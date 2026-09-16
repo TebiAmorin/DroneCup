@@ -1,0 +1,1461 @@
+<title>Wasteland Circuit 6</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ── TOKENS ─────────────────────────────────────── */
+:root {
+  --bg:        #06090d;
+  --surface:   #0c1119;
+  --surface2:  #131b25;
+  --border:    #192231;
+  --text:      #c2d4e6;
+  --muted:     #3d556d;
+  --accent:    #e05520;
+  --accent-lo: rgba(224,85,32,.12);
+  --accent-hi: #f07c2a;
+  --dim:       rgba(224,85,32,.05);
+  --accent-red: #c03418;
+  --accent-gold: #d4940e;
+  --green:     #22c55e;
+  --green-lo:  rgba(34,197,94,.12);
+  --red:       #ef4444;
+  --red-lo:    rgba(239,68,68,.12);
+
+  --caramelo: #f5c842;
+  --vetel:    #3b82f6;
+  --miwell:   #22c55e;
+  --barra:    #ef4444;
+  --sora:     #a855f7;
+
+  --f-display: 'Rajdhani', 'Barlow Condensed', sans-serif;
+  --f-body:    'Barlow Condensed', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--f-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* grid bg */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(224,85,32,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(224,85,32,.022) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* corner glow */
+body::after {
+  content: '';
+  position: fixed;
+  top: -100px; right: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(192,52,24,.09) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── OUTER WRAP ─────────────────────────────────── */
+#app {
+  position: relative;
+  z-index: 1;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-inline: clamp(16px, 3vw, 48px);
+  padding-block: 0 60px;
+}
+
+/* ── STATUS BAR ─────────────────────────────────── */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-block: 9px;
+  border-bottom: 1px solid var(--border);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.status-bar .live-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  animation: blink 2.2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+.status-bar .spacer { flex: 1; }
+
+/* ── HEADER ─────────────────────────────────────── */
+header { padding-top: 24px; }
+
+.header-main {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.r6-emblem { height: 90px; width: auto; flex-shrink: 0; object-fit: contain; }
+
+.title-block { flex: 1; min-width: 0; }
+.title-eyebrow {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .28em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.title-block h1 {
+  font-family: var(--f-display);
+  font-size: clamp(32px, 7vw, 52px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.title-block h1 em { font-style: normal; background: linear-gradient(90deg, var(--accent) 0%, var(--accent-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+.header-meta {
+  text-align: right;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .08em;
+  line-height: 1.7;
+  flex-shrink: 0;
+}
+.header-meta strong {
+  display: block;
+  font-family: var(--f-display);
+  font-size: 14px;
+  color: var(--accent-hi);
+  letter-spacing: .12em;
+}
+
+/* ── NAV TABS ───────────────────────────────────── */
+.tab-nav {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.tab-btn {
+  position: relative;
+  bottom: -1px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 11px 22px;
+  font-family: var(--f-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .18s, border-color .18s;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-admin { margin-left: auto; }
+.tab-admin.active { color: var(--muted); border-bottom-color: var(--muted); }
+
+/* ── PAGES ──────────────────────────────────────── */
+.page { display: none; padding-top: 30px; }
+.page.active { display: block; }
+
+/* ── SECTION HEADER ─────────────────────────────── */
+.sec-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.sec-head h2 {
+  font-family: var(--f-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.chip {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-lo);
+  border: 1px solid rgba(255,98,0,.28);
+  padding: 3px 9px;
+  clip-path: polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%);
+  white-space: nowrap;
+}
+.rule { flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+
+/* ── RANK TABLE ─────────────────────────────────── */
+.rank-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  font-variant-numeric: tabular-nums;
+}
+.rank-table thead th {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 16px 10px;
+  text-align: left;
+}
+th.r { text-align: right; }
+
+.r-row { background: var(--surface); transition: background .14s; }
+.r-row:hover { background: var(--surface2); }
+.r-row.leader { background: var(--surface2); }
+.r-row td { padding: 13px 16px; vertical-align: middle; }
+.r-row td:first-child { border-left: 3px solid transparent; border-radius: 2px 0 0 2px; }
+.r-row.leader td:first-child { border-left-color: var(--accent); }
+.r-row td:last-child { border-radius: 0 2px 2px 0; }
+
+.rk-num { font-family: var(--f-display); font-size: 22px; font-weight: 700; color: var(--muted); width: 44px; }
+.leader .rk-num { color: var(--accent); }
+
+.t-dot { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 10px; position: relative; top: 1px; flex-shrink: 0; }
+.t-name-wrap { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.t-name { font-family: var(--f-display); font-size: 18px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.leader-badge { font-size: 8.5px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); background: var(--accent-lo); border: 1px solid rgba(255,98,0,.3); padding: 2px 7px; }
+.pts-val { font-family: var(--f-display); font-size: 22px; font-weight: 700; color: var(--text); text-align: right; }
+.leader .pts-val { color: var(--accent-hi); }
+.num-cell { text-align: right; font-size: 13px; color: var(--muted); }
+
+/* progress strip */
+.progress-section { }
+.prog-list { display: grid; gap: 7px; }
+.prog-row { background: var(--surface); display: flex; align-items: center; gap: 14px; padding: 11px 16px; }
+.prog-label { font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); width: 84px; flex-shrink: 0; }
+.race-pips { display: flex; gap: 6px; }
+.pip { width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
+.pip.done { background: var(--accent); }
+.prog-status { margin-left: auto; font-size: 9.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; }
+.prog-status.done { color: var(--accent); }
+.prog-status.pending { color: var(--muted); }
+.prog-status.active { color: var(--accent-hi); }
+
+/* Progress rows v2 — with podium */
+.prog-row-v2 { flex-direction: column; align-items: stretch; padding: 10px 16px 10px; gap: 0; }
+.prog-row-head { display: flex; align-items: center; gap: 14px; }
+.prog-row-v2 .prog-label { width: 72px; }
+.prog-done { background: var(--surface2); }
+.prog-active { border-left: 2px solid rgba(255,98,0,.45); }
+.prog-done .prog-row-head { }
+
+/* Per-partida podium */
+.prog-podium { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; }
+.prog-podium-row { display: flex; align-items: center; gap: 8px; }
+.prog-pod-medal { font-size: 11px; width: 18px; flex-shrink: 0; }
+.prog-pod-dot { width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; }
+.prog-pod-name { font-family: var(--f-display); font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; flex: 1; }
+.prog-pod-pts { font-family: var(--f-display); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.prog-pending-msg { margin-top: 7px; padding-top: 7px; border-top: 1px solid var(--border); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+/* ── TEAM CARDS ─────────────────────────────────── */
+.teams-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 14px; }
+.t-card { background: var(--surface); overflow: hidden; transition: transform .2s; position: relative; }
+.t-card:hover { transform: translateY(-2px); }
+.card-stripe { height: 3px; }
+.t-card::after { content: ''; position: absolute; top: 10px; right: 10px; width: 14px; height: 14px; border-top: 1.5px solid currentColor; border-right: 1.5px solid currentColor; opacity: .18; }
+.card-inner { padding: 18px 20px 16px; }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.card-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.card-name { font-family: var(--f-display); font-size: clamp(22px, 5vw, 30px); font-weight: 700; text-transform: uppercase; letter-spacing: .02em; line-height: 1; }
+.card-rk { font-family: var(--f-display); font-size: 46px; font-weight: 700; line-height: 1; opacity: .12; }
+.card-sep { height: 1px; background: var(--border); margin-bottom: 13px; }
+.crew-label { font-size: 9px; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.crew-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 16px; }
+.crew-item { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--text); }
+.crew-arrow { font-size: 9px; opacity: .4; }
+.card-stats { display: flex; border-top: 1px solid var(--border); padding-top: 13px; }
+.s-block { flex: 1; text-align: center; }
+.s-block + .s-block { border-left: 1px solid var(--border); }
+.s-val { display: block; font-family: var(--f-display); font-size: 21px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.s-lbl { font-size: 8.5px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+
+/* ── FORMATO PAGE ───────────────────────────────── */
+.formato-stack { display: grid; gap: 13px; }
+.fmt-block { background: var(--surface); padding: 22px 22px 22px 26px; position: relative; }
+.fmt-block::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); }
+.fmt-block h3 { font-family: var(--f-display); font-size: 15px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-hi); margin-bottom: 11px; }
+.fmt-block p { font-size: 15px; line-height: 1.65; color: var(--text); font-weight: 400; }
+.matches-grid { display: grid; gap: 8px; margin-top: 6px; }
+.match-row { display: flex; align-items: center; gap: 14px; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); }
+.match-num { font-family: var(--f-display); font-size: 20px; font-weight: 700; color: var(--accent); width: 32px; flex-shrink: 0; }
+.match-info { flex: 1; }
+.match-title { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.match-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.match-tags { display: flex; gap: 5px; }
+.m-tag { font-size: 8.5px; font-weight: 700; letter-spacing: .1em; color: var(--accent); background: var(--accent-lo); border: 1px solid rgba(255,98,0,.28); padding: 2px 6px; }
+.score-tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; margin-top: 10px; }
+.score-tbl th { font-size: 9.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+.score-tbl td { font-size: 14px; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
+.score-tbl tr:last-child td { border-bottom: none; }
+.score-tbl .pts-col { text-align: right; font-family: var(--f-display); font-size: 19px; font-weight: 700; color: var(--accent-hi); }
+.medal { margin-right: 8px; }
+
+/* ── ADMIN ───────────────────────────────────────── */
+.admin-block { margin-bottom: 28px; }
+.admin-h3 { font-family: var(--f-display); font-size: 14px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.crew-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.crew-card { background: var(--surface); padding: 14px 16px; }
+.ce-name { font-family: var(--f-display); font-size: 17px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 12px; }
+.ce-field { margin-bottom: 8px; }
+.ce-label { display: block; font-size: 9px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+.dark-input { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 10px; font-family: var(--f-body); font-size: 14px; font-weight: 500; outline: none; transition: border-color .15s; }
+.dark-input:focus { border-color: var(--accent); }
+.dark-input::placeholder { color: var(--muted); }
+.partida-admin { margin-bottom: 22px; }
+.pa-label { font-size: 10px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.pa-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.pa-races { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.race-form { background: var(--surface); padding: 14px 14px 12px; border: 1px solid transparent; transition: border-color .2s; }
+.race-form.is-saved { border-color: rgba(34,197,94,.22); }
+.rf-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.rf-num { font-family: var(--f-display); font-size: 14px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text); }
+.saved-tag { font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--green); background: var(--green-lo); border: 1px solid rgba(34,197,94,.25); padding: 2px 7px; }
+.pos-rows { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.pos-row { display: flex; align-items: center; gap: 8px; }
+.pos-medal { font-size: 11px; width: 28px; flex-shrink: 0; text-align: center; font-family: var(--f-display); font-weight: 700; color: var(--muted); letter-spacing: .05em; }
+.dark-select { flex: 1; appearance: none; -webkit-appearance: none; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 7px 28px 7px 10px; font-family: var(--f-body); font-size: 13px; font-weight: 600; outline: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%233d556d' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 9px center; transition: border-color .15s; }
+.dark-select:focus { border-color: var(--accent); }
+.rf-error { font-size: 11px; font-weight: 600; letter-spacing: .04em; color: var(--red); background: var(--red-lo); border: 1px solid rgba(239,68,68,.25); padding: 6px 10px; margin-bottom: 10px; }
+.rf-actions { display: flex; gap: 8px; }
+.btn-save { flex: 1; background: var(--accent); color: #fff; border: none; padding: 8px 12px; font-family: var(--f-display); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: background .15s; }
+.btn-save:hover { background: var(--accent-hi); }
+.btn-clear { background: none; color: var(--muted); border: 1px solid var(--border); padding: 8px 10px; font-family: var(--f-display); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: color .15s, border-color .15s; }
+.btn-clear:hover { color: var(--red); border-color: rgba(239,68,68,.4); }
+.btn-clear.confirming { color: var(--red); border-color: rgba(239,68,68,.5); }
+.btn-primary { background: var(--accent); color: #fff; border: none; padding: 10px 24px; font-family: var(--f-display); font-size: 12.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: background .15s; }
+.btn-primary:hover { background: var(--accent-hi); }
+.btn-primary.saved { background: var(--green); }
+
+/* ── PASSWORD GATE ──────────────────────────────── */
+.pw-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 70px 20px 40px;
+  text-align: center;
+}
+.pw-lock {
+  width: 48px; height: 48px;
+  margin-bottom: 22px;
+  opacity: .35;
+}
+.pw-title {
+  font-family: var(--f-display);
+  font-size: 18px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.pw-sub {
+  font-size: 13px; color: var(--muted);
+  margin-bottom: 30px;
+}
+.pw-row {
+  display: flex; gap: 8px;
+  max-width: 320px; width: 100%;
+}
+.pw-input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 14px;
+  font-family: var(--f-body); font-size: 15px; font-weight: 500;
+  outline: none;
+  transition: border-color .15s;
+  letter-spacing: .06em;
+}
+.pw-input:focus { border-color: var(--accent); }
+.pw-input.shake {
+  animation: shake .35s ease;
+  border-color: var(--red);
+}
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-6px)}
+  40%{transform:translateX(6px)}
+  60%{transform:translateX(-4px)}
+  80%{transform:translateX(4px)}
+}
+.pw-btn {
+  background: var(--accent); color: #fff; border: none;
+  padding: 10px 18px;
+  font-family: var(--f-display); font-size: 12px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  cursor: pointer; transition: background .15s; white-space: nowrap;
+}
+.pw-btn:hover { background: var(--accent-hi); }
+.pw-err {
+  font-size: 11px; font-weight: 600;
+  color: var(--red);
+  margin-top: 12px; height: 16px;
+  letter-spacing: .04em;
+}
+
+/* ── STREAMS ─────────────────────────────────────── */
+.streams-toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.stream-layout-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); padding: 7px 13px; font-family: var(--f-display); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: color .15s, border-color .15s; }
+.stream-layout-btn.active, .stream-layout-btn:hover { color: var(--accent); border-color: var(--accent); }
+.stream-layout-btn svg { width: 12px; height: 12px; vertical-align: middle; margin-right: 5px; }
+.ms-grid { display: grid; gap: 4px; }
+.ms-grid.layout-2 { grid-template-columns: 1fr 1fr; }
+.ms-grid.layout-3 { grid-template-columns: 1fr 1fr 1fr; }
+.ms-grid.layout-full { grid-template-columns: 1fr; }
+.ms-cell { position: relative; background: #000; }
+.ms-cell::before { content:''; display:block; padding-top:56.25%; }
+.ms-cell iframe { position:absolute; inset:0; width:100%; height:100%; border:none; display:block; }
+.ms-cell-label { position:absolute; top:0; left:0; background:rgba(0,0,0,.6); color:#fff; font-family:var(--f-display); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:4px 8px; pointer-events:none; z-index:1; }
+.ms-cell-empty { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:11px; letter-spacing:.08em; text-transform:uppercase; }
+.stream-notice { display:flex; align-items:flex-start; gap:10px; font-size:12px; color:var(--muted); background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); padding:12px 14px; margin-bottom:16px; line-height:1.6; }
+.stream-notice svg { flex-shrink:0; margin-top:1px; opacity:.7; }
+
+
+/* ── TWITCH ─────────────────────────────────────── */
+.twitch-link { display:inline-flex; align-items:center; color:#9146ff; opacity:.55; transition:opacity .15s; margin-left:7px; flex-shrink:0; vertical-align:middle; }
+.twitch-link:hover { opacity:1; }
+.twitch-link svg { width:13px; height:13px; }
+.card-twitch { display:inline-flex; align-items:center; gap:5px; color:#9146ff; opacity:.65; font-size:11px; font-weight:600; letter-spacing:.04em; text-decoration:none; transition:opacity .15s; margin-top:10px; }
+.card-twitch:hover { opacity:1; }
+.card-twitch svg { width:14px; height:14px; }
+
+/* ── POINTS EDITOR ──────────────────────────────── */
+.pts-edit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 8px 16px; margin-bottom: 4px; }
+.pts-edit-row { display: flex; align-items: center; gap: 8px; }
+.pts-edit-pos { font-size: 13px; font-weight: 700; color: var(--accent); width: 30px; text-align: right; flex-shrink: 0; }
+.pts-edit-input { width: 62px !important; text-align: center; }
+.pts-edit-lbl { font-size: 12px; color: var(--muted); }
+
+/* ── EXPAND ROWS ────────────────────────────────── */
+.r-row.expandable { cursor: pointer; }
+.r-row.expandable:hover { background: var(--surface2) !important; }
+.expand-td { width: 22px; text-align: center; padding-right: 10px !important; }
+.expand-arrow { font-size: 10px; color: var(--muted); display: inline-block; transition: transform .2s; user-select: none; }
+.r-row.open .expand-arrow { transform: rotate(180deg); }
+.expand-detail { display: none; }
+.expand-detail.open { display: table-row; }
+.expand-detail td { padding: 0 !important; border: none !important; }
+.expand-inner { padding: 8px 14px 14px 44px; display: flex; flex-wrap: wrap; gap: 4px 32px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.mbr-row { display: flex; align-items: center; gap: 10px; width: 100%; max-width: 280px; padding: 3px 0; }
+.mbr-role { font-size: 9px; font-weight: 700; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; width: 28px; flex-shrink: 0; }
+.mbr-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); }
+.mbr-pts { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 36px; text-align: right; }
+
+/* ── CLASIFICACIÓN LAYOUT ───────────────────────── */
+/* Default: stacked */
+.clas-layout { display: flex; flex-direction: column; gap: 0; }
+.clas-layout .progress-section { margin-top: 30px; }
+
+/* ── PARTIDAS BAR ───────────────────────────────── */
+.partidas-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.pb-counter {
+  font-family: var(--f-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--accent);
+  white-space: nowrap;
+  margin-right: 4px;
+}
+.pb-counter em { color: var(--muted); font-style: normal; font-size: 12px; }
+.pb-divider {
+  width: 1px; height: 18px;
+  background: var(--border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+.pb-card {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--border);
+  padding: 5px 10px;
+  transition: border-left-color .2s;
+}
+.pb-card.done  { border-left-color: var(--accent); }
+.pb-card.current { border-left-color: rgba(255,98,0,.5); }
+.pb-label {
+  font-family: var(--f-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.pb-card.done .pb-label { color: var(--text); }
+.pb-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.pb-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background .2s;
+  flex-shrink: 0;
+}
+.pb-dot.done { background: var(--accent); }
+.pb-tag {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.pb-card.done .pb-tag { color: var(--accent); }
+.pb-card.current .pb-tag { color: var(--accent-hi); }
+
+@media (max-width: 640px) {
+  .partidas-bar { gap: 5px; margin-bottom: 12px; }
+  .pb-card { padding: 4px 8px; gap: 5px; }
+  .pb-tag { display: none; }
+  .pb-dot { width: 6px; height: 6px; }
+}
+
+/* ── WIDE SCREEN ≥ 1100px ───────────────────────── */
+@media (min-width: 1100px) {
+  /* Header: larger emblem and spacing */
+  .r6-emblem { height: 96px; width: auto; }
+  .header-main { gap: 24px; margin-bottom: 32px; }
+  .status-bar { font-size: 10px; }
+
+  /* Clasificación: table left, progress right */
+  .clas-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 0 36px;
+    align-items: start;
+  }
+  .clas-layout .progress-section { margin-top: 0; }
+
+  /* Standings table: slightly larger text */
+  .r-row td { padding: 15px 18px; }
+  .rk-num { font-size: 26px; width: 50px; }
+  .t-name { font-size: 20px; }
+  .pts-val { font-size: 26px; }
+
+  /* Teams grid: 3 columns */
+  .teams-grid { grid-template-columns: repeat(3, 1fr); }
+
+  /* Formato: 2-column grid */
+  .formato-stack {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 13px;
+  }
+  /* Last item spans both columns if needed */
+  .formato-stack .fmt-block:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  /* Score block (3rd item) spans both columns — it's the scoring table */
+  .formato-stack .fmt-block:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  /* Admin crew/team grids: 3 columns */
+  .crew-grid { grid-template-columns: repeat(3, 1fr); }
+
+  /* Points editor: 5 columns (2 per row × 5) */
+  .pts-edit-grid { grid-template-columns: repeat(5, 1fr); }
+
+  /* Race forms: 3 cols (already default) */
+  .pa-races { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ── EXTRA WIDE ≥ 1400px ────────────────────────── */
+@media (min-width: 1400px) {
+  /* More breathing room */
+  .header-main { padding-top: 8px; }
+
+  /* Clasificación: wider progress panel */
+  .clas-layout { grid-template-columns: 1fr 380px; gap: 0 48px; }
+
+  /* Teams grid: 5 columns (one per team) */
+  .teams-grid { grid-template-columns: repeat(5, 1fr); }
+
+  /* Admin: 5 cols for team/crew grids (one per streamer) */
+  .crew-grid { grid-template-columns: repeat(5, 1fr); }
+
+  /* Points editor: all 10 in one row */
+  .pts-edit-grid { grid-template-columns: repeat(5, 1fr); }
+}
+
+/* ── RESPONSIVE ─────────────────────────────────── */
+
+/* ── Tablet: ≤ 800px ─── */
+@media (max-width: 800px) {
+  /* Race editor: 2 columns instead of 3 */
+  .pa-races { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Small tablet: ≤ 700px ─── */
+@media (max-width: 700px) {
+  /* Race forms single column */
+  .pa-races { grid-template-columns: 1fr; }
+  /* Admin crew grid 2 cols */
+  .crew-grid { grid-template-columns: 1fr 1fr; }
+  /* Hide secondary ranking columns on standings */
+  .hide-sm { display: none; }
+  /* Points editor: 2 cols */
+  .pts-edit-grid { grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); }
+}
+
+/* ── Mobile: ≤ 640px ─── */
+@media (max-width: 640px) {
+  /* App horizontal padding */
+  #app { padding-inline: 16px; }
+
+  /* Status bar: compact */
+  .status-bar { font-size: 8.5px; gap: 10px; }
+
+  /* Header: hide meta block */
+  .header-meta { display: none; }
+  .header-main { gap: 12px; margin-bottom: 20px; }
+
+  /* Tab nav: scroll horizontally */
+  .tab-nav {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    padding: 10px 14px;
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tab-admin { margin-left: 0; }
+
+  /* Section headers: tighter */
+  .sec-head { margin-bottom: 14px; gap: 8px; }
+  .sec-head h2 { font-size: 17px; }
+  .chip { font-size: 8px; padding: 2px 7px; }
+
+  /* Standings table: compact */
+  .rank-table thead th { font-size: 8.5px; padding: 0 10px 8px; }
+  .r-row td { padding: 10px 10px; }
+  .rk-num { font-size: 18px; width: 34px; }
+  .t-name { font-size: 15px; }
+  .pts-val { font-size: 18px; }
+  .leader-badge { display: none; }
+  .hide-sm { display: none; }
+
+  /* Expand inner: single column */
+  .expand-inner { padding: 6px 10px 10px 34px; gap: 2px 0; }
+  .mbr-row { max-width: 100%; }
+
+  /* Team cards: single column */
+  .teams-grid { grid-template-columns: 1fr; }
+
+  /* Formato: tighter */
+  .fmt-block { padding: 16px 16px 16px 20px; }
+  .fmt-block h3 { font-size: 13px; }
+  .fmt-block p { font-size: 14px; }
+  .match-row { padding: 8px 10px; gap: 10px; }
+  .match-num { font-size: 17px; width: 26px; }
+  .match-title { font-size: 12px; }
+
+  /* Admin: single column crew grid */
+  .crew-grid { grid-template-columns: 1fr; }
+  /* Points editor: 2 cols */
+  .pts-edit-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Streams: toolbar wraps, single column fallback */
+  .streams-toolbar { gap: 7px; }
+  .stream-layout-btn { padding: 6px 10px; font-size: 10px; }
+  .ms-grid.layout-2,
+  .ms-grid.layout-3 { grid-template-columns: 1fr; }
+
+  /* Progress pips: compact */
+  .prog-label { width: 70px; font-size: 9px; }
+  .pip { width: 8px; height: 8px; }
+}
+
+/* ── Small mobile: ≤ 480px ─── */
+@media (max-width: 480px) {
+  #app { padding-inline: 12px; }
+  .r6-emblem { height: 58px; width: auto; }
+
+  /* Header title smaller */
+  .title-eyebrow { font-size: 8.5px; letter-spacing: .18em; }
+
+  /* Tab buttons even more compact */
+  .tab-btn { padding: 9px 11px; font-size: 9.5px; letter-spacing: .08em; }
+
+  /* Standings: hide rank number column text, keep spacing */
+  .rk-num { font-size: 15px; width: 28px; }
+  .t-name { font-size: 13px; }
+  .pts-val { font-size: 16px; }
+
+  /* Expand inner even more compact */
+  .expand-inner { padding: 5px 8px 8px 28px; }
+  .mbr-name { font-size: 12px; }
+  .mbr-pts { font-size: 12px; min-width: 28px; }
+
+  /* Formato score table: compact */
+  .score-tbl th, .score-tbl td { padding: 7px 8px; font-size: 13px; }
+  .score-tbl .pts-col { font-size: 16px; }
+
+  /* Points editor: stacked */
+  .pts-edit-grid { grid-template-columns: repeat(2, 1fr); gap: 6px 12px; }
+
+  /* Race form: full width selects */
+  .pos-row { gap: 6px; }
+  .pos-medal { width: 22px; font-size: 10px; }
+
+  /* Cards */
+  .card-inner { padding: 14px 14px 12px; }
+  .card-rk { font-size: 36px; }
+  .card-name { font-size: clamp(18px, 6vw, 26px); }
+
+  /* Password gate */
+  .pw-gate { padding: 40px 16px 30px; }
+  .pw-row { flex-direction: column; }
+  .pw-btn { width: 100%; padding: 10px; }
+}
+
+/* ── Very small: ≤ 360px ─── */
+@media (max-width: 360px) {
+  #app { padding-inline: 10px; }
+  .tab-btn { padding: 8px 9px; font-size: 9px; letter-spacing: .05em; }
+  .pts-edit-grid { grid-template-columns: 1fr 1fr; }
+  .t-name { font-size: 12px; }
+}
+
+/* ── LEADER PULSE ───────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .r-row.leader { animation: l-pulse 3.5s ease-in-out infinite; }
+  @keyframes l-pulse { 0%,100% { box-shadow: none; } 50% { box-shadow: 0 0 22px rgba(192,52,24,.09); } }
+}
+</style>
+
+<div id="app">
+
+  <div class="status-bar">
+    <div class="live-dot"></div>
+    <span>Rainbow Six · Wasteland Circuit 6</span>
+    <span class="spacer"></span>
+    <span class="hide-sm" id="sb-progress">Cargando…</span>
+  </div>
+
+  <header>
+    <div class="header-main">
+      <img class="r6-emblem" src="data:image/png;base64,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" alt="Wasteland Circuit 6" aria-hidden="true">
+      <div class="title-block">
+        <span class="title-eyebrow">Rainbow Six · Wasteland Circuit</span>
+        <h1>Wasteland <em>Circuit</em></h1>
+      </div>
+      <div class="header-meta" id="hdr-meta">
+        <strong>WASTELAND CIRCUIT</strong>5 equipos · 12 carreras
+      </div>
+    </div>
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-page="clasificacion">Clasificación</button>
+      <button class="tab-btn" data-page="equipos">Equipos</button>
+      <button class="tab-btn" data-page="formato">Formato</button>
+      <button class="tab-btn" data-page="streams">▶ Streams</button>
+      <button class="tab-btn tab-admin" data-page="admin">⚙ Admin</button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- CLASIFICACIÓN -->
+    <section id="clasificacion" class="page active">
+      <div class="sec-head">
+        <h2>Clasificación General</h2>
+        <div class="chip" id="chip-live">—</div>
+        <div class="rule"></div>
+      </div>
+      <div id="partidas-bar"></div>
+      <div class="clas-layout">
+        <table class="rank-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Equipo</th>
+              <th class="r hide-sm">Victorias</th>
+              <th class="r hide-sm">Podios</th>
+              <th class="r">Puntos</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rank-tbody"></tbody>
+        </table>
+        <div class="progress-section" id="prog-wrap"></div>
+      </div>
+    </section>
+
+    <!-- EQUIPOS -->
+    <section id="equipos" class="page">
+      <div class="sec-head">
+        <h2>Equipos</h2>
+        <div class="chip">5 Equipos</div>
+        <div class="rule"></div>
+      </div>
+      <div class="teams-grid" id="teams-grid"></div>
+    </section>
+
+    <!-- FORMATO -->
+    <section id="formato" class="page">
+      <div class="sec-head">
+        <h2>Formato del Torneo</h2>
+        <div class="chip">Reglamento</div>
+        <div class="rule"></div>
+      </div>
+      <div class="formato-stack">
+        <div class="fmt-block">
+          <h3>Estructura General</h3>
+          <p>El torneo enfrenta a 5 streamers, cada uno al mando de un equipo de 3 pilotos: el propio streamer como capitán más 2 miembros seleccionados de su comunidad. Todos compiten simultáneamente en carreras de drones dentro del universo de Rainbow Six.</p>
+        </div>
+        <div class="fmt-block">
+          <h3>Partidas y Carreras</h3>
+          <p style="margin-bottom:12px">El torneo se divide en 4 partidas. Cada partida consta de 3 carreras de drones — un total de 12 carreras.</p>
+          <div class="matches-grid">
+            <div class="match-row"><div class="match-num">P1</div><div class="match-info"><div class="match-title">Partida 1</div><div class="match-sub">3 carreras · Fase inicial</div></div><div class="match-tags"><div class="m-tag">C1</div><div class="m-tag">C2</div><div class="m-tag">C3</div></div></div>
+            <div class="match-row"><div class="match-num">P2</div><div class="match-info"><div class="match-title">Partida 2</div><div class="match-sub">3 carreras · Fase de grupo</div></div><div class="match-tags"><div class="m-tag">C4</div><div class="m-tag">C5</div><div class="m-tag">C6</div></div></div>
+            <div class="match-row"><div class="match-num">P3</div><div class="match-info"><div class="match-title">Partida 3</div><div class="match-sub">3 carreras · Semifinal</div></div><div class="match-tags"><div class="m-tag">C7</div><div class="m-tag">C8</div><div class="m-tag">C9</div></div></div>
+            <div class="match-row"><div class="match-num">P4</div><div class="match-info"><div class="match-title">Partida 4</div><div class="match-sub">3 carreras · Gran Final</div></div><div class="match-tags"><div class="m-tag">C10</div><div class="m-tag">C11</div><div class="m-tag">C12</div></div></div>
+          </div>
+        </div>
+        <div class="fmt-block" id="fmt-scoring">
+          <!-- rendered by renderFormatoScoring() -->
+        </div>
+        <div class="fmt-block">
+          <h3>Campeón</h3>
+          <p>El equipo con más puntos acumulados al concluir las 12 carreras será proclamado campeón del Drone Cup. En caso de empate en puntos, el desempate se resuelve por número de victorias totales en carrera.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STREAMS -->
+    <section id="streams" class="page"></section>
+
+    <!-- ADMIN -->
+    <section id="admin" class="page">
+
+      <!-- PASSWORD GATE -->
+      <div id="admin-gate" class="pw-gate">
+        <svg class="pw-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="11" width="18" height="11" rx="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <div class="pw-title">Acceso Restringido</div>
+        <div class="pw-sub">Introduce la contraseña para acceder al panel de administración</div>
+        <div class="pw-row">
+          <input type="password" class="pw-input" id="pw-input" placeholder="Contraseña">
+          <button class="pw-btn" onclick="tryLogin()">Entrar</button>
+        </div>
+        <div class="pw-err" id="pw-err"></div>
+      </div>
+
+      <!-- ADMIN CONTENT (hidden until authenticated) -->
+      <div id="admin-content" style="display:none">
+        <div class="sec-head">
+          <h2>Panel de Administración</h2>
+          <div class="chip" style="color:var(--muted);border-color:var(--border);background:none">Admin</div>
+          <div class="rule"></div>
+        </div>
+        <div class="admin-block">
+          <div class="admin-h3">Nombres de Equipos</div>
+          <div class="crew-grid" id="team-names-editor"></div>
+          <div style="margin-top:14px"><button class="btn-primary" id="save-teamnames-btn">Guardar nombres</button></div>
+        </div>
+        <div class="admin-block">
+          <div class="admin-h3">Nombres de Tripulación</div>
+          <div class="crew-grid" id="crew-editor"></div>
+          <div style="margin-top:14px"><button class="btn-primary" id="save-crews-btn">Guardar nombres</button></div>
+        </div>
+        <div class="admin-block">
+          <div class="admin-h3">Sistema de Puntuación</div>
+          <div id="points-editor"></div>
+        </div>
+        <div class="admin-block">
+          <div class="admin-h3">Resultados de Carreras</div>
+          <div id="race-editor"></div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script>
+const TEAMS = [
+  { id:'caramelo', name:'Caramelo',  color:'#f5c842' },
+  { id:'vetel',    name:'Vetel',     color:'#3b82f6' },
+  { id:'miwell',   name:'Miwell',    color:'#22c55e' },
+  { id:'sora',     name:'SoraMusic', color:'#a855f7' },
+  { id:'barra',    name:'Barra',     color:'#ef4444' },
+];
+// personId = 'teamId_memberIndex'  (0=capitán, 1=tripulante1, 2=tripulante2)
+const DEFAULT_POINTS = [15,12,10,8,6,5,4,3,2,1];
+const POS_LABELS = ['🥇','🥈','🥉','4.º','5.º','6.º','7.º','8.º','9.º','10.º'];
+
+let state = { crews:{}, teamNames:{}, captainNames:{}, twitchChannels:{}, points:[...DEFAULT_POINTS], results:{} };
+
+function loadState() {
+  try { const r = localStorage.getItem('r6dronecup_v2'); if(r) state = JSON.parse(r); } catch(e){}
+  if(!state.teamNames)      state.teamNames      = {};
+  if(!state.captainNames)   state.captainNames   = {};
+  if(!state.twitchChannels) state.twitchChannels = {};
+  if(!state.points || state.points.length < 1) state.points = [...DEFAULT_POINTS];
+  TEAMS.forEach(t => {
+    if(!state.crews[t.id])           state.crews[t.id]           = ['',''];
+    if(!state.teamNames[t.id])       state.teamNames[t.id]       = t.name;
+    if(!state.captainNames[t.id])    state.captainNames[t.id]    = t.name;
+    if(state.twitchChannels[t.id] === undefined) state.twitchChannels[t.id] = '';
+  });
+}
+function saveState() {
+  try { localStorage.setItem('r6dronecup_v2', JSON.stringify(state)); } catch(e){}
+}
+
+const TWITCH_SVG = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>`;
+
+function twitchLink(teamId, extraClass='twitch-link') {
+  const ch = (state.twitchChannels && state.twitchChannels[teamId]) || '';
+  if(!ch) return '';
+  return `<a class="${extraClass}" href="https://www.twitch.tv/${ch}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Ver en Twitch">${TWITCH_SVG}</a>`;
+}
+
+function getTeamName(teamId) {
+  return (state.teamNames && state.teamNames[teamId]) || (TEAMS.find(t=>t.id===teamId)||{}).name || teamId;
+}
+function getCaptainName(teamId) {
+  return (state.captainNames && state.captainNames[teamId]) || (TEAMS.find(t=>t.id===teamId)||{}).name || teamId;
+}
+
+function calcStandings() {
+  // personPts['teamId_mi'] = acumulado individual; teamPts[teamId] = suma equipo
+  const personPts={}, teamPts={}, wins={}, pods={};
+  const pts = state.points || DEFAULT_POINTS;
+  TEAMS.forEach(t => {
+    teamPts[t.id]=0; wins[t.id]=0; pods[t.id]=0;
+    [0,1,2].forEach(mi => { personPts[`${t.id}_${mi}`]=0; });
+  });
+  for(let p=0;p<4;p++) for(let c=0;c<3;c++) {
+    const race = state.results[`${p}_${c}`];
+    if(!race) continue;
+    race.forEach((pid, idx) => {
+      if(!pid) return;
+      const racePts = pts[idx] || 0;
+      personPts[pid] = (personPts[pid]||0) + racePts;
+      const tid = pid.split('_')[0];
+      if(teamPts[tid]!==undefined) {
+        teamPts[tid] += racePts;
+        if(idx===0) wins[tid]++;
+        if(idx<3)   pods[tid]++;
+      }
+    });
+  }
+  return [...TEAMS]
+    .map(t => {
+      const mp = [0,1,2].map(mi => personPts[`${t.id}_${mi}`]||0);
+      return {...t, name:getTeamName(t.id), pts:teamPts[t.id], memberPts:mp, wins:wins[t.id], pods:pods[t.id]};
+    })
+    .sort((a,b) => b.pts-a.pts || b.wins-a.wins);
+}
+
+function raceDone(p,c) { return !!state.results[`${p}_${c}`]; }
+function partidaDone(p) { return [0,1,2].every(c => raceDone(p,c)); }
+function totalDone() { let n=0; for(let p=0;p<4;p++) for(let c=0;c<3;c++) if(raceDone(p,c)) n++; return n; }
+
+function calcPartidaStandings(p) {
+  // Returns top-3 teams sorted by points within a single partida
+  const pts = state.points || DEFAULT_POINTS;
+  const teamPts = {};
+  TEAMS.forEach(t => { teamPts[t.id] = 0; });
+  for(let c=0;c<3;c++) {
+    const race = state.results[`${p}_${c}`];
+    if(!race) continue;
+    race.forEach((pid, idx) => {
+      if(!pid) return;
+      const tid = pid.split('_')[0];
+      if(teamPts[tid] !== undefined) teamPts[tid] += (pts[idx]||0);
+    });
+  }
+  return [...TEAMS]
+    .map(t => ({ ...t, name: getTeamName(t.id), pts: teamPts[t.id] }))
+    .filter(t => t.pts > 0)
+    .sort((a,b) => b.pts - a.pts)
+    .slice(0,3);
+}
+
+function renderClasificacion() {
+  const standings = calcStandings();
+  const done = totalDone();
+  const hasData = done > 0;
+
+  document.getElementById('sb-progress').textContent = `${done} de 12 carreras completadas`;
+
+  const completedPartidas = [0,1,2,3].filter(p => partidaDone(p)).length;
+  document.getElementById('hdr-meta').innerHTML = hasData
+    ? `<strong>EN CURSO</strong>Partida ${Math.min(4,completedPartidas+1)} de 4<br>5 equipos · 12 carreras`
+    : `<strong>WASTELAND CIRCUIT</strong>5 equipos · 12 carreras`;
+
+  document.getElementById('chip-live').textContent = hasData ? 'En vivo' : 'Sin resultados';
+
+  // ── Partidas bar ─────────────────────────────────
+  const completedCount = [0,1,2,3].filter(p => partidaDone(p)).length;
+  const partidaCards = [0,1,2,3].map(p => {
+    const allDone = partidaDone(p);
+    const racesInPartida = [0,1,2].filter(c => raceDone(p,c)).length;
+    const isCurrentPartida = !allDone && (p === 0 || partidaDone(p-1));
+    const cls = allDone ? 'done' : isCurrentPartida ? 'current' : '';
+    const tagTxt = allDone ? '✓' : isCurrentPartida ? `${racesInPartida}/3` : '—';
+    const dots = [0,1,2].map(c => `<div class="pb-dot${raceDone(p,c)?' done':''}"></div>`).join('');
+    return `<div class="pb-card ${cls}">
+      <span class="pb-label">P${p+1}</span>
+      <div class="pb-dots">${dots}</div>
+      <span class="pb-tag">${tagTxt}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('partidas-bar').innerHTML = `<div class="partidas-bar">
+    <span class="pb-counter">${completedCount}<em>/4</em></span>
+    <div class="pb-divider"></div>
+    ${partidaCards}
+  </div>`;
+
+  document.getElementById('rank-tbody').innerHTML = standings.map((t,i) => {
+    const rank=i+1, leader=rank===1&&hasData;
+    const crew = state.crews[t.id]||['',''];
+    const names = [getCaptainName(t.id), crew[0]||'Tripulante 1', crew[1]||'Tripulante 2'];
+    const roles = ['Cap.','T-1','T-2'];
+    const memberRows = names.map((n,mi) =>
+      `<div class="mbr-row">
+        <span class="mbr-role">${roles[mi]}</span>
+        <span class="mbr-name">${n}</span>
+        <span class="mbr-pts" style="color:${t.color}">${t.memberPts[mi]} pts</span>
+      </div>`
+    ).join('');
+    return `<tr class="r-row expandable${leader?' leader':''}" onclick="toggleExpand('${t.id}')">
+      <td class="rk-num">${rank}</td>
+      <td><div class="t-name-wrap">
+        <span class="t-dot" style="background:${t.color}"></span>
+        <span class="t-name">${t.name}</span>
+        ${leader?'<span class="leader-badge">Líder</span>':''}
+        ${twitchLink(t.id)}
+      </div></td>
+      <td class="num-cell hide-sm">${t.wins}</td>
+      <td class="num-cell hide-sm">${t.pods}</td>
+      <td class="pts-val">${t.pts}</td>
+      <td class="expand-td"><span class="expand-arrow" id="arrow-${t.id}">▾</span></td>
+    </tr>
+    <tr class="expand-detail" id="expand-${t.id}">
+      <td colspan="6"><div class="expand-inner">${memberRows}</div></td>
+    </tr>`;
+  }).join('');
+
+  const podiumLabels = ['🥇','🥈','🥉'];
+  const progRows = [0,1,2,3].map(p => {
+    const allDone = partidaDone(p);
+    const racesIn = [0,1,2].filter(c => raceDone(p,c)).length;
+    const isActive = !allDone && racesIn > 0;
+    const isPending = !allDone && racesIn === 0;
+    const pips = [0,1,2].map(c => `<div class="pip${raceDone(p,c)?' done':''}"></div>`).join('');
+    const statusTxt = allDone ? 'Completada' : isActive ? `${racesIn}/3 carreras` : 'Pendiente';
+    const statusCls = allDone ? 'done' : isActive ? 'active' : 'pending';
+
+    const top3 = calcPartidaStandings(p);
+    const podiumHtml = top3.length ? `
+      <div class="prog-podium">
+        ${top3.map((t,i) => `
+          <div class="prog-podium-row">
+            <span class="prog-pod-medal">${podiumLabels[i]}</span>
+            <span class="prog-pod-dot" style="background:${t.color}"></span>
+            <span class="prog-pod-name">${t.name}</span>
+            <span class="prog-pod-pts" style="color:${t.color}">${t.pts}</span>
+          </div>`).join('')}
+      </div>` : (isPending ? `<div class="prog-pending-msg">Sin resultados</div>` : '');
+
+    return `<div class="prog-row prog-row-v2${allDone?' prog-done':isActive?' prog-active':''}">
+      <div class="prog-row-head">
+        <span class="prog-label">Partida ${p+1}</span>
+        <div class="race-pips">${pips}</div>
+        <span class="prog-status ${statusCls}">${statusTxt}</span>
+      </div>
+      ${podiumHtml}
+    </div>`;
+  }).join('');
+
+  document.getElementById('prog-wrap').innerHTML = `
+    <div class="sec-head" style="margin-bottom:14px">
+      <h2 style="font-size:15px">Progreso</h2><div class="rule"></div>
+    </div>
+    <div class="prog-list">${progRows}</div>`;
+}
+
+function renderEquipos() {
+  const standings = calcStandings();
+  document.getElementById('teams-grid').innerHTML = standings.map((t,i) => {
+    const rank = i+1;
+    const crew = state.crews[t.id]||['',''];
+    const m0 = crew[0]||'[Comunidad 1]', m1 = crew[1]||'[Comunidad 2]';
+    const fs = t.name.length>8 ? 'clamp(18px,4vw,24px)' : 'clamp(22px,5vw,30px)';
+    return `<div class="t-card" style="color:${t.color}">
+      <div class="card-stripe" style="background:${t.color}"></div>
+      <div class="card-inner">
+        <div class="card-top">
+          <div>
+            <div class="card-eyebrow">Capitán</div>
+            <div class="card-name" style="color:${t.color};font-size:${fs}">${getCaptainName(t.id)}</div>
+            ${(state.twitchChannels&&state.twitchChannels[t.id])?`<a class="card-twitch" href="https://www.twitch.tv/${state.twitchChannels[t.id]}" target="_blank" rel="noopener">${TWITCH_SVG}twitch.tv/${state.twitchChannels[t.id]}</a>`:''}
+          </div>
+          <div class="card-rk" style="color:${t.color}">#${rank}</div>
+        </div>
+        <div class="card-sep"></div>
+        <div class="crew-label">Tripulación</div>
+        <div class="crew-list">
+          <div class="crew-item"><span class="crew-arrow">▸</span>${m0}</div>
+          <div class="crew-item"><span class="crew-arrow">▸</span>${m1}</div>
+        </div>
+        <div class="card-stats">
+          <div class="s-block"><span class="s-val" style="color:${t.color}">${t.pts}</span><span class="s-lbl">Puntos</span></div>
+          <div class="s-block"><span class="s-val">${t.wins}</span><span class="s-lbl">Victorias</span></div>
+          <div class="s-block"><span class="s-val">${t.pods}</span><span class="s-lbl">Podios</span></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderCrewEditor() {
+  document.getElementById('crew-editor').innerHTML = TEAMS.map(t => {
+    const crew = state.crews[t.id]||['',''];
+    const capName = getCaptainName(t.id);
+    return `<div class="crew-card">
+      <div class="ce-name" style="color:${t.color}">${getTeamName(t.id)}</div>
+      <div class="ce-field"><label class="ce-label">Capitán (creador)</label><input type="text" class="dark-input" id="crew-${t.id}-cap" value="${capName}" placeholder="${t.name}" maxlength="28"></div>
+      <div class="ce-field"><label class="ce-label">Tripulante 1</label><input type="text" class="dark-input" id="crew-${t.id}-0" value="${crew[0]}" placeholder="Nombre" maxlength="28"></div>
+      <div class="ce-field"><label class="ce-label">Tripulante 2</label><input type="text" class="dark-input" id="crew-${t.id}-1" value="${crew[1]}" placeholder="Nombre" maxlength="28"></div>
+    </div>`;
+  }).join('');
+}
+
+function renderTeamNamesEditor() {
+  document.getElementById('team-names-editor').innerHTML = TEAMS.map(t => {
+    const tn = getTeamName(t.id);
+    const ch = (state.twitchChannels && state.twitchChannels[t.id]) || '';
+    return `<div class="crew-card">
+      <div class="ce-name" style="color:${t.color}">Equipo ${t.name}</div>
+      <div class="ce-field"><label class="ce-label">Nombre visible</label><input type="text" class="dark-input" id="tname-${t.id}" value="${tn}" placeholder="${t.name}" maxlength="24"></div>
+      <div class="ce-field"><label class="ce-label" style="display:flex;align-items:center;gap:5px">${TWITCH_SVG.replace('svg ','svg style="width:11px;height:11px;color:#9146ff" ')}Canal de Twitch</label><input type="text" class="dark-input" id="twitch-${t.id}" value="${ch}" placeholder="nombre_canal" maxlength="40" autocomplete="off" spellcheck="false"></div>
+    </div>`;
+  }).join('');
+}
+
+function saveTeamNames() {
+  TEAMS.forEach(t => {
+    const inp = document.getElementById(`tname-${t.id}`);
+    const tw  = document.getElementById(`twitch-${t.id}`);
+    state.teamNames[t.id]      = (inp ? inp.value.trim() : '') || t.name;
+    state.twitchChannels[t.id] = tw ? tw.value.trim().replace(/^@/,'') : '';
+  });
+  saveState();
+  renderClasificacion(); renderEquipos(); renderStreams(); renderCrewEditor(); renderTeamNamesEditor(); renderRaceEditor();
+  const btn = document.getElementById('save-teamnames-btn');
+  btn.textContent='✓ Guardado'; btn.classList.add('saved');
+  setTimeout(() => { btn.textContent='Guardar nombres'; btn.classList.remove('saved'); }, 2000);
+}
+
+function renderPointsEditor() {
+  const pts = state.points || DEFAULT_POINTS;
+  const rows = pts.map((p,i) =>
+    `<div class="pts-edit-row">
+      <span class="pts-edit-pos">${POS_LABELS[i]||`${i+1}.º`}</span>
+      <input type="number" class="dark-input pts-edit-input" id="pts-pos-${i}" value="${p}" min="0" max="9999">
+      <span class="pts-edit-lbl">pts</span>
+    </div>`
+  ).join('');
+  document.getElementById('points-editor').innerHTML =
+    `<div class="pts-edit-grid">${rows}</div>
+     <div style="margin-top:14px"><button class="btn-primary" id="save-points-btn">Guardar puntuación</button></div>`;
+  document.getElementById('save-points-btn').addEventListener('click', savePoints);
+}
+
+function savePoints() {
+  state.points = (state.points||DEFAULT_POINTS).map((_,i) => {
+    const inp = document.getElementById(`pts-pos-${i}`);
+    return inp ? Math.max(0, parseInt(inp.value)||0) : 0;
+  });
+  saveState();
+  renderClasificacion(); renderFormatoScoring(); renderRaceEditor(); renderPointsEditor();
+}
+
+function buildPersonOptions(savedPid) {
+  let html = '<option value="">— Piloto —</option>';
+  TEAMS.forEach(t => {
+    const tn   = getTeamName(t.id);
+    const crew = state.crews[t.id]||['',''];
+    const members = [
+      { pid:`${t.id}_0`, label:`${getCaptainName(t.id)} (Cap.)` },
+      { pid:`${t.id}_1`, label:`${crew[0]||'Tripulante 1'} (T-1)` },
+      { pid:`${t.id}_2`, label:`${crew[1]||'Tripulante 2'} (T-2)` },
+    ];
+    html += `<optgroup label="${tn}">`;
+    members.forEach(m => { html += `<option value="${m.pid}"${savedPid===m.pid?' selected':''}>${m.label}</option>`; });
+    html += '</optgroup>';
+  });
+  return html;
+}
+
+function buildRaceForm(key, carNum) {
+  const saved = state.results[key];
+  const isSaved = !!saved;
+  const numPos = (state.points||DEFAULT_POINTS).length;
+  const posRows = Array.from({length:numPos}, (_,i) => {
+    const savedVal = saved ? (saved[i]||'') : '';
+    return `<div class="pos-row">
+      <span class="pos-medal">${POS_LABELS[i]||`${i+1}.º`}</span>
+      <select class="dark-select pos-sel" data-key="${key}" data-pos="${i+1}">
+        ${buildPersonOptions(savedVal)}
+      </select>
+    </div>`;
+  }).join('');
+  return `<div class="race-form${isSaved?' is-saved':''}" id="rf-${key}">
+    <div class="rf-head">
+      <span class="rf-num">Carrera ${carNum}</span>
+      ${isSaved?'<span class="saved-tag">✓ Guardada</span>':''}
+    </div>
+    <div class="pos-rows">${posRows}</div>
+    <div class="rf-error" id="err-${key}" hidden></div>
+    <div class="rf-actions">
+      <button class="btn-save" data-key="${key}">Guardar</button>
+      ${isSaved?`<button class="btn-clear" data-key="${key}">Borrar</button>`:''}
+    </div>
+  </div>`;
+}
+
+function renderRaceEditor() {
+  let html = '';
+  for(let p=0;p<4;p++) {
+    const forms = [0,1,2].map(c => buildRaceForm(`${p}_${c}`, c+1)).join('');
+    html += `<div class="partida-admin"><div class="pa-label">Partida ${p+1}</div><div class="pa-races">${forms}</div></div>`;
+  }
+  const el = document.getElementById('race-editor');
+  el.innerHTML = html;
+  el.querySelectorAll('.btn-save').forEach(btn => btn.addEventListener('click', () => saveRace(btn.dataset.key)));
+  el.querySelectorAll('.btn-clear').forEach(btn => btn.addEventListener('click', () => clearRace(btn, btn.dataset.key)));
+}
+
+function saveRace(key) {
+  const sels   = document.querySelectorAll(`.pos-sel[data-key="${key}"]`);
+  const vals   = Array.from(sels).map(s => s.value);
+  const errEl  = document.getElementById(`err-${key}`);
+  const filled = vals.filter(v => v);
+  if(new Set(filled).size !== filled.length) {
+    errEl.textContent='Cada piloto solo puede aparecer una vez.'; errEl.hidden=false; return;
+  }
+  errEl.hidden = true;
+  state.results[key] = vals;
+  saveState();
+  renderClasificacion(); renderEquipos(); renderRaceEditor();
+}
+
+function clearRace(btn, key) {
+  if(btn.dataset.confirm !== '1') {
+    btn.dataset.confirm='1'; btn.textContent='¿Confirmar?'; btn.classList.add('confirming');
+    setTimeout(() => { if(btn.dataset.confirm==='1'){btn.dataset.confirm='';btn.textContent='Borrar';btn.classList.remove('confirming');} }, 3000);
+    return;
+  }
+  delete state.results[key];
+  saveState();
+  renderClasificacion(); renderEquipos(); renderRaceEditor();
+}
+
+function saveCrews() {
+  TEAMS.forEach(t => {
+    const cap = (document.getElementById(`crew-${t.id}-cap`)||{}).value||'';
+    const v0  = (document.getElementById(`crew-${t.id}-0`)||{}).value||'';
+    const v1  = (document.getElementById(`crew-${t.id}-1`)||{}).value||'';
+    state.captainNames[t.id] = cap.trim() || t.name;
+    state.crews[t.id] = [v0.trim(), v1.trim()];
+  });
+  saveState(); renderClasificacion(); renderEquipos(); renderRaceEditor();
+  const btn = document.getElementById('save-crews-btn');
+  btn.textContent='✓ Guardado'; btn.classList.add('saved');
+  setTimeout(() => { btn.textContent='Guardar nombres'; btn.classList.remove('saved'); }, 2000);
+}
+
+let streamLayout = '2';
+
+function buildStreamGrid() {
+  const hosts = new Set(['claude.ai']);
+  try { const h = window.location.hostname; if(h) hosts.add(h); } catch(e){}
+  try { const h = window.top.location.hostname; if(h) hosts.add(h); } catch(e){}
+  const parentParams = [...hosts].map(h => `parent=${encodeURIComponent(h)}`).join('&');
+
+  const cells = TEAMS.map(t => {
+    const ch    = (state.twitchChannels && state.twitchChannels[t.id]) || '';
+    const tName = getTeamName(t.id);
+    const inner = ch
+      ? `<iframe src="https://player.twitch.tv/?channel=${encodeURIComponent(ch)}&${parentParams}&autoplay=false" allowfullscreen></iframe>`
+      : `<div class="ms-cell-empty">Sin canal</div>`;
+    return `<div class="ms-cell">
+      <div class="ms-cell-label" style="border-left:3px solid ${t.color}">${tName}</div>
+      ${inner}
+    </div>`;
+  }).join('');
+
+  return `<div class="ms-grid layout-${streamLayout}" id="ms-grid">${cells}</div>`;
+}
+
+function setStreamLayout(layout) {
+  streamLayout = layout;
+  document.querySelectorAll('.stream-layout-btn').forEach(b => b.classList.toggle('active', b.dataset.layout===layout));
+  const grid = document.getElementById('ms-grid');
+  if(grid) { grid.className = `ms-grid layout-${layout}`; }
+}
+
+function renderStreams() {
+  const el = document.getElementById('streams');
+  if(!el) return;
+
+  const isFile = window.location.protocol === 'file:';
+  const notice = isFile
+    ? `<div class="stream-notice">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Los players de Twitch requieren que la página esté servida desde un dominio (no desde archivo local). Sube el HTML a cualquier hosting o ábrelo con un servidor local.
+      </div>`
+    : '';
+
+  const toolbar = `<div class="streams-toolbar">
+    <button class="stream-layout-btn active" data-layout="2" onclick="setStreamLayout('2')">2 columnas</button>
+    <button class="stream-layout-btn" data-layout="3" onclick="setStreamLayout('3')">3 columnas</button>
+    <button class="stream-layout-btn" data-layout="full" onclick="setStreamLayout('full')">Pantalla completa</button>
+  </div>`;
+
+  el.innerHTML = `
+    <div class="sec-head">
+      <h2>Streams en Directo</h2>
+      <div class="chip" style="color:#9146ff;border-color:#9146ff;background:rgba(145,70,255,.08)">Live</div>
+      <div class="rule"></div>
+    </div>
+    ${notice}
+    ${toolbar}
+    ${buildStreamGrid()}`;
+}
+
+function renderFormatoScoring() {
+  const pts = state.points || DEFAULT_POINTS;
+  const posNames = [
+    '1.er puesto','2.º puesto','3.er puesto','4.º puesto','5.º puesto',
+    '6.º puesto','7.º puesto','8.º puesto','9.º puesto','10.º puesto'
+  ];
+  const rows = pts.map((p, i) => {
+    const icon = i < 3 ? `<span class="medal">${POS_LABELS[i]}</span>` : '';
+    return `<tr><td>${icon}${posNames[i]||`${i+1}.º puesto`}</td><td class="pts-col">${p}</td></tr>`;
+  }).join('');
+  document.getElementById('fmt-scoring').innerHTML = `
+    <h3>Sistema de Puntuación</h3>
+    <p style="margin-bottom:0">Cada carrera otorga puntos según la posición de llegada. Los puntos se acumulan a lo largo de todas las carreras del torneo.</p>
+    <table class="score-tbl">
+      <thead><tr><th>Posición de llegada</th><th style="text-align:right">Puntos</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+// Expand member breakdown in clasificación
+function toggleExpand(teamId) {
+  const detail = document.getElementById(`expand-${teamId}`);
+  const mainRow = detail ? detail.previousElementSibling : null;
+  if(!detail) return;
+  const isOpen = detail.classList.toggle('open');
+  if(mainRow) mainRow.classList.toggle('open', isOpen);
+}
+
+// Password gate
+let adminAuth = false;
+function tryLogin() {
+  const input = document.getElementById('pw-input');
+  const err   = document.getElementById('pw-err');
+  if (input.value === 'dronecup25') {
+    adminAuth = true;
+    document.getElementById('admin-gate').style.display    = 'none';
+    document.getElementById('admin-content').style.display = '';
+    err.textContent = '';
+  } else {
+    input.classList.remove('shake');
+    void input.offsetWidth; // reflow to restart animation
+    input.classList.add('shake');
+    err.textContent = 'Contraseña incorrecta';
+    input.value = '';
+    setTimeout(() => input.classList.remove('shake'), 400);
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const pwInput = document.getElementById('pw-input');
+  if (pwInput) pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+});
+
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.page).classList.add('active');
+    // If switching to admin and not yet authenticated, show gate
+    if (btn.dataset.page === 'admin' && !adminAuth) {
+      document.getElementById('admin-gate').style.display    = '';
+      document.getElementById('admin-content').style.display = 'none';
+    }
+  });
+});
+
+// Boot
+loadState();
+renderClasificacion();
+renderFormatoScoring();
+renderEquipos();
+renderStreams();
+renderTeamNamesEditor();
+renderCrewEditor();
+renderPointsEditor();
+renderRaceEditor();
+document.getElementById('save-crews-btn').addEventListener('click', saveCrews);
+document.getElementById('save-teamnames-btn').addEventListener('click', saveTeamNames);
+</script>
