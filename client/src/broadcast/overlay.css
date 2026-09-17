@@ -1,0 +1,238 @@
+/* ── BROADCAST OVERLAY — Creator Camera Frame ─── */
+/* Provisional design — will be replaced by Photoshop assets */
+/* Designed for 1920×1080 OBS Browser Source */
+/* Layout: right-center panel to avoid game UI corners */
+
+.ov-root {
+  --ov-team: #e05520;
+  --ov-bg: transparent;
+  --ov-surface: rgba(6, 9, 13, 0.85);
+  --ov-text: #c2d4e6;
+  --ov-text-bright: #ffffff;
+  --ov-muted: #526c87;
+  --ov-border: rgba(255, 255, 255, 0.08);
+
+  width: 1920px;
+  height: 1080px;
+  background: var(--ov-bg);
+  font-family: 'Rajdhani', 'Barlow Condensed', sans-serif;
+  color: var(--ov-text);
+  position: relative;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ov-loading,
+.ov-error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--ov-muted);
+}
+
+/* ── FRAME CONTAINER ── */
+.ov-frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ── PANEL LATERAL DERECHO (centrado vertical) ── */
+.ov-panel {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ── TEAM HEADER (top of panel) ── */
+.ov-team-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--ov-surface);
+  padding: 12px 16px;
+  border-radius: 4px 4px 0 0;
+  border-left: 3px solid var(--ov-team);
+}
+
+.ov-team-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--ov-team);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ov-team-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.ov-team-name {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ov-text-bright);
+  line-height: 1;
+}
+
+.ov-team-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ov-muted);
+  margin-top: 3px;
+}
+
+.ov-team-rank {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--ov-text-bright);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+/* ── PILOTS LIST ── */
+.ov-pilot-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ov-surface);
+  padding: 7px 16px 7px 10px;
+}
+
+.ov-pilot-role {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 20px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--ov-text-bright);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.ov-pilot-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--ov-text);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ov-pilot-pts {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ov-text-bright);
+  letter-spacing: 0.04em;
+  min-width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── TEAM TOTAL (bottom of panel) ── */
+.ov-team-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--ov-surface);
+  padding: 8px 16px;
+  border-radius: 0 0 4px 4px;
+  border-top: 2px solid var(--ov-team);
+}
+
+.ov-total-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--ov-muted);
+  text-transform: uppercase;
+}
+
+.ov-total-pts {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ov-team);
+  letter-spacing: 0.06em;
+}
+
+/* ── LIVE BADGE (below panel) ── */
+.ov-live-badge {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: 170px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ov-surface);
+  padding: 5px 14px;
+  border-radius: 3px;
+}
+
+.ov-footer-title {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--ov-muted);
+  text-transform: uppercase;
+}
+
+.ov-footer-live {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #ef4444;
+  animation: ov-blink 2s ease-in-out infinite;
+}
+
+@keyframes ov-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── CONNECTION INDICATOR ── */
+.ov-connection {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 2px 6px;
+  border-radius: 2px;
+  opacity: 0.5;
+}
+
+.ov-connection.ok {
+  color: #22c55e;
+}
+
+.ov-connection.lost {
+  color: #ef4444;
+  animation: ov-blink 1s ease-in-out infinite;
+}
