@@ -4,7 +4,7 @@ import type { CompetitionState } from './useCompetition';
 import { api, ParticipantData, MapDetail } from '../api';
 import { getSocket } from '../socket';
 import { SectionHead, StatusBadge, LoadingState, EmptyState, MapResultTable, TeamDot } from './components';
-import { getAvatarBySlug, getCreatorBySlug } from './assets';
+import { getAvatarBySlug, getCreatorBySlug, getTeamColor } from './assets';
 
 interface TeamResults {
   map: MapDetail;
@@ -134,7 +134,7 @@ export default function TeamDetail() {
   const creator = participants.find(p => p.type === 'CREATOR');
   const player1 = participants.find(p => p.type === 'PLAYER_1');
   const player2 = participants.find(p => p.type === 'PLAYER_2');
-  const teamColor = team?.color || creatorData?.color || 'var(--accent)';
+  const teamColor = team ? getTeamColor(team) : (slug ? getTeamColor({ slug }) : 'var(--accent)');
 
   // Desglose de puntos individuales desde useCompetition
   const creatorIndiv = individuals?.find(i => i.participantId === creator?.id);
@@ -221,7 +221,7 @@ export default function TeamDetail() {
           {teams.map(t => {
             const isCurrent = t.slug === slug;
             const cData = getCreatorBySlug(t.slug);
-            const cColor = t.color || cData?.color || '#3b82f6';
+            const cColor = getTeamColor(t);
             const cAvatar = getAvatarBySlug(t.slug);
 
             return (

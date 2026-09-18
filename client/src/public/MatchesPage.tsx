@@ -4,7 +4,7 @@ import type { CompetitionState } from './useCompetition';
 import { api, MatchDetail, MapDetail, TeamData, ParticipantData } from '../api';
 import { getSocket } from '../socket';
 import { SectionHead, StatusBadge, TeamDot, LoadingState } from './components';
-import { getAvatarBySlug, getCreatorBySlug } from './assets';
+import { getAvatarBySlug, getCreatorBySlug, getTeamColor } from './assets';
 
 export default function MatchesPage() {
   const { matches, teams, loading } = useOutletContext<CompetitionState>();
@@ -128,7 +128,7 @@ export default function MatchesPage() {
                 Partida {spotlightMatch.matchNumber}
                 {activeSpotlightMap && (
                   <span className="pub-ms-spot-map">
-                    · Mapa {activeSpotlightMap.mapIndex} ({activeSpotlightMap.code})
+                    · Mapa {activeSpotlightMap.mapIndex}
                   </span>
                 )}
               </h2>
@@ -164,7 +164,7 @@ export default function MatchesPage() {
             <div className="pub-ms-duos-grid">
               {teams.map(t => {
                 const creatorData = getCreatorBySlug(t.slug);
-                const teamColor = t.color || creatorData?.color || '#3b82f6';
+                const teamColor = getTeamColor(t);
                 const avatar = getAvatarBySlug(t.slug);
                 const isP1 = spotlightMatch.matchNumber <= 2;
                 const activePilot = t.participants?.find(p => p.type === (isP1 ? 'PLAYER_1' : 'PLAYER_2'));
@@ -354,7 +354,7 @@ function MatchCardRow({
                 <div className="pub-match-pairs-grid">
                   {teams.map(t => {
                     const creatorData = getCreatorBySlug(t.slug);
-                    const teamColor = t.color || creatorData?.color || '#3b82f6';
+                    const teamColor = getTeamColor(t);
                     const p1 = t.participants?.find(p => p.type === 'PLAYER_1');
                     const p2 = t.participants?.find(p => p.type === 'PLAYER_2');
                     const activePilot = isP1 ? p1 : p2;
@@ -387,7 +387,6 @@ function MatchCardRow({
                       const isSelected = activeTab === mp.id;
                       const isLive = mp.status === 'ACTIVE';
                       const isDone = mp.status === 'COMPLETED';
-                      const globalNum = (match.matchNumber - 1) * 3 + mp.mapIndex;
 
                       return (
                         <button
@@ -398,9 +397,7 @@ function MatchCardRow({
                           role="tab"
                           aria-selected={isSelected}
                         >
-                          <span className="pub-mm-num">M{globalNum}</span>
-                          <span className="pub-mm-label">Mapa {mp.mapIndex}</span>
-                          <span className="pub-mm-code">{mp.code}</span>
+                          <span className="pub-mm-label">MAPA {mp.mapIndex}</span>
                           <span className={`pub-mm-badge ${isLive ? 'live' : isDone ? 'done' : 'pending'}`}>
                             {isLive ? 'En vivo' : isDone ? 'Fin' : 'Pendiente'}
                           </span>
@@ -475,12 +472,19 @@ function MapDetailCard({
     return Object.values(mapPointsByTeam).sort((a, b) => b.totalPoints - a.totalPoints);
   }, [mapDetail]);
 
+  const maxPoints = useMemo(() => {
+    if (teamScores.length === 0) return 0;
+    return teamScores[0].totalPoints;
+  }, [teamScores]);
+
   return (
     <div className={`pub-map-card ${mapData.status.toLowerCase()}`}>
       <div className="pub-map-card-head">
         <div className="pub-map-head-left">
-          <span className="pub-map-tag">MAPA {mapData.mapIndex}</span>
-          <span className="pub-map-code-title">{mapData.code}</span>
+          <div className="pub-map-title-wrap">
+            <span className="pub-map-title-bar" />
+            <h3 className="pub-map-title">MAPA {mapData.mapIndex}</h3>
+          </div>
         </div>
         <StatusBadge status={mapData.status} />
       </div>
@@ -489,20 +493,39 @@ function MapDetailCard({
         <div className="pub-map-card-content">
           {/* RESUMEN DE PUNTOS DEL MAPA POR EQUIPO */}
           <div className="pub-map-team-summary">
-            <span className="pub-mts-title">Puntos de Equipo en este Mapa (Suma de los 2 Drones)</span>
+            <div className="pub-mts-head">
+              <span className="pub-mts-title">Puntos de Equipo en este Mapa</span>
+              <span className="pub-mts-subtitle">Suma combinada de ambos drones</span>
+            </div>
             <div className="pub-mts-grid">
               {teamScores.map(ts => {
-                const creatorData = getCreatorBySlug(ts.teamName.toLowerCase());
-                const color = ts.teamColor || creatorData?.color || '#3b82f6';
+                const color = getTeamColor({ name: ts.teamName, teamName: ts.teamName });
+                const isWinner = maxPoints > 0 && ts.totalPoints === maxPoints;
 
                 return (
-                  <div key={ts.teamName} className="pub-mts-card" style={{ borderLeft: `3px solid ${color}` }}>
-                    <div className="pub-mts-team">{ts.teamName}</div>
-                    <div className="pub-mts-val">
-                      <strong>+{ts.totalPoints}</strong> <small>pts</small>
+                  <div
+                    key={ts.teamName}
+                    className={`pub-mts-card${isWinner ? ' is-winner' : ''}`}
+                    style={{ borderLeftColor: color }}
+                  >
+                    <div className="pub-mts-card-top">
+                      {isWinner && (
+                        <span className="pub-mts-winner-tag">Ganador del mapa</span>
+                      )}
+                      <div className="pub-mts-team-wrap">
+                        <TeamDot color={color} />
+                        <span className="pub-mts-team">{ts.teamName}</span>
+                      </div>
                     </div>
+
+                    <div className="pub-mts-val">
+                      <span className="pub-mts-val-num">+{ts.totalPoints}</span>
+                      <span className="pub-mts-val-unit">PTS</span>
+                    </div>
+
                     <div className="pub-mts-pos">
-                      {ts.positions.join(' & ')}
+                      <span className="pub-mts-pos-label">Drones</span>
+                      <span className="pub-mts-pos-val">{ts.positions.join(' · ')}</span>
                     </div>
                   </div>
                 );
@@ -520,7 +543,7 @@ function MapDetailCard({
                 const isPodium3 = r.position === 3;
                 const isDNF = r.status === 'DNF';
                 const creatorData = getCreatorBySlug(r.teamName.toLowerCase());
-                const color = r.teamColor || creatorData?.color || '#3b82f6';
+                const color = getTeamColor({ name: r.teamName, teamName: r.teamName });
                 const isCreator = r.participantType === 'CREATOR';
 
                 return (

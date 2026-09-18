@@ -417,6 +417,163 @@ export async function resetMatch(matchId: string) {
   };
 }
 
+export async function resetMap(mapId: string) {
+  const client = await pool.connect();
+  let tournamentId: string;
+  let tournamentStatus: string;
+  let matchId: string;
+  let matchNumber: number;
+  let targetMapIndex: number;
+  let isNoop = false;
+  let finalMatchStatus: string;
+  let finalCurrentMatchId: string | null = null;
+  let finalCurrentMapId: string | null = null;
+  let affectedMapIds: string[] = [];
+
+  try {
+    await client.query('BEGIN');
+
+    const { rows: [mapRow] } = await client.query(
+      `SELECT map.id, map.match_id, map.map_index, map.status AS map_status,
+              match.tournament_id, match.status AS match_status, match.match_number,
+              t.status AS tournament_status, t.current_match_id, t.current_map_id
+       FROM map
+       JOIN match ON match.id = map.match_id
+       JOIN tournament t ON t.id = match.tournament_id
+       WHERE map.id = $1
+       FOR UPDATE OF map`,
+      [mapId]
+    );
+
+    if (!mapRow) throw new ApiError(404, 'NOT_FOUND', 'Map not found');
+
+    matchId = mapRow.match_id;
+    tournamentId = mapRow.tournament_id;
+    tournamentStatus = mapRow.tournament_status;
+    matchNumber = mapRow.match_number;
+    targetMapIndex = mapRow.map_index;
+
+    if (mapRow.map_status === 'PENDING') {
+      const { rows: laterMaps } = await client.query(
+        `SELECT status FROM map WHERE match_id = $1 AND map_index > $2`,
+        [matchId, targetMapIndex]
+      );
+      const allLaterPending = laterMaps.every(m => m.status === 'PENDING');
+      if (allLaterPending) {
+        isNoop = true;
+        finalMatchStatus = mapRow.match_status;
+        await client.query('COMMIT');
+      }
+    }
+
+    if (!isNoop) {
+      const { rows: mapsToReset } = await client.query(
+        `SELECT id FROM map WHERE match_id = $1 AND map_index >= $2 ORDER BY map_index`,
+        [matchId, targetMapIndex]
+      );
+      affectedMapIds = mapsToReset.map(m => m.id);
+
+      await client.query(
+        `DELETE FROM map_result WHERE map_id = ANY($1)`,
+        [affectedMapIds]
+      );
+
+      await client.query(
+        `DELETE FROM ranking_snapshot WHERE map_id = ANY($1)`,
+        [affectedMapIds]
+      );
+
+      await client.query(
+        `UPDATE map SET status = 'PENDING', started_at = NULL, completed_at = NULL
+         WHERE match_id = $1 AND map_index >= $2`,
+        [matchId, targetMapIndex]
+      );
+
+      const { rows: [earlierCompleted] } = await client.query(
+        `SELECT COUNT(*)::int AS cnt FROM map WHERE match_id = $1 AND map_index < $2 AND status = 'COMPLETED'`,
+        [matchId, targetMapIndex]
+      );
+
+      if (earlierCompleted.cnt > 0) {
+        await client.query(
+          `UPDATE map SET status = 'ACTIVE', started_at = now() WHERE id = $1`,
+          [mapId]
+        );
+
+        if (mapRow.match_status !== 'LIVE') {
+          await client.query(
+            `UPDATE match SET status = 'LIVE', completed_at = NULL WHERE id = $1`,
+            [matchId]
+          );
+        }
+        finalMatchStatus = 'LIVE';
+
+        await client.query(
+          `UPDATE tournament SET current_match_id = $1, current_map_id = $2 WHERE id = $3`,
+          [matchId, mapId, tournamentId]
+        );
+        finalCurrentMatchId = matchId;
+        finalCurrentMapId = mapId;
+      } else {
+        if (mapRow.match_status !== 'UPCOMING') {
+          await client.query(
+            `UPDATE match SET status = 'UPCOMING', started_at = NULL, completed_at = NULL WHERE id = $1`,
+            [matchId]
+          );
+        }
+        finalMatchStatus = 'UPCOMING';
+
+        if (mapRow.current_match_id === matchId) {
+          await client.query(
+            `UPDATE tournament SET current_match_id = NULL, current_map_id = NULL WHERE id = $1`,
+            [tournamentId]
+          );
+        }
+        finalCurrentMatchId = mapRow.current_match_id === matchId ? null : mapRow.current_match_id;
+        finalCurrentMapId = mapRow.current_match_id === matchId ? null : mapRow.current_map_id;
+      }
+
+      await client.query('COMMIT');
+    }
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
+
+  if (isNoop) {
+    return {
+      success: true,
+      mapId,
+      matchId: matchId!,
+      matchStatus: finalMatchStatus!,
+      affectedMaps: [],
+      noop: true,
+    };
+  }
+
+  await recalculateAllSnapshots(tournamentId);
+  const ranked = await calculateTeamRankings(tournamentId);
+
+  emitRankingUpdated(ranked);
+  emitCompetitionUpdated({
+    tournamentId,
+    status: tournamentStatus,
+    currentMatchId: finalCurrentMatchId,
+    currentMapId: finalCurrentMapId,
+  });
+
+  return {
+    success: true,
+    mapId,
+    matchId,
+    matchStatus: finalMatchStatus!,
+    affectedMaps: affectedMapIds,
+    ranked,
+  };
+}
+
 function mapErrorCode(field: string): string {
   switch (field) {
     case 'results': return 'INVALID_RESULT';

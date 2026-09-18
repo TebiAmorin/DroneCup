@@ -15,12 +15,13 @@ import { getSocket } from '../socket';
 type MatchFilter = 'OVERALL' | 1 | 2 | 3 | 4;
 
 export default function Classification() {
-  const { rankings, individuals, matches, teams, loading } = useOutletContext<CompetitionState>();
+  const { rankings, individuals, matches, teams, hasResults, loading } = useOutletContext<CompetitionState>();
   const navigate = useNavigate();
 
   const [matchFilter, setMatchFilter] = useState<MatchFilter>('OVERALL');
   const [expandedTeam, setExpandedTeam] = useState<string | null>(null);
   const [teamStats, setTeamStats] = useState<TeamStats[]>([]);
+  const [showIndividual, setShowIndividual] = useState<boolean>(true);
 
   const loadData = useCallback(async () => {
     try {
@@ -56,9 +57,8 @@ export default function Classification() {
   const totalMatches = matches.length || 4;
   const completedCount = completedMatches.length;
 
-  const isTournamentStarted =
-    rankings.some(r => r.totalPoints > 0) || liveMatch !== undefined || completedCount > 0;
-  const leader = rankings[0];
+  const isTournamentStarted = hasResults;
+  const leader = hasResults ? rankings[0] : undefined;
   const leaderPoints = leader?.totalPoints ?? 0;
   const leaderStats = teamStats.find(ts => ts.teamId === leader?.teamId);
   const leaderAvgPts =
@@ -115,7 +115,7 @@ export default function Classification() {
         // Gap strictly derived from official rankings
         const prevPoints = idx > 0 ? rankings[idx - 1].totalPoints : null;
         const gap = prevPoints !== null ? prevPoints - t.totalPoints : null;
-        const gapText = gap === null ? null : gap === 0 ? '= 0' : `-${gap}`;
+        const gapText = !hasResults ? null : gap === null ? null : gap === 0 ? '= 0' : `-${gap}`;
 
         const playedMatches = stats?.pointsByMatch ?? [];
         const playedMatchesCount = playedMatches.length;
@@ -135,8 +135,8 @@ export default function Classification() {
           teamSlug: t.teamSlug,
           teamColor,
           officialRank: t.rank,
-          posDisplay: String(t.rank).padStart(2, '0'),
-          pointsDisplay: t.totalPoints,
+          posDisplay: hasResults ? String(t.rank).padStart(2, '0') : '—',
+          pointsDisplay: hasResults ? t.totalPoints : null,
           gapText,
           stats,
           team,
@@ -292,10 +292,10 @@ export default function Classification() {
           <div className="pub-chk-card">
             <span className="pub-chk-label">PUNTOS DEL LÍDER</span>
             <span className="pub-chk-val gold">
-              {leaderPoints} <small>PTS</small>
+              {hasResults ? <>{leaderPoints} <small>PTS</small></> : '—'}
             </span>
             <span className="pub-chk-sub">
-              {isTieForFirst ? 'Empate en primera posición' : 'Puntuación acumulada oficial'}
+              {isTieForFirst ? 'Empate en primera posición' : hasResults ? 'Puntuación acumulada oficial' : 'Sin resultados registrados'}
             </span>
           </div>
 
@@ -312,10 +312,10 @@ export default function Classification() {
           <div className="pub-chk-card">
             <span className="pub-chk-label">RENDIMIENTO LÍDER</span>
             <span className="pub-chk-val">
-              {leaderAvgPts} <small>PTS / PARTIDA</small>
+              {hasResults ? <>{leaderAvgPts} <small>PTS / PARTIDA</small></> : '—'}
             </span>
             <span className="pub-chk-sub">
-              {leaderStats ? `${leaderStats.mapsWon} mapas ganados` : '—'}
+              {hasResults && leaderStats ? `${leaderStats.mapsWon} mapas ganados` : '—'}
             </span>
           </div>
         </div>
@@ -379,8 +379,8 @@ export default function Classification() {
                   {matchFilter === 'OVERALL'
                     ? 'Clasificación General (Acumulada Oficial)'
                     : isSelectedMatchPlayed
-                    ? `Rendimiento en Partida ${matchFilter} (Puntos de Ronda)`
-                    : `Partida ${matchFilter} · Pendiente`}
+                    ? 'Rendimiento de Ronda (Puntos)'
+                    : 'Ronda Pendiente'}
                 </span>
               )}
             </div>
@@ -401,8 +401,8 @@ export default function Classification() {
             <div className="pub-clas-pre-notice pending">
               <span className="pub-cpn-dot pending" />
               <span>
-                <strong>Partida {matchFilter} pendiente:</strong> Las puntuaciones de esta ronda se
-                computarán una vez disputado el primero mapa de la Partida {matchFilter}.
+                <strong>Ronda pendiente:</strong> Las puntuaciones de esta partida se
+                computarán una vez disputado su primer mapa.
               </span>
             </div>
           )}
@@ -416,9 +416,7 @@ export default function Classification() {
                     {matchFilter === 'OVERALL' ? '#' : `# Partida ${matchFilter}`}
                   </th>
                   <th className="pub-th-team">Equipo</th>
-                  <th className="r pub-th-pts">
-                    {matchFilter === 'OVERALL' ? 'Puntos' : `Puntos Partida ${matchFilter}`}
-                  </th>
+                  <th className="r pub-th-pts">Puntos</th>
                   <th className="pub-th-expand" />
                 </tr>
               </thead>
@@ -498,13 +496,8 @@ export default function Classification() {
                                   )}
                                 </div>
 
-                                {/* Información secundaria útil: Partidas jugadas, media y desglose P1..P4 */}
+                                {/* Desglose de progresión P1..P4 */}
                                 <div className="pub-rk-substats">
-                                  <span className="pub-rk-sub-meta">
-                                    {r.playedMatchesCount > 0
-                                      ? `${r.playedMatchesCount} ${r.playedMatchesCount === 1 ? 'Partida' : 'Partidas'} · Media: ${r.avgPointsPerMatch} pts`
-                                      : '0 Partidas disputadas'}
-                                  </span>
                                   <div className="pub-rk-rounds-breakdown">
                                     {r.matchPointsList.map(mp => {
                                       const isFilterActive = matchFilter === mp.matchNumber;
@@ -573,9 +566,12 @@ export default function Classification() {
                               </Link>
                             </div>
 
-                            <div className="pub-expand-members-grid">
+                            <div
+                              className="pub-expand-members-grid"
+                              style={{ '--team-color': r.teamColor } as any}
+                            >
                               <div
-                                className="pub-em-card cap"
+                                className="pub-em-card"
                                 style={{ borderLeft: `3px solid ${r.teamColor}` }}
                               >
                                 <div className="pub-em-role-tag">CREATOR</div>
@@ -590,7 +586,10 @@ export default function Classification() {
                                 </div>
                               </div>
 
-                              <div className="pub-em-card p1">
+                              <div
+                                className="pub-em-card"
+                                style={{ borderLeft: `3px solid ${r.teamColor}` }}
+                              >
                                 <div className="pub-em-role-tag">PLAYER 1</div>
                                 <div className="pub-em-row">
                                   <span className="pub-em-name">{p1?.name ?? 'Piloto 1'}</span>
@@ -603,7 +602,10 @@ export default function Classification() {
                                 </div>
                               </div>
 
-                              <div className="pub-em-card p2">
+                              <div
+                                className="pub-em-card"
+                                style={{ borderLeft: `3px solid ${r.teamColor}` }}
+                              >
                                 <div className="pub-em-role-tag">PLAYER 2</div>
                                 <div className="pub-em-row">
                                   <span className="pub-em-name">{p2?.name ?? 'Piloto 2'}</span>
@@ -624,6 +626,150 @@ export default function Classification() {
                 })}
               </tbody>
             </table>
+          </div>
+
+          {/* ── CLASIFICACIÓN INDIVIDUAL DE PILOTOS (SECUNDARIA) ── */}
+          <div className="pub-indiv-section">
+            <div className="pub-indiv-header">
+              <div className="pub-indiv-title-wrap">
+                <h2 className="pub-indiv-title">Clasificación Individual</h2>
+                <p className="pub-indiv-subtitle">
+                  {matchFilter === 'OVERALL'
+                    ? 'Puntuación individual acumulada de los 15 pilotos oficiales'
+                    : 'La clasificación individual oficial se computa sobre el acumulado del torneo'}
+                </p>
+              </div>
+              <div className="pub-indiv-actions">
+                <span className="pub-indiv-badge">
+                  {matchFilter === 'OVERALL' ? '15 Pilotos' : 'Vista General'}
+                </span>
+                <button
+                  type="button"
+                  className="pub-indiv-toggle-btn"
+                  onClick={() => setShowIndividual(prev => !prev)}
+                  aria-expanded={showIndividual}
+                >
+                  <span>{showIndividual ? 'Ocultar' : 'Mostrar'}</span>
+                  <CaretIcon isOpen={showIndividual} />
+                </button>
+              </div>
+            </div>
+
+            {showIndividual && (
+              matchFilter === 'OVERALL' ? (
+                <div className="pub-table-responsive-wrap">
+                  <table className="pub-rank-table pub-indiv-table">
+                    <thead>
+                      <tr>
+                        <th className="pub-th-pos">#</th>
+                        <th className="pub-th-team">Piloto</th>
+                        <th>Equipo</th>
+                        <th className="r pub-th-pts">Puntos</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {individuals.map(ind => {
+                        const team = teams.find(t => t.id === ind.teamId);
+                        const teamColor = getTeamColor({
+                          slug: team?.slug,
+                          name: ind.teamName,
+                          teamName: ind.teamName,
+                        });
+                        const roleLabel =
+                          ind.participantType === 'CREATOR'
+                            ? 'Capitán'
+                            : ind.participantType === 'PLAYER_1'
+                            ? 'Piloto 1'
+                            : 'Piloto 2';
+
+                        const creatorData =
+                          ind.participantType === 'CREATOR'
+                            ? getCreatorBySlug(team?.slug || ind.teamName)
+                            : null;
+
+                        return (
+                          <tr
+                            key={ind.participantId}
+                            className="pub-rk-row pub-indiv-row"
+                            style={{
+                              ['--team-color' as any]: teamColor,
+                              borderLeft: `4px solid ${teamColor}`,
+                            }}
+                          >
+                            {/* 1. POSICIÓN */}
+                            <td className="pub-rk-num-cell">
+                              <span className="pub-rk-pos-num">
+                                {hasResults ? String(ind.rank).padStart(2, '0') : '—'}
+                              </span>
+                            </td>
+
+                            {/* 2. PILOTO + ROL */}
+                            <td>
+                              <div className="pub-indiv-pilot-cell">
+                                <span className="pub-indiv-pilot-name">{ind.participantName}</span>
+                                <span className="pub-indiv-role-label">{roleLabel}</span>
+                                {creatorData && (
+                                  <a
+                                    className="pub-row-twitch-link hide-sm"
+                                    href={`https://www.twitch.tv/${creatorData.twitch}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    title={`Canal de Twitch de ${ind.participantName}`}
+                                    aria-label={`Twitch de ${ind.participantName}`}
+                                  >
+                                    <TwitchSvg />
+                                  </a>
+                                )}
+                              </div>
+                            </td>
+
+                            {/* 3. EQUIPO */}
+                            <td>
+                              <div className="pub-indiv-team-cell">
+                                <TeamDot color={teamColor} />
+                                <span
+                                  className="pub-indiv-team-name"
+                                  onClick={team?.slug ? () => navigate(`/teams/${team.slug}`) : undefined}
+                                  style={{ cursor: team?.slug ? 'pointer' : 'default' }}
+                                >
+                                  {ind.teamName}
+                                </span>
+                              </div>
+                            </td>
+
+                            {/* 4. PUNTOS */}
+                            <td className="pub-rk-pts">
+                              <div className="pub-rk-pts-main">
+                                <span className="pub-pts-number">
+                                  {hasResults ? ind.totalPoints : '—'}
+                                </span>
+                                <span className="pub-pts-label">
+                                  {hasResults ? 'PTS' : 'PENDIENTE'}
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="pub-indiv-notice">
+                  <span className="pub-in-title">Clasificación individual no disponible por partida</span>
+                  <p className="pub-in-text">
+                    El sistema oficial de competición calcula y publica la clasificación individual sobre el acumulado del torneo (Overall).
+                  </p>
+                  <button
+                    type="button"
+                    className="pub-indiv-switch-btn"
+                    onClick={() => setMatchFilter('OVERALL')}
+                  >
+                    Ver clasificación individual general (Overall) →
+                  </button>
+                </div>
+              )
+            )}
           </div>
         </div>
 
@@ -723,10 +869,10 @@ export default function Classification() {
           <div className="pub-side-card pub-side-prize">
             <span className="pub-side-eyebrow">PREMIO AL CAMPEÓN</span>
             <div className="pub-side-prize-val">
-              10.000 <small>Créditos R6</small>
+              +10.000 <small>Credits</small>
             </div>
             <p className="pub-side-prize-desc">
-              Bolsa oficial de créditos de Rainbow Six Siege para el equipo campeón al finalizar los
+              Bolsa oficial de créditos para el equipo campeón al finalizar los
               12 mapas de competición.
             </p>
           </div>

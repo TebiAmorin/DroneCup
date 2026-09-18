@@ -16,7 +16,7 @@ export const CREATORS = {
   caramelo: {
     name: 'Caramelo',
     twitch: 'CarameloOficial',
-    color: '#eab308',
+    color: '#ef4444',
     registrationUrl: 'https://twitter.com/CarameloOficial',
     registrationPlatform: 'twitter' as const,
     registrationLabel: 'Inscribirme en Twitter/X',
@@ -34,7 +34,7 @@ export const CREATORS = {
   miwell: {
     name: 'Miwell',
     twitch: 'DonMiwell',
-    color: '#22c55e',
+    color: '#a855f7',
     registrationUrl: 'https://www.twitch.tv/DonMiwell',
     registrationPlatform: 'twitch' as const,
     registrationLabel: 'Inscribirme en Twitch',
@@ -43,7 +43,7 @@ export const CREATORS = {
   sora: {
     name: 'SoraMusic',
     twitch: 'soramusicr6',
-    color: '#a855f7',
+    color: '#22c55e',
     registrationUrl: 'https://twitter.com/soramusicr6',
     registrationPlatform: 'twitter' as const,
     registrationLabel: 'Inscribirme en Twitter/X',
@@ -52,7 +52,7 @@ export const CREATORS = {
   barra: {
     name: 'Barra',
     twitch: 'barra',
-    color: '#ef4444',
+    color: '#f5c842',
     registrationUrl: 'https://discord.gg/barra',
     registrationPlatform: 'discord' as const,
     registrationLabel: 'Inscribirme en Discord',
@@ -99,20 +99,20 @@ export function getCreatorBySlug(slug: string) {
 }
 
 export const OFFICIAL_TEAM_COLORS: Record<string, string> = {
-  caramelo: '#f5c842',
-  vetel: '#3b82f6',
-  miwell: '#22c55e',
-  sora: '#a855f7',
-  soramusic: '#a855f7',
-  barra: '#ef4444',
-  alpha: '#f5c842',
-  beta: '#3b82f6',
-  gamma: '#22c55e',
-  delta: '#a855f7',
-  epsilon: '#ef4444',
+  caramelo: '#ef4444',
+  vetel: '#38bdf8',
+  miwell: '#a855f7',
+  sora: '#22c55e',
+  soramusic: '#22c55e',
+  barra: '#f5c842',
+  alpha: '#ef4444',
+  beta: '#38bdf8',
+  gamma: '#a855f7',
+  delta: '#22c55e',
+  epsilon: '#f5c842',
 };
 
-const PALETTE_FALLBACK = ['#f5c842', '#3b82f6', '#22c55e', '#a855f7', '#ef4444'];
+const PALETTE_FALLBACK = ['#38bdf8', '#a855f7', '#ef4444', '#f5c842', '#22c55e'];
 
 export function getTeamColor(
   team: { slug?: string; name?: string; teamSlug?: string; teamName?: string; color?: string | null; teamColor?: string | null },

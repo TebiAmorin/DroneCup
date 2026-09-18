@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { api, TeamStats, ParticipantStats, ProgressionResponse } from '../api';
 import { getSocket } from '../socket';
 import { SectionHead, LoadingState } from './components';
+import { CompetitionState } from './useCompetition';
 import StatsTeamSelector from './StatsTeamSelector';
 import StatsKPIHeader from './StatsKPIHeader';
 import PointsProgressionChart from './PointsProgressionChart';
@@ -10,6 +12,7 @@ import MapPerformanceTable from './MapPerformanceTable';
 import ParticipantStatsSection from './ParticipantStatsSection';
 
 export default function StatsPage() {
+  const compState = useOutletContext<CompetitionState | undefined>();
   const [teams, setTeams] = useState<TeamStats[]>([]);
   const [participants, setParticipants] = useState<ParticipantStats[]>([]);
   const [progression, setProgression] = useState<ProgressionResponse | null>(null);
@@ -93,9 +96,25 @@ export default function StatsPage() {
   }
 
   const completedMapsCount = teams.reduce((max, t) => Math.max(max, t.mapsPlayed), 0);
-  const chipLabel = completedMapsCount > 0
+  const hasResults = completedMapsCount > 0;
+  const chipLabel = hasResults
     ? `${completedMapsCount} de 12 Mapas Disputados`
     : '5 Escuadras Oficiales';
+
+  if (!hasResults) {
+    return (
+      <div className="pub-page pub-stats-page">
+        <SectionHead
+          title="Estadísticas del Torneo"
+          chip="Fase Previa"
+          subtitle="Análisis de rendimiento por escuadra, curvas de progresión acumulada y métricas de pilotos"
+        />
+        <div className="pub-chart-empty">
+          <p className="pub-ce-text">Las estadísticas se activarán cuando se dispute el primer mapa de competición.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pub-page pub-stats-page">
@@ -147,6 +166,7 @@ export default function StatsPage() {
         participants={participants}
         teams={teams}
         selectedTeamId={selectedTeamId}
+        individuals={compState?.individuals}
       />
     </div>
   );

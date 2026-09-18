@@ -1,11 +1,12 @@
 import { useState, useMemo } from 'react';
-import { ParticipantStats, TeamStats } from '../api';
+import { ParticipantStats, TeamStats, RankingIndividual } from '../api';
 import { getTeamColor } from './assets';
 
 interface ParticipantStatsSectionProps {
   participants: ParticipantStats[];
   teams: TeamStats[];
   selectedTeamId: string;
+  individuals?: RankingIndividual[];
 }
 
 type RoleFilter = 'ALL' | 'CREATOR' | 'PLAYER_1' | 'PLAYER_2';
@@ -74,6 +75,7 @@ export default function ParticipantStatsSection({
   participants,
   teams,
   selectedTeamId,
+  individuals,
 }: ParticipantStatsSectionProps) {
   const [roleFilter, setRoleFilter] = useState<RoleFilter>('ALL');
 
@@ -99,7 +101,7 @@ export default function ParticipantStatsSection({
           <div className="pub-chart-badge">Rendimiento Individual</div>
           <h3 className="pub-chart-title">Estadísticas de Pilotos</h3>
           <p className="pub-chart-subtitle">
-            Telemetría individual, puestos alcanzados, promedio por mapa y curva de progresión de cada corredor
+            Telemetría individual, clasificación oficial del torneo, promedio por mapa y curva de progresión de cada corredor
           </p>
         </div>
 
@@ -124,14 +126,14 @@ export default function ParticipantStatsSection({
               className={`pub-pf-btn${roleFilter === 'PLAYER_1' ? ' active' : ''}`}
               onClick={() => setRoleFilter('PLAYER_1')}
             >
-              Piloto 1 (M1-6)
+              Piloto 1 (Partidas 1–2)
             </button>
             <button
               type="button"
               className={`pub-pf-btn${roleFilter === 'PLAYER_2' ? ' active' : ''}`}
               onClick={() => setRoleFilter('PLAYER_2')}
             >
-              Piloto 2 (M7-12)
+              Piloto 2 (Partidas 3–4)
             </button>
           </div>
         )}
@@ -141,6 +143,18 @@ export default function ParticipantStatsSection({
         {displayParticipants.map((p, idx) => {
           const team = teams.find(t => t.teamId === p.teamId);
           const color = getTeamColor({ ...team, teamSlug: team?.teamSlug, teamName: p.teamName }, idx);
+
+          // Official tournament individual ranking from backend
+          const indivEntry = individuals?.find(i => i.participantId === p.participantId);
+          const officialRank = indivEntry?.rank;
+          const rankClass =
+            officialRank === 1
+              ? 'gold'
+              : officialRank === 2
+              ? 'silver'
+              : officialRank === 3
+              ? 'bronze'
+              : '';
 
           const roleLabel =
             p.participantType === 'CREATOR'
@@ -153,8 +167,8 @@ export default function ParticipantStatsSection({
             p.participantType === 'CREATOR'
               ? '12 Mapas'
               : p.participantType === 'PLAYER_1'
-              ? 'Mapas 1-6'
-              : 'Mapas 7-12';
+              ? 'Partidas 1–2'
+              : 'Partidas 3–4';
 
           const roleClass = p.participantType.toLowerCase().replace('_', '-');
 
@@ -169,9 +183,21 @@ export default function ParticipantStatsSection({
             >
               <div className="pub-part-card-head">
                 <div className="pub-part-card-pilot">
-                  <span className="pub-part-card-dot" style={{ background: color }} />
+                  {typeof officialRank === 'number' && (
+                    <div
+                      className={`pub-part-indiv-badge${rankClass ? ` ${rankClass}` : ''}`}
+                      title={`Puesto #${officialRank} en la clasificación individual oficial`}
+                    >
+                      <span className="pub-part-indiv-num">#{officialRank}</span>
+                      <span className="pub-part-indiv-lbl">INDIVIDUAL</span>
+                    </div>
+                  )}
+
                   <div className="pub-part-card-identity">
-                    <h4 className="pub-part-card-name">{p.participantName}</h4>
+                    <div className="pub-part-card-name-row">
+                      <span className="pub-part-card-dot" style={{ background: color }} />
+                      <h4 className="pub-part-card-name">{p.participantName}</h4>
+                    </div>
                     <span className="pub-part-card-team">{p.teamName}</span>
                   </div>
                 </div>
@@ -184,7 +210,7 @@ export default function ParticipantStatsSection({
 
               {/* Main metrics grid */}
               <div className="pub-part-metrics-grid">
-                <div className="pub-part-metric">
+                <div className="pub-part-metric hero">
                   <span className="pub-part-metric-val highlight" style={{ color }}>
                     {p.totalPoints}
                   </span>
@@ -193,21 +219,21 @@ export default function ParticipantStatsSection({
 
                 <div className="pub-part-metric">
                   <span className="pub-part-metric-val">{p.mapsPlayed}</span>
-                  <span className="pub-part-metric-lbl">Mapas Jugados</span>
+                  <span className="pub-part-metric-lbl">Mapas</span>
                 </div>
 
                 <div className="pub-part-metric">
                   <span className="pub-part-metric-val">
                     {p.averagePointsPerMap !== null ? p.averagePointsPerMap : '—'}
                   </span>
-                  <span className="pub-part-metric-lbl">Promedio / Mapa</span>
+                  <span className="pub-part-metric-lbl">Promedio / M</span>
                 </div>
 
                 <div className="pub-part-metric">
                   <span className={`pub-part-metric-val${p.bestPosition === 1 ? ' gold' : p.bestPosition === 2 ? ' silver' : p.bestPosition === 3 ? ' bronze' : ''}`}>
                     {p.bestPosition !== null ? `${p.bestPosition}.º` : '—'}
                   </span>
-                  <span className="pub-part-metric-lbl">Mejor Posición</span>
+                  <span className="pub-part-metric-lbl">Mejor Pos.</span>
                 </div>
 
                 <div className="pub-part-metric">

@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useCreatorOverlay } from './useCreatorOverlay';
-import { getAvatarBySlug, getCreatorBySlug } from '../public/assets';
+import { getAvatarBySlug, getCreatorBySlug, getTeamColor } from '../public/assets';
 import './overlay.css';
 
 export default function CreatorOverlay() {
@@ -8,7 +8,7 @@ export default function CreatorOverlay() {
   const data = useCreatorOverlay(slug);
   const creatorData = getCreatorBySlug(slug);
   const avatar = getAvatarBySlug(slug);
-  const teamColor = data.team?.color || creatorData?.color || '#e05520';
+  const teamColor = data.team ? getTeamColor(data.team) : (slug ? getTeamColor({ slug }) : '#e05520');
 
   if (data.loading) {
     return (

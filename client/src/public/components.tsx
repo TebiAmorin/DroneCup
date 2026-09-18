@@ -1,4 +1,5 @@
 import { RankingTeam, MapResultData } from '../api';
+import { getTeamColor } from './assets';
 
 export function StatusBadge({ status }: { status: string }) {
   const cls = status === 'LIVE' ? 'live' : status === 'COMPLETED' ? 'completed' : 'upcoming';
@@ -96,7 +97,7 @@ export function RankingTable({ rankings, onTeamClick }: { rankings: RankingTeam[
             <td className="pub-rk-num">{t.rank}</td>
             <td>
               <div className="pub-rk-name-wrap">
-                <TeamDot color={t.teamColor} />
+                <TeamDot color={getTeamColor(t)} />
                 <span className="pub-rk-name">{t.teamName}</span>
                 {t.rank === 1 && <span className="pub-leader-badge">Líder</span>}
               </div>

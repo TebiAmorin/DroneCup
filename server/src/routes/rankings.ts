@@ -12,7 +12,16 @@ router.get('/', async (_req, res, next) => {
     const teams = await calculateTeamRankings(tournament.id);
     const individuals = await calculateIndividualRankings(tournament.id);
 
-    res.json({ teams, individuals });
+    const { rows: [{ count }] } = await pool.query<{ count: string }>(
+      `SELECT COUNT(*)::text AS count FROM map_result mr
+       JOIN map ON map.id = mr.map_id
+       JOIN match ON match.id = map.match_id
+       WHERE match.tournament_id = $1`,
+      [tournament.id]
+    );
+    const hasResults = parseInt(count, 10) > 0;
+
+    res.json({ teams, individuals, hasResults });
   } catch (err) { next(err); }
 });
 

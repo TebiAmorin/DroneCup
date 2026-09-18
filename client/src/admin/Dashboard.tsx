@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { api, TournamentData, MatchData, RankingTeam } from '../api';
 import { getSocket } from '../socket';
+import { useRefetchOnReconnect } from './useSocket';
+import { getTeamColor } from '../public/assets';
 import ResultEntry from './ResultEntry';
 
 export default function Dashboard() {
@@ -21,12 +23,15 @@ export default function Dashboard() {
       setMatches(m);
       setRankings(r.teams);
       setError(null);
-    } catch {
-      setError('Failed to load data');
+    } catch (err) {
+      console.error('Dashboard load error:', err);
+      setError('No se pudieron cargar los datos del dashboard.');
     } finally {
       setLoading(false);
     }
   }, []);
+
+  useRefetchOnReconnect(loadData);
 
   useEffect(() => {
     loadData();
@@ -49,42 +54,43 @@ export default function Dashboard() {
     };
   }, [loadData]);
 
-  if (loading) return <div className="loading">Loading...</div>;
+  if (loading) return <div className="loading">Cargando datos del panel...</div>;
   if (error) return <div className="error-message">{error}</div>;
-  if (!tournament) return <div className="error-message">No tournament found</div>;
+  if (!tournament) return <div className="error-message">No se encontró el torneo</div>;
 
   const liveMatch = matches.find(m => m.status === 'LIVE');
-  const currentMatch = liveMatch || matches.find(m => m.status === 'UPCOMING');
 
   return (
     <div>
-      <h1 className="page-title">Dashboard</h1>
+      <h1 className="page-title">Panel General</h1>
 
       <div className="grid-3">
         <div className="card">
-          <div className="card-title">Tournament</div>
+          <div className="card-title">Torneo</div>
           <div className="stat-value">{tournament.name}</div>
           <span className={`status-badge ${tournament.status.toLowerCase()}`}>
             {tournament.status}
           </span>
         </div>
-        <div className="card">
-          <div className="card-title">Current Match</div>
+
+        <div className={`card${liveMatch ? ' card-live-highlight' : ''}`}>
+          <div className="card-title">Partida en Directo</div>
           {liveMatch ? (
             <>
-              <div className="stat-value">Match {liveMatch.matchNumber}</div>
-              <span className="status-badge live">LIVE</span>
+              <div className="stat-value">Partida {liveMatch.matchNumber}</div>
+              <span className="status-badge live">EN DIRECTO</span>
             </>
           ) : (
-            <div className="stat-label">No active match</div>
+            <div className="stat-label">Sin partida activa</div>
           )}
         </div>
+
         <div className="card">
-          <div className="card-title">Progress</div>
+          <div className="card-title">Progreso del Torneo</div>
           <div className="stat-value">
             {matches.filter(m => m.status === 'COMPLETED').length} / {matches.length}
           </div>
-          <div className="stat-label">Matches completed</div>
+          <div className="stat-label">Partidas completadas</div>
         </div>
       </div>
 
@@ -97,49 +103,52 @@ export default function Dashboard() {
       )}
 
       <div className="card">
-        <div className="card-title">Current Classification</div>
+        <div className="card-title">Clasificación General Oficial</div>
         {rankings.length > 0 ? (
           <table className="ranking-table">
             <thead>
               <tr>
                 <th>#</th>
-                <th>Team</th>
-                <th style={{ textAlign: 'right' }}>Points</th>
+                <th>Equipo</th>
+                <th style={{ textAlign: 'right' }}>Puntos</th>
               </tr>
             </thead>
             <tbody>
-              {rankings.map(r => (
-                <tr key={r.teamId}>
-                  <td style={{ fontWeight: 700, width: '40px' }}>{r.rank}</td>
-                  <td>
-                    {r.teamColor && <span className="team-color" style={{ background: r.teamColor }} />}
-                    {r.teamName}
-                  </td>
-                  <td style={{ textAlign: 'right', fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: '18px' }}>
-                    {r.totalPoints}
-                  </td>
-                </tr>
-              ))}
+              {rankings.map((r, idx) => {
+                const color = getTeamColor({ color: r.teamColor, teamSlug: r.teamSlug, teamName: r.teamName }, idx);
+                return (
+                  <tr key={r.teamId}>
+                    <td style={{ fontWeight: 700, width: '40px' }}>{r.rank}</td>
+                    <td>
+                      <span className="team-color" style={{ background: color }} />
+                      <strong style={{ fontWeight: 600 }}>{r.teamName}</strong>
+                    </td>
+                    <td style={{ textAlign: 'right', fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: '18px' }}>
+                      {r.totalPoints}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         ) : (
-          <div className="stat-label">No results yet</div>
+          <div className="stat-label">No hay resultados registrados aún</div>
         )}
       </div>
 
       <div className="card">
-        <div className="card-title">Matches Overview</div>
+        <div className="card-title">Resumen de Partidas</div>
         <div className="grid-2">
           {matches.map(m => (
-            <div key={m.id} style={{ padding: '12px', background: 'var(--bg-secondary)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+            <div key={m.id} style={{ padding: '14px', background: 'var(--bg-secondary)', borderRadius: '6px', border: '1px solid var(--border)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: '16px' }}>
-                  Match {m.matchNumber}
+                <span style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: '17px' }}>
+                  Partida {m.matchNumber}
                 </span>
                 <span className={`status-badge ${m.status.toLowerCase()}`}>{m.status}</span>
               </div>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                {m.phase} · {m.matchNumber <= 2 ? 'Creator + Player 1' : 'Creator + Player 2'}
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '6px' }}>
+                {m.phase} · {m.matchNumber <= 2 ? 'Capitán + Piloto 1 (Partidas 1–2)' : 'Capitán + Piloto 2 (Partidas 3–4)'}
               </div>
             </div>
           ))}

@@ -15,7 +15,7 @@ import { StatusBadge, TeamDot, RankingTable, LoadingState } from './components';
 const CREATOR_ENTRIES = Object.entries(CREATORS) as [CreatorSlug, typeof CREATORS[CreatorSlug]][];
 
 export default function Home() {
-  const { matches, rankings, teams, loading } = useOutletContext<CompetitionState>();
+  const { matches, rankings, teams, hasResults, loading } = useOutletContext<CompetitionState>();
   const navigate = useNavigate();
   const liveMatch = matches.find(m => m.status === 'LIVE');
   const { match: liveDetail } = useMatchDetail(liveMatch?.id ?? null);
@@ -24,7 +24,7 @@ export default function Home() {
   const totalMatches = matches.length || 4;
   const completedCount = completedMatches.length;
 
-  const leader = rankings.length > 0 ? rankings[0] : null;
+  const leader = hasResults && rankings.length > 0 ? rankings[0] : null;
   const leaderColor = leader ? getTeamColor(leader) : undefined;
   const activeMap = liveDetail?.maps.find(mp => mp.status === 'ACTIVE') || liveDetail?.maps[0];
 
@@ -82,9 +82,9 @@ export default function Home() {
             </div>
           </div>
           <div className="pub-stat-card highlight">
-            <div className="pub-stat-num">10.000</div>
+            <div className="pub-stat-num">+10.000</div>
             <div className="pub-stat-label">
-              CRÉDITOS R6
+              Credits
               <span>Premio equipo campeón</span>
             </div>
           </div>
@@ -139,7 +139,7 @@ export default function Home() {
               <div className="pub-ms-duos-grid">
                 {teams.map(t => {
                   const creatorData = getCreatorBySlug(t.slug);
-                  const teamColor = t.color || creatorData?.color || getTeamColor(t);
+                  const teamColor = getTeamColor(t);
                   const avatar = getAvatarBySlug(t.slug);
                   const isP1 = liveMatch.matchNumber <= 2;
                   const activePilot = t.participants?.find(p => p.type === (isP1 ? 'PLAYER_1' : 'PLAYER_2'));
@@ -308,14 +308,14 @@ export default function Home() {
             <div className="pub-format-prize-row">
               <div>
                 <span className="pub-format-sub">03 · Premios y puntuación</span>
-                <h3 className="pub-format-head">10.000 Créditos R6 para el equipo campeón</h3>
+                <h3 className="pub-format-head">+10.000 Credits para el equipo campeón</h3>
                 <p className="pub-format-lead">
                   Los puntos obtenidos individualmente por el creador y su compañero en cada mapa se acumulan en la clasificación general de su equipo.
                 </p>
               </div>
               <div className="pub-prize-pill">
-                <span className="pub-prize-amount">10.000</span>
-                <span className="pub-prize-currency">Créditos R6</span>
+                <span className="pub-prize-amount">+10.000</span>
+                <span className="pub-prize-currency">Credits</span>
               </div>
             </div>
 
@@ -339,7 +339,7 @@ export default function Home() {
       </section>
 
       {/* ── CHAPTER 3: CLASIFICACIÓN (SI HAY RESULTADOS) ── */}
-      {rankings.length > 0 && (
+      {hasResults && rankings.length > 0 && (
         <section className="pub-chapter">
           <div className="pub-chapter-header">
             <div>

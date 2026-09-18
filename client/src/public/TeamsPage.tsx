@@ -3,7 +3,7 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import type { CompetitionState } from './useCompetition';
 import { api } from '../api';
 import { SectionHead, TeamDot, LoadingState, EmptyState } from './components';
-import { getAvatarBySlug, getCreatorBySlug } from './assets';
+import { getAvatarBySlug, getCreatorBySlug, getTeamColor } from './assets';
 
 function TwitchIcon({ size = 13 }: { size?: number }) {
   return (
@@ -13,9 +13,9 @@ function TwitchIcon({ size = 13 }: { size?: number }) {
   );
 }
 
-function TrophyIcon({ size = 13 }: { size?: number }) {
+function TrophyIcon({ size = 15 }: { size?: number }) {
   return (
-    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
       <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
       <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
       <path d="M4 22h16" />
@@ -99,7 +99,7 @@ export default function TeamsPage() {
       <SectionHead
         title="Equipos del Torneo"
         chip="5 Comunidades · 15 Pilotos"
-        subtitle="5 Creadores oficiales y 10 pilotos comunitarios en carreras por 10.000 Créditos R6"
+        subtitle="5 Creadores oficiales y 10 pilotos comunitarios en carreras por +10.000 Credits"
       />
 
       {/* ── BANNER DE FORMATO Y ESTRUCTURA DE EQUIPOS ── */}
@@ -118,7 +118,7 @@ export default function TeamsPage() {
           <div className="pub-tfh-num">1+2</div>
           <div className="pub-tfh-info">
             <span className="pub-tfh-title">Rotación de Pilotos</span>
-            <span className="pub-tfh-sub">Capitán (12 mapas) + Piloto 1 (Mapas 1-6) + Piloto 2 (Mapas 7-12)</span>
+            <span className="pub-tfh-sub">Capitán (12 mapas) + Piloto 1 (Partidas 1–2) + Piloto 2 (Partidas 3–4)</span>
           </div>
         </div>
 
@@ -138,16 +138,16 @@ export default function TeamsPage() {
         {sortedTeams.map(team => {
           const rank = rankings.find(r => r.teamId === team.id);
           const creatorData = getCreatorBySlug(team.slug);
-          const teamColor = team.color || creatorData?.color || '#3b82f6';
+          const teamColor = getTeamColor(team);
           const avatar = getAvatarBySlug(team.slug);
           const participants = team.participants ?? [];
           const creator = participants.find(p => p.type === 'CREATOR');
           const p1 = participants.find(p => p.type === 'PLAYER_1');
           const p2 = participants.find(p => p.type === 'PLAYER_2');
 
-          const creatorIndiv = individuals.find(i => i.participantId === creator?.id);
-          const p1Indiv = individuals.find(i => i.participantId === p1?.id);
-          const p2Indiv = individuals.find(i => i.participantId === p2?.id);
+          const creatorIndiv = individuals?.find(i => i.participantId === creator?.id);
+          const p1Indiv = individuals?.find(i => i.participantId === p1?.id);
+          const p2Indiv = individuals?.find(i => i.participantId === p2?.id);
 
           const stats = teamStats[team.id] || { victories: 0, podiums: 0, mapsRaced: 0 };
           const isRank1 = rank?.rank === 1;
@@ -221,70 +221,54 @@ export default function TeamsPage() {
                   <div className="pub-tec-metric">
                     <span className="pub-tem-val">
                       {stats.victories > 0 ? (
-                        <span className="pub-tem-gold">
-                          <TrophyIcon size={14} /> {stats.victories}
+                        <span className="pub-tem-gold" title={`${stats.victories} victorias en mapas`}>
+                          <TrophyIcon size={16} />
+                          <span className="pub-tem-num">{stats.victories}</span>
                         </span>
                       ) : (
-                        '0'
+                        <span className="pub-tem-num">0</span>
                       )}
                     </span>
                     <span className="pub-tem-lbl">Victorias (1.º)</span>
                   </div>
 
                   <div className="pub-tec-metric">
-                    <span className="pub-tem-val">{stats.podiums}</span>
+                    <span className="pub-tem-val">
+                      <span className="pub-tem-num">{stats.podiums}</span>
+                    </span>
                     <span className="pub-tem-lbl">Podios (Top 3)</span>
                   </div>
                 </div>
 
-                <div className="pub-tec-divider" />
-
-                {/* Desglose de Alineación y Puntos Aportados */}
-                <div className="pub-tec-roster">
-                  <span className="pub-tec-roster-title">Alineación & Puntos</span>
-
-                  {/* Capitán */}
-                  <div className="pub-tec-member">
-                    <div className="pub-tem-left">
-                      <TeamDot color={teamColor} />
-                      <span className="pub-tem-role-badge cap">Capitán</span>
-                      <span className="pub-tem-name">{creator?.name ?? creatorData?.name ?? team.name}</span>
+                {/* PARTICIPANTES DIRECTAMENTE INTEGRADOS EN LA CARD */}
+                <div className="pub-team-members-list">
+                  <div className="pub-tmr-item">
+                    <div className="pub-tmr-info">
+                      <span className="pub-tmr-role cap">Capitán</span>
+                      <span className="pub-tmr-name">{creator?.name ?? creatorData?.name ?? team.name}</span>
                     </div>
-                    <div className="pub-tem-right">
-                      <span className="pub-tem-pts">{creatorIndiv?.totalPoints ?? 0} pts</span>
-                      {creatorIndiv?.rank && (
-                        <span className="pub-tem-subrank">#{creatorIndiv.rank} Ind.</span>
-                      )}
+                    <div className="pub-tmr-pts">
+                      <strong>{creatorIndiv?.totalPoints ?? 0}</strong> <small>pts</small>
                     </div>
                   </div>
 
-                  {/* Piloto 1 */}
-                  <div className="pub-tec-member">
-                    <div className="pub-tem-left">
-                      <TeamDot color={teamColor} />
-                      <span className="pub-tem-role-badge p1">Piloto 1</span>
-                      <span className="pub-tem-name">{p1?.name ?? 'Piloto 1'}</span>
+                  <div className="pub-tmr-item">
+                    <div className="pub-tmr-info">
+                      <span className="pub-tmr-role">Piloto 1</span>
+                      <span className="pub-tmr-name">{p1?.name ?? 'Piloto 1'}</span>
                     </div>
-                    <div className="pub-tem-right">
-                      <span className="pub-tem-pts">{p1Indiv?.totalPoints ?? 0} pts</span>
-                      {p1Indiv?.rank && (
-                        <span className="pub-tem-subrank">#{p1Indiv.rank} Ind.</span>
-                      )}
+                    <div className="pub-tmr-pts">
+                      <strong>{p1Indiv?.totalPoints ?? 0}</strong> <small>pts</small>
                     </div>
                   </div>
 
-                  {/* Piloto 2 */}
-                  <div className="pub-tec-member">
-                    <div className="pub-tem-left">
-                      <TeamDot color={teamColor} />
-                      <span className="pub-tem-role-badge p2">Piloto 2</span>
-                      <span className="pub-tem-name">{p2?.name ?? 'Piloto 2'}</span>
+                  <div className="pub-tmr-item">
+                    <div className="pub-tmr-info">
+                      <span className="pub-tmr-role">Piloto 2</span>
+                      <span className="pub-tmr-name">{p2?.name ?? 'Piloto 2'}</span>
                     </div>
-                    <div className="pub-tem-right">
-                      <span className="pub-tem-pts">{p2Indiv?.totalPoints ?? 0} pts</span>
-                      {p2Indiv?.rank && (
-                        <span className="pub-tem-subrank">#{p2Indiv.rank} Ind.</span>
-                      )}
+                    <div className="pub-tmr-pts">
+                      <strong>{p2Indiv?.totalPoints ?? 0}</strong> <small>pts</small>
                     </div>
                   </div>
                 </div>

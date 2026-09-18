@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { pool } from '../db/pool.js';
-import { confirmMapResults, correctMapResults } from '../engine/stateMachine.js';
+import { confirmMapResults, correctMapResults, resetMap } from '../engine/stateMachine.js';
 import { requireAdmin } from '../middleware/auth.js';
 
 const router = Router();
@@ -58,6 +58,13 @@ router.put('/:id/results', requireAdmin, async (req, res, next) => {
     }
     const result = await correctMapResults(req.params.id as string, results);
     res.json({ success: true, ...result });
+  } catch (err) { next(err); }
+});
+
+router.post('/:id/reset', requireAdmin, async (req, res, next) => {
+  try {
+    const result = await resetMap(req.params.id as string);
+    res.json(result);
   } catch (err) { next(err); }
 });
 

@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { api, MatchData, MatchDetail } from '../api';
 import { getSocket } from '../socket';
+import { useRefetchOnReconnect } from './useSocket';
+import { useAdminToast, AdminToast } from './AdminToast';
 import ResultEntry from './ResultEntry';
 
 export default function Matches() {
@@ -9,20 +11,27 @@ export default function Matches() {
   const [matchDetail, setMatchDetail] = useState<MatchDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [resetConfirm, setResetConfirm] = useState<{ id: string; number: number } | null>(null);
+  const [resetLoading, setResetLoading] = useState(false);
+  const [mapResetConfirm, setMapResetConfirm] = useState<{ mapId: string; mapCode: string; mapIndex: number; matchNumber: number; matchId: string; totalMaps: number } | null>(null);
+  const [mapResetLoading, setMapResetLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [toast, setToast] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
+  const { toast, showToast, dismissToast } = useAdminToast();
 
   const loadMatches = useCallback(async () => {
     try {
       const data = await api.getMatches();
       setMatches(data);
       setError(null);
-    } catch {
-      setError('Failed to load matches');
+    } catch (err) {
+      console.error('Matches load error:', err);
+      setError('No se pudieron cargar las partidas.');
     } finally {
       setLoading(false);
     }
   }, []);
+
+  useRefetchOnReconnect(loadMatches);
 
   useEffect(() => {
     loadMatches();
@@ -69,30 +78,75 @@ export default function Matches() {
     setActionLoading(true);
     try {
       await api.startMatch(id);
-      showToast('success', 'Match started successfully');
+      showToast('success', 'Partida iniciada correctamente.');
       await loadMatches();
       await loadMatchDetail(id);
     } catch (err: unknown) {
       const apiErr = err as { error?: { message?: string } };
-      showToast('error', apiErr?.error?.message || 'Failed to start match');
+      showToast('error', apiErr?.error?.message || 'No se pudo iniciar la partida.');
     } finally {
       setActionLoading(false);
     }
   }
 
-  function showToast(type: 'success' | 'error', msg: string) {
-    setToast({ type, msg });
-    setTimeout(() => setToast(null), 3000);
+  async function handleResetMatch() {
+    if (!resetConfirm) return;
+    setResetLoading(true);
+    try {
+      const result = await api.resetMatch(resetConfirm.id);
+      setResetConfirm(null);
+      if (result.noop) {
+        showToast('success', `Match ${resetConfirm.number} ya estaba en UPCOMING.`);
+      } else {
+        showToast('success', `Match ${resetConfirm.number} reseteado correctamente.`);
+      }
+      await loadMatches();
+      if (expanded === resetConfirm.id) {
+        await loadMatchDetail(resetConfirm.id);
+      }
+    } catch (err: unknown) {
+      console.error('Reset match error:', err);
+      const apiErr = err as { error?: { message?: string } };
+      showToast('error', apiErr?.error?.message || 'No se pudo resetear el match.');
+    } finally {
+      setResetLoading(false);
+    }
   }
 
-  if (loading) return <div className="loading">Loading...</div>;
+  async function handleResetMap() {
+    if (!mapResetConfirm) return;
+    setMapResetLoading(true);
+    try {
+      const result = await api.resetMap(mapResetConfirm.mapId);
+      const mc = mapResetConfirm;
+      setMapResetConfirm(null);
+      if (result.noop) {
+        showToast('success', `Mapa ${mc.mapCode} ya estaba en PENDING.`);
+      } else {
+        const affectedCount = result.affectedMaps.length;
+        showToast('success', `Mapa ${mc.mapCode} reseteado${affectedCount > 1 ? ` (${affectedCount} mapas afectados)` : ''}.`);
+      }
+      await loadMatches();
+      if (expanded === mc.matchId) {
+        await loadMatchDetail(mc.matchId);
+      }
+    } catch (err: unknown) {
+      console.error('Reset map error:', err);
+      const apiErr = err as { error?: { message?: string } };
+      showToast('error', apiErr?.error?.message || 'No se pudo resetear el mapa.');
+    } finally {
+      setMapResetLoading(false);
+    }
+  }
+
+  if (loading) return <div className="loading">Cargando partidas...</div>;
   if (error) return <div className="error-message">{error}</div>;
 
   return (
     <div>
-      <h1 className="page-title">Matches</h1>
+      <h1 className="page-title">Partidas</h1>
 
-      {toast && <div className={`toast ${toast.type}`}>{toast.msg}</div>}
+      <AdminToast toast={toast} onDismiss={dismissToast} />
 
       {matches.map(match => {
         const isExpanded = expanded === match.id;
@@ -101,29 +155,38 @@ export default function Matches() {
         return (
           <div className="card" key={match.id}>
             <div
-              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', flexWrap: 'wrap', gap: '10px' }}
               onClick={() => handleExpand(match.id)}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
                 <span style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '20px', fontWeight: 700 }}>
-                  Match {match.matchNumber}
+                  Partida {match.matchNumber}
                 </span>
                 <span className={`status-badge ${match.status.toLowerCase()}`}>{match.status}</span>
                 <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                  {match.phase} · {match.matchNumber <= 2 ? 'Creator + Player 1' : 'Creator + Player 2'}
+                  {match.phase} · {match.matchNumber <= 2 ? 'Capitán + Piloto 1 (Partidas 1–2)' : 'Capitán + Piloto 2 (Partidas 3–4)'}
                 </span>
               </div>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 {match.status === 'UPCOMING' && (
                   <button
                     className="btn btn-primary"
                     disabled={actionLoading || hasLiveMatch}
                     onClick={e => { e.stopPropagation(); handleStartMatch(match.id); }}
                   >
-                    Start Match
+                    Iniciar partida
                   </button>
                 )}
-                <span style={{ color: 'var(--text-muted)', fontSize: '18px' }}>
+                {(match.status === 'LIVE' || match.status === 'COMPLETED') && (
+                  <button
+                    className="btn btn-danger btn-sm"
+                    disabled={actionLoading || resetLoading}
+                    onClick={e => { e.stopPropagation(); setResetConfirm({ id: match.id, number: match.matchNumber }); }}
+                  >
+                    Resetear partida
+                  </button>
+                )}
+                <span style={{ color: 'var(--text-muted)', fontSize: '18px', marginLeft: '4px' }}>
                   {isExpanded ? '▲' : '▼'}
                 </span>
               </div>
@@ -131,16 +194,36 @@ export default function Matches() {
 
             {isExpanded && matchDetail && (
               <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border)' }}>
-                <div className="card-title">Maps</div>
+                <div className="card-title">Mapas de la Partida</div>
                 <div className="map-pills" style={{ marginBottom: '16px' }}>
                   {matchDetail.maps.map(map => (
-                    <span key={map.id} className={`map-pill ${map.status.toLowerCase()}`}>
+                    <span key={map.id} className={`map-pill ${map.status.toLowerCase()}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                       {map.code} — {map.status}
+                      {(map.status === 'ACTIVE' || map.status === 'COMPLETED') && (
+                        <button
+                          className="btn-map-reset"
+                          disabled={mapResetLoading}
+                          onClick={e => {
+                            e.stopPropagation();
+                            setMapResetConfirm({
+                              mapId: map.id,
+                              mapCode: map.code,
+                              mapIndex: map.mapIndex,
+                              matchNumber: match.matchNumber,
+                              matchId: match.id,
+                              totalMaps: matchDetail.maps.length,
+                            });
+                          }}
+                          title="Resetear este mapa"
+                        >
+                          ↺
+                        </button>
+                      )}
                     </span>
                   ))}
                 </div>
 
-                <div className="card-title">Participants</div>
+                <div className="card-title">Pilotos en Competición</div>
                 <div className="match-participants" style={{ marginBottom: '16px' }}>
                   {matchDetail.participants.map(p => (
                     <span
@@ -181,6 +264,75 @@ export default function Matches() {
           </div>
         );
       })}
+
+      {resetConfirm && (
+        <div className="confirm-dialog-overlay" onClick={() => { if (!resetLoading) setResetConfirm(null); }}>
+          <div className="confirm-dialog" onClick={e => e.stopPropagation()}>
+            <h3>¿Resetear Partida {resetConfirm.number}?</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '13px', lineHeight: 1.6, marginBottom: '8px' }}>
+              Esta acción eliminará todos los resultados registrados en sus mapas y devolverá la partida a estado UPCOMING.
+            </p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '13px', lineHeight: 1.6, marginBottom: '8px' }}>
+              La clasificación se recalculará automáticamente.
+            </p>
+            <p style={{ color: 'var(--warning)', fontSize: '12px', fontWeight: 600 }}>
+              Esta acción no se puede deshacer automáticamente.
+            </p>
+            <div className="dialog-actions">
+              <button
+                className="btn btn-secondary"
+                disabled={resetLoading}
+                onClick={() => setResetConfirm(null)}
+              >
+                Cancelar
+              </button>
+              <button
+                className="btn btn-danger"
+                disabled={resetLoading}
+                onClick={handleResetMatch}
+              >
+                {resetLoading ? 'Reseteando...' : 'Resetear partida'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {mapResetConfirm && (() => {
+        const laterCount = mapResetConfirm.totalMaps - mapResetConfirm.mapIndex;
+        return (
+          <div className="confirm-dialog-overlay" onClick={() => { if (!mapResetLoading) setMapResetConfirm(null); }}>
+            <div className="confirm-dialog" onClick={e => e.stopPropagation()}>
+              <h3>¿Resetear Mapa {mapResetConfirm.mapCode}?</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', lineHeight: 1.6, marginBottom: '8px' }}>
+                Se eliminarán los resultados de este mapa{laterCount > 0 ? ` y ${laterCount === 1 ? 'del mapa posterior' : `de los ${laterCount} mapas posteriores`}` : ''} de la Partida {mapResetConfirm.matchNumber}.
+              </p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', lineHeight: 1.6, marginBottom: '8px' }}>
+                El progreso posterior del match se perderá y la clasificación será recalculada.
+              </p>
+              <p style={{ color: 'var(--warning)', fontSize: '12px', fontWeight: 600 }}>
+                Esta acción no se puede deshacer automáticamente.
+              </p>
+              <div className="dialog-actions">
+                <button
+                  className="btn btn-secondary"
+                  disabled={mapResetLoading}
+                  onClick={() => setMapResetConfirm(null)}
+                >
+                  Cancelar
+                </button>
+                <button
+                  className="btn btn-danger"
+                  disabled={mapResetLoading}
+                  onClick={handleResetMap}
+                >
+                  {mapResetLoading ? 'Reseteando...' : 'Resetear mapa'}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }

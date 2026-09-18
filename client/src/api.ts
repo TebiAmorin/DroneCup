@@ -228,7 +228,7 @@ export const api = {
       method: 'PUT',
       body: JSON.stringify({ results }),
     }),
-  getRankings: () => request<{ teams: RankingTeam[]; individuals: RankingIndividual[] }>('/rankings'),
+  getRankings: () => request<{ teams: RankingTeam[]; individuals: RankingIndividual[]; hasResults?: boolean }>('/rankings'),
   getParticipants: (query?: Record<string, string>) => {
     const qs = query ? '?' + new URLSearchParams(query).toString() : '';
     return request<ParticipantData[]>(`/participants${qs}`);
@@ -241,6 +241,11 @@ export const api = {
   resetMatch: (id: string) =>
     authedRequest<{ success: boolean; matchId: string; status: string; noop?: boolean; ranked?: RankingTeam[] }>(
       `/matches/${id}/reset`,
+      { method: 'POST' }
+    ),
+  resetMap: (id: string) =>
+    authedRequest<{ success: boolean; mapId: string; matchId: string; matchStatus: string; affectedMaps: string[]; noop?: boolean; ranked?: RankingTeam[] }>(
+      `/maps/${id}/reset`,
       { method: 'POST' }
     ),
   getStatisticsTeams: () => request<TeamStats[]>('/statistics/teams'),

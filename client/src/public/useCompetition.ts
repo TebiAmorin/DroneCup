@@ -8,6 +8,7 @@ export interface CompetitionState {
   rankings: RankingTeam[];
   individuals: RankingIndividual[];
   teams: TeamData[];
+  hasResults: boolean;
   loading: boolean;
 }
 
@@ -17,6 +18,7 @@ export function useCompetition(): CompetitionState & { refresh: () => void } {
   const [rankings, setRankings] = useState<RankingTeam[]>([]);
   const [individuals, setIndividuals] = useState<RankingIndividual[]>([]);
   const [teams, setTeams] = useState<TeamData[]>([]);
+  const [hasResults, setHasResults] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchAll = useCallback(async () => {
@@ -31,6 +33,7 @@ export function useCompetition(): CompetitionState & { refresh: () => void } {
       setMatches(m);
       setRankings(r.teams);
       setIndividuals(r.individuals || []);
+      setHasResults(r.hasResults ?? r.teams.some(t => t.totalPoints > 0));
       setTeams(te);
     } catch (e) {
       console.error('Failed to fetch competition state', e);
@@ -77,7 +80,7 @@ export function useCompetition(): CompetitionState & { refresh: () => void } {
     };
   }, [fetchAll]);
 
-  return { tournament, matches, rankings, individuals, teams, loading, refresh: fetchAll };
+  return { tournament, matches, rankings, individuals, teams, hasResults, loading, refresh: fetchAll };
 }
 
 export function useMatchDetail(matchId: string | null): { match: MatchDetail | null; loading: boolean } {
