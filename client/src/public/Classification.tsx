@@ -9,10 +9,11 @@ import {
   getCreatorBySlug,
   getTeamColor,
 } from './assets';
-import { api, TeamStats } from '../api';
+import { api, TeamStats, ParticipantStats } from '../api';
 import { getSocket } from '../socket';
 
 type MatchFilter = 'OVERALL' | 1 | 2 | 3 | 4;
+type IndivFilter = 'ALL' | 'NO_CREATORS' | 'PHASE_1' | 'PHASE_2';
 
 export default function Classification() {
   const { rankings, individuals, matches, teams, hasResults, loading } = useOutletContext<CompetitionState>();
@@ -21,12 +22,18 @@ export default function Classification() {
   const [matchFilter, setMatchFilter] = useState<MatchFilter>('OVERALL');
   const [expandedTeam, setExpandedTeam] = useState<string | null>(null);
   const [teamStats, setTeamStats] = useState<TeamStats[]>([]);
+  const [participantStats, setParticipantStats] = useState<ParticipantStats[]>([]);
   const [showIndividual, setShowIndividual] = useState<boolean>(true);
+  const [indivFilter, setIndivFilter] = useState<IndivFilter>('ALL');
 
   const loadData = useCallback(async () => {
     try {
-      const statsData = await api.getStatisticsTeams();
+      const [statsData, participantsData] = await Promise.all([
+        api.getStatisticsTeams(),
+        api.getStatisticsParticipants(),
+      ]);
       setTeamStats(statsData);
+      setParticipantStats(participantsData);
     } catch (err) {
       console.error('Failed to load stats for classification', err);
     }
@@ -263,6 +270,241 @@ export default function Classification() {
       });
     }
   }, [rankings, teamStats, teams, matchFilter, isSelectedMatchPlayed]);
+
+  interface DisplayIndividualRow {
+    participantId: string;
+    participantName: string;
+    participantType: 'CREATOR' | 'PLAYER_1' | 'PLAYER_2';
+    roleLabel: string;
+    teamId: string;
+    teamName: string;
+    teamSlug?: string;
+    teamColor: string;
+    posDisplay: string;
+    pointsDisplay: number | null;
+    mapsDetail?: string;
+    creatorData?: ReturnType<typeof getCreatorBySlug>;
+  }
+
+  const displayIndividuals: DisplayIndividualRow[] = useMemo(() => {
+    if (!individuals || individuals.length === 0) return [];
+
+    const getStats = (id: string) => participantStats.find(ps => ps.participantId === id);
+
+    if (indivFilter === 'ALL') {
+      return individuals.map(ind => {
+        const team = teams.find(t => t.id === ind.teamId);
+        const teamColor = getTeamColor({
+          slug: team?.slug,
+          name: ind.teamName,
+          teamName: ind.teamName,
+          color: team?.color,
+        });
+        const roleLabel =
+          ind.participantType === 'CREATOR'
+            ? 'Capitán'
+            : ind.participantType === 'PLAYER_1'
+            ? 'Piloto 1'
+            : 'Piloto 2';
+
+        const creatorData =
+          ind.participantType === 'CREATOR'
+            ? getCreatorBySlug(team?.slug || ind.teamName)
+            : null;
+
+        return {
+          participantId: ind.participantId,
+          participantName: ind.participantName,
+          participantType: ind.participantType,
+          roleLabel,
+          teamId: ind.teamId,
+          teamName: ind.teamName,
+          teamSlug: team?.slug,
+          teamColor,
+          posDisplay: hasResults ? String(ind.rank).padStart(2, '0') : '—',
+          pointsDisplay: hasResults ? ind.totalPoints : null,
+          creatorData,
+        };
+      });
+    }
+
+    if (indivFilter === 'NO_CREATORS') {
+      const filtered = individuals.filter(ind => ind.participantType !== 'CREATOR');
+      let currentRank = 1;
+      return filtered.map((ind, idx) => {
+        if (idx > 0 && ind.totalPoints < filtered[idx - 1].totalPoints) {
+          currentRank = idx + 1;
+        }
+        const team = teams.find(t => t.id === ind.teamId);
+        const teamColor = getTeamColor({
+          slug: team?.slug,
+          name: ind.teamName,
+          teamName: ind.teamName,
+          color: team?.color,
+        });
+        const roleLabel = ind.participantType === 'PLAYER_1' ? 'Piloto 1' : 'Piloto 2';
+
+        return {
+          participantId: ind.participantId,
+          participantName: ind.participantName,
+          participantType: ind.participantType,
+          roleLabel,
+          teamId: ind.teamId,
+          teamName: ind.teamName,
+          teamSlug: team?.slug,
+          teamColor,
+          posDisplay: hasResults ? String(currentRank).padStart(2, '0') : '—',
+          pointsDisplay: hasResults ? ind.totalPoints : null,
+        };
+      });
+    }
+
+    if (indivFilter === 'PHASE_1') {
+      const eligible = individuals.filter(
+        ind => ind.participantType === 'CREATOR' || ind.participantType === 'PLAYER_1'
+      );
+
+      const withPhaseData = eligible.map(ind => {
+        const stats = getStats(ind.participantId);
+        const phaseMaps = stats?.pointsByMap?.filter(m => m.matchNumber === 1 || m.matchNumber === 2) || [];
+        const phasePoints = phaseMaps.reduce((sum, m) => sum + m.points, 0);
+        const mapsCount = phaseMaps.length;
+        return {
+          ind,
+          phasePoints,
+          mapsCount,
+        };
+      });
+
+      const hasPhaseResults = hasResults && withPhaseData.some(item => item.mapsCount > 0);
+
+      withPhaseData.sort((a, b) => {
+        if (b.phasePoints !== a.phasePoints) return b.phasePoints - a.phasePoints;
+        return a.ind.participantName.localeCompare(b.ind.participantName);
+      });
+
+      let currentRank = 1;
+      return withPhaseData.map((item, idx) => {
+        if (idx > 0 && item.phasePoints < withPhaseData[idx - 1].phasePoints) {
+          currentRank = idx + 1;
+        }
+        const team = teams.find(t => t.id === item.ind.teamId);
+        const teamColor = getTeamColor({
+          slug: team?.slug,
+          name: item.ind.teamName,
+          teamName: item.ind.teamName,
+          color: team?.color,
+        });
+        const roleLabel = item.ind.participantType === 'CREATOR' ? 'Capitán' : 'Piloto 1';
+        const creatorData =
+          item.ind.participantType === 'CREATOR'
+            ? getCreatorBySlug(team?.slug || item.ind.teamName)
+            : null;
+
+        return {
+          participantId: item.ind.participantId,
+          participantName: item.ind.participantName,
+          participantType: item.ind.participantType,
+          roleLabel,
+          teamId: item.ind.teamId,
+          teamName: item.ind.teamName,
+          teamSlug: team?.slug,
+          teamColor,
+          posDisplay: hasPhaseResults ? String(currentRank).padStart(2, '0') : '—',
+          pointsDisplay: hasPhaseResults ? item.phasePoints : null,
+          mapsDetail: `${item.mapsCount}/6 Mapas`,
+          creatorData,
+        };
+      });
+    }
+
+    if (indivFilter === 'PHASE_2') {
+      const eligible = individuals.filter(
+        ind => ind.participantType === 'CREATOR' || ind.participantType === 'PLAYER_2'
+      );
+
+      const withPhaseData = eligible.map(ind => {
+        const stats = getStats(ind.participantId);
+        const phaseMaps = stats?.pointsByMap?.filter(m => m.matchNumber === 3 || m.matchNumber === 4) || [];
+        const phasePoints = phaseMaps.reduce((sum, m) => sum + m.points, 0);
+        const mapsCount = phaseMaps.length;
+        return {
+          ind,
+          phasePoints,
+          mapsCount,
+        };
+      });
+
+      const hasPhaseResults = hasResults && withPhaseData.some(item => item.mapsCount > 0);
+
+      withPhaseData.sort((a, b) => {
+        if (b.phasePoints !== a.phasePoints) return b.phasePoints - a.phasePoints;
+        return a.ind.participantName.localeCompare(b.ind.participantName);
+      });
+
+      let currentRank = 1;
+      return withPhaseData.map((item, idx) => {
+        if (idx > 0 && item.phasePoints < withPhaseData[idx - 1].phasePoints) {
+          currentRank = idx + 1;
+        }
+        const team = teams.find(t => t.id === item.ind.teamId);
+        const teamColor = getTeamColor({
+          slug: team?.slug,
+          name: item.ind.teamName,
+          teamName: item.ind.teamName,
+          color: team?.color,
+        });
+        const roleLabel = item.ind.participantType === 'CREATOR' ? 'Capitán' : 'Piloto 2';
+        const creatorData =
+          item.ind.participantType === 'CREATOR'
+            ? getCreatorBySlug(team?.slug || item.ind.teamName)
+            : null;
+
+        return {
+          participantId: item.ind.participantId,
+          participantName: item.ind.participantName,
+          participantType: item.ind.participantType,
+          roleLabel,
+          teamId: item.ind.teamId,
+          teamName: item.ind.teamName,
+          teamSlug: team?.slug,
+          teamColor,
+          posDisplay: hasPhaseResults ? String(currentRank).padStart(2, '0') : '—',
+          pointsDisplay: hasPhaseResults ? item.phasePoints : null,
+          mapsDetail: `${item.mapsCount}/6 Mapas`,
+          creatorData,
+        };
+      });
+    }
+
+    return [];
+  }, [individuals, participantStats, indivFilter, teams, hasResults]);
+
+  const indivSubtitle = useMemo(() => {
+    switch (indivFilter) {
+      case 'ALL':
+        return 'Puntuación individual acumulada de los 15 pilotos oficiales';
+      case 'NO_CREATORS':
+        return 'Clasificación de los 10 pilotos de comunidad (excluye capitanes)';
+      case 'PHASE_1':
+        return 'Rendimiento en Fase 1 (Capitanes + Pilotos 1) · Puntos en Partidas 1 y 2';
+      case 'PHASE_2':
+        return 'Rendimiento en Fase 2 (Capitanes + Pilotos 2) · Puntos en Partidas 3 y 4';
+    }
+  }, [indivFilter]);
+
+  const indivBadgeText = useMemo(() => {
+    switch (indivFilter) {
+      case 'ALL':
+        return '15 Pilotos';
+      case 'NO_CREATORS':
+        return '10 Pilotos';
+      case 'PHASE_1':
+        return 'Fase 1 · 10';
+      case 'PHASE_2':
+        return 'Fase 2 · 10';
+    }
+  }, [indivFilter]);
 
   if (loading) return <LoadingState />;
 
@@ -634,14 +876,12 @@ export default function Classification() {
               <div className="pub-indiv-title-wrap">
                 <h2 className="pub-indiv-title">Clasificación Individual</h2>
                 <p className="pub-indiv-subtitle">
-                  {matchFilter === 'OVERALL'
-                    ? 'Puntuación individual acumulada de los 15 pilotos oficiales'
-                    : 'La clasificación individual oficial se computa sobre el acumulado del torneo'}
+                  {indivSubtitle}
                 </p>
               </div>
               <div className="pub-indiv-actions">
                 <span className="pub-indiv-badge">
-                  {matchFilter === 'OVERALL' ? '15 Pilotos' : 'Vista General'}
+                  {indivBadgeText}
                 </span>
                 <button
                   type="button"
@@ -656,7 +896,56 @@ export default function Classification() {
             </div>
 
             {showIndividual && (
-              matchFilter === 'OVERALL' ? (
+              <>
+                {/* Selector de filtros de clasificación individual */}
+                <div className="pub-indiv-filter-bar">
+                  <div className="pub-indiv-filters" role="tablist" aria-label="Filtros de clasificación individual">
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={indivFilter === 'ALL'}
+                      className={`pub-indiv-filter-btn${indivFilter === 'ALL' ? ' active' : ''}`}
+                      onClick={() => setIndivFilter('ALL')}
+                    >
+                      <span>General</span>
+                      <span className="pub-indiv-fcount">15</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={indivFilter === 'NO_CREATORS'}
+                      className={`pub-indiv-filter-btn${indivFilter === 'NO_CREATORS' ? ' active' : ''}`}
+                      onClick={() => setIndivFilter('NO_CREATORS')}
+                    >
+                      <span>Sin Creadores</span>
+                      <span className="pub-indiv-fcount">10</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={indivFilter === 'PHASE_1'}
+                      className={`pub-indiv-filter-btn${indivFilter === 'PHASE_1' ? ' active' : ''}`}
+                      onClick={() => setIndivFilter('PHASE_1')}
+                    >
+                      <span>Partidas 1–2</span>
+                      <span className="pub-indiv-ftag">Fase 1</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={indivFilter === 'PHASE_2'}
+                      className={`pub-indiv-filter-btn${indivFilter === 'PHASE_2' ? ' active' : ''}`}
+                      onClick={() => setIndivFilter('PHASE_2')}
+                    >
+                      <span>Partidas 3–4</span>
+                      <span className="pub-indiv-ftag">Fase 2</span>
+                    </button>
+                  </div>
+                </div>
+
                 <div className="pub-table-responsive-wrap">
                   <table className="pub-rank-table pub-indiv-table">
                     <thead>
@@ -668,107 +957,79 @@ export default function Classification() {
                       </tr>
                     </thead>
                     <tbody>
-                      {individuals.map(ind => {
-                        const team = teams.find(t => t.id === ind.teamId);
-                        const teamColor = getTeamColor({
-                          slug: team?.slug,
-                          name: ind.teamName,
-                          teamName: ind.teamName,
-                        });
-                        const roleLabel =
-                          ind.participantType === 'CREATOR'
-                            ? 'Capitán'
-                            : ind.participantType === 'PLAYER_1'
-                            ? 'Piloto 1'
-                            : 'Piloto 2';
+                      {displayIndividuals.map(ind => (
+                        <tr
+                          key={ind.participantId}
+                          className="pub-rk-row pub-indiv-row"
+                          style={{
+                            ['--team-color' as any]: ind.teamColor,
+                          }}
+                        >
+                          {/* 1. POSICIÓN */}
+                          <td className="pub-rk-num-cell">
+                            <span className="pub-rk-pos-num">
+                              {ind.posDisplay}
+                            </span>
+                          </td>
 
-                        const creatorData =
-                          ind.participantType === 'CREATOR'
-                            ? getCreatorBySlug(team?.slug || ind.teamName)
-                            : null;
-
-                        return (
-                          <tr
-                            key={ind.participantId}
-                            className="pub-rk-row pub-indiv-row"
-                            style={{
-                              ['--team-color' as any]: teamColor,
-                              borderLeft: `4px solid ${teamColor}`,
-                            }}
-                          >
-                            {/* 1. POSICIÓN */}
-                            <td className="pub-rk-num-cell">
-                              <span className="pub-rk-pos-num">
-                                {hasResults ? String(ind.rank).padStart(2, '0') : '—'}
+                          {/* 2. PILOTO + ROL */}
+                          <td>
+                            <div className="pub-indiv-pilot-cell">
+                              <span className="pub-indiv-pilot-name">{ind.participantName}</span>
+                              <span className={`pub-indiv-role-label role-${ind.participantType.toLowerCase()}`}>
+                                {ind.roleLabel}
                               </span>
-                            </td>
-
-                            {/* 2. PILOTO + ROL */}
-                            <td>
-                              <div className="pub-indiv-pilot-cell">
-                                <span className="pub-indiv-pilot-name">{ind.participantName}</span>
-                                <span className="pub-indiv-role-label">{roleLabel}</span>
-                                {creatorData && (
-                                  <a
-                                    className="pub-row-twitch-link hide-sm"
-                                    href={`https://www.twitch.tv/${creatorData.twitch}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    title={`Canal de Twitch de ${ind.participantName}`}
-                                    aria-label={`Twitch de ${ind.participantName}`}
-                                  >
-                                    <TwitchSvg />
-                                  </a>
-                                )}
-                              </div>
-                            </td>
-
-                            {/* 3. EQUIPO */}
-                            <td>
-                              <div className="pub-indiv-team-cell">
-                                <TeamDot color={teamColor} />
-                                <span
-                                  className="pub-indiv-team-name"
-                                  onClick={team?.slug ? () => navigate(`/teams/${team.slug}`) : undefined}
-                                  style={{ cursor: team?.slug ? 'pointer' : 'default' }}
+                              {ind.creatorData && (
+                                <a
+                                  className="pub-row-twitch-link hide-sm"
+                                  href={`https://www.twitch.tv/${ind.creatorData.twitch}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title={`Canal de Twitch de ${ind.participantName}`}
+                                  aria-label={`Twitch de ${ind.participantName}`}
                                 >
-                                  {ind.teamName}
-                                </span>
-                              </div>
-                            </td>
+                                  <TwitchSvg />
+                                </a>
+                              )}
+                            </div>
+                          </td>
 
-                            {/* 4. PUNTOS */}
-                            <td className="pub-rk-pts">
-                              <div className="pub-rk-pts-main">
-                                <span className="pub-pts-number">
-                                  {hasResults ? ind.totalPoints : '—'}
-                                </span>
-                                <span className="pub-pts-label">
-                                  {hasResults ? 'PTS' : 'PENDIENTE'}
-                                </span>
+                          {/* 3. EQUIPO */}
+                          <td>
+                            <div className="pub-indiv-team-cell">
+                              <TeamDot color={ind.teamColor} />
+                              <span
+                                className="pub-indiv-team-name"
+                                onClick={ind.teamSlug ? () => navigate(`/teams/${ind.teamSlug}`) : undefined}
+                                style={{ cursor: ind.teamSlug ? 'pointer' : 'default' }}
+                              >
+                                {ind.teamName}
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* 4. PUNTOS */}
+                          <td className="pub-rk-pts">
+                            <div className="pub-rk-pts-main">
+                              <span className="pub-pts-number">
+                                {ind.pointsDisplay !== null ? ind.pointsDisplay : '—'}
+                              </span>
+                              <span className="pub-pts-label">
+                                {ind.pointsDisplay !== null ? 'PTS' : 'PENDIENTE'}
+                              </span>
+                            </div>
+                            {ind.mapsDetail && (
+                              <div className="pub-indiv-maps-sub">
+                                {ind.mapsDetail}
                               </div>
-                            </td>
-                          </tr>
-                        );
-                      })}
+                            )}
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
-              ) : (
-                <div className="pub-indiv-notice">
-                  <span className="pub-in-title">Clasificación individual no disponible por partida</span>
-                  <p className="pub-in-text">
-                    El sistema oficial de competición calcula y publica la clasificación individual sobre el acumulado del torneo (Overall).
-                  </p>
-                  <button
-                    type="button"
-                    className="pub-indiv-switch-btn"
-                    onClick={() => setMatchFilter('OVERALL')}
-                  >
-                    Ver clasificación individual general (Overall) →
-                  </button>
-                </div>
-              )
+              </>
             )}
           </div>
         </div>

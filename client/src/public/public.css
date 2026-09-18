@@ -1811,8 +1811,85 @@
   color: #fff;
   border-color: var(--border-strong);
 }
+
+/* Individual Filter Bar */
+.pub-indiv-filter-bar {
+  margin-bottom: 12px;
+}
+.pub-indiv-filters {
+  display: inline-flex;
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 3px;
+  gap: 3px;
+}
+.pub-indiv-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--ink-secondary);
+  font-family: var(--f-display);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.pub-indiv-filter-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+}
+.pub-indiv-filter-btn.active {
+  background: var(--surface2);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.pub-indiv-fcount {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink-secondary);
+}
+.pub-indiv-filter-btn.active .pub-indiv-fcount {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+.pub-indiv-ftag {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 1px 5px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink-tertiary);
+}
+.pub-indiv-filter-btn.active .pub-indiv-ftag {
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+}
+
+/* Individual Table Rows & Team Colors */
 .pub-indiv-table {
   margin-top: 4px;
+}
+.pub-indiv-row {
+  border-left: 4px solid var(--team-color, var(--border));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--team-color, #fff) 7%, transparent) 0%, transparent 42%), var(--surface);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.pub-indiv-row:hover {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--team-color, #fff) 12%, transparent) 0%, transparent 52%), var(--surface2);
+  border-color: var(--team-color, var(--border-strong));
 }
 .pub-indiv-pilot-cell {
   display: flex;
@@ -1839,6 +1916,21 @@
   padding: 1px 6px;
   border-radius: 2px;
 }
+.pub-indiv-role-label.role-creator {
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+.pub-indiv-role-label.role-player_1 {
+  border-color: rgba(56, 189, 248, 0.28);
+  color: #93c5fd;
+  background: rgba(56, 189, 248, 0.08);
+}
+.pub-indiv-role-label.role-player_2 {
+  border-color: rgba(168, 85, 247, 0.28);
+  color: #c084fc;
+  background: rgba(168, 85, 247, 0.08);
+}
 .pub-indiv-team-cell {
   display: flex;
   align-items: center;
@@ -1853,6 +1945,16 @@
 .pub-indiv-team-name:hover {
   color: #fff;
   text-decoration: underline;
+}
+.pub-indiv-maps-sub {
+  font-family: var(--f-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink-tertiary);
+  text-transform: uppercase;
+  margin-top: 2px;
+  text-align: right;
 }
 .pub-indiv-notice {
   background: var(--surface);
@@ -2185,6 +2287,20 @@
   }
   .pub-indiv-pilot-name {
     font-size: 14px;
+  }
+  .pub-indiv-filter-bar {
+    width: 100%;
+  }
+  .pub-indiv-filters {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+  .pub-indiv-filter-btn {
+    justify-content: center;
+    padding: 6px 6px;
+    font-size: 11px;
   }
 }
 
