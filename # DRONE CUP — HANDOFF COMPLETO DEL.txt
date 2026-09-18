@@ -1,0 +1,1823 @@
+# DRONE CUP — HANDOFF COMPLETO DEL PROYECTO
+
+## 0. INSTRUCCIONES PARA EL NUEVO CHAT
+
+Este chat continúa un proyecto que estaba desarrollándose en otra conversación.
+
+**NO empieces el proyecto desde cero.**
+
+Quiero que actúes como **arquitecto técnico + project manager + revisor** del proyecto, mientras **Claude Code actúa como agente de implementación**.
+
+Mi forma de trabajo:
+
+1. Definimos una fase/bloque.
+2. Tú analizas qué hay que hacer y preparas un prompt preciso para Claude Code.
+3. Claude implementa.
+4. Yo te paso el resultado/informe de Claude.
+5. Tú revisas si cumple el plan.
+6. Solo entonces aprobamos la fase y pasamos a la siguiente.
+7. Evitamos grandes refactors y cambios no solicitados.
+
+**IMPORTANTE:**
+
+* No quiero sobreingeniería.
+* No Docker.
+* No Redis.
+* No microservicios.
+* No añadir APIs/game integrations que no existen.
+* No cambiar lógica funcional sin necesidad.
+* No duplicar lógica entre frontend/backend.
+* El backend es la fuente de verdad competitiva.
+* La Public Web y Broadcast son consumidores del Core.
+* Claude no debe avanzar varias fases de golpe salvo que yo lo autorice.
+
+Mi preferencia es trabajar de forma **práctica, profesional y controlada**, con pasos pequeños y verificables.
+
+---
+
+# 1. OBJETIVO DEL PROYECTO
+
+Estamos construyendo un sistema web profesional para una nueva competición de **Rainbow Six Siege Drone Racing**, organizada para un evento de Ubisoft.
+
+El sistema debe servir para:
+
+* administrar la competición;
+* introducir resultados manualmente;
+* calcular automáticamente puntuaciones;
+* mantener clasificación;
+* actualizar todo en tiempo real;
+* mostrar una Public Web profesional;
+* generar overlays para broadcast/OBS;
+* posteriormente generar estadísticas y exports.
+
+**No existe API ni integración con el juego.**
+
+Todos los resultados competitivos se introducen manualmente desde Admin.
+
+Hay **2 operadores humanos**, ambos con permisos ADMIN.
+
+---
+
+# 2. CONCEPTO DE LA COMPETICIÓN
+
+Actualmente hay 5 equipos/comunidades.
+
+Seed actual:
+
+* Caramelo
+* Vetel
+* Miwell
+* SoraMusic
+* Barra
+
+Estos nombres son **seed data** y pueden cambiar cuando se configuren los nombres reales antes del evento.
+
+Cada equipo tiene:
+
+* 1 Creator
+* 1 Player 1
+* 1 Player 2
+
+El Creator es el protagonista principal y participa en las 4 partidas.
+
+---
+
+# 3. FORMATO COMPETITIVO
+
+## Partidas
+
+Hay:
+
+* 4 partidas principales.
+* Cada partida tiene 3 mapas.
+* Total: 12 mapas.
+
+Cada mapa tiene 10 participantes:
+
+* 5 creators.
+* 5 jugadores de comunidad correspondientes a la rotación.
+
+### Match 1
+
+Cada equipo:
+
+* Creator
+* Player 1
+
+### Match 2
+
+Cada equipo:
+
+* Creator
+* Player 1
+
+### Match 3
+
+Cada equipo:
+
+* Creator
+* Player 2
+
+### Match 4
+
+Cada equipo:
+
+* Creator
+* Player 2
+
+Por tanto:
+
+```text
+Creator → Match 1, 2, 3, 4
+Player 1 → Match 1, 2
+Player 2 → Match 3, 4
+```
+
+Los puntos de los participantes se acumulan para su equipo.
+
+La clasificación principal es **por equipo**.
+
+La clasificación individual es secundaria.
+
+---
+
+# 4. SISTEMA DE PUNTUACIÓN
+
+Cada mapa tiene 10 participantes.
+
+Puntuación:
+
+| Posición | Puntos |
+| -------- | -----: |
+| 1º       |     25 |
+| 2º       |     18 |
+| 3º       |     15 |
+| 4º       |     12 |
+| 5º       |     10 |
+| 6º       |      8 |
+| 7º       |      6 |
+| 8º       |      4 |
+| 9º       |      2 |
+| 10º      |      1 |
+| DNF      |      0 |
+
+Reglas:
+
+* No hay empates dentro de un mapa.
+* Puede haber múltiples DNF.
+* Todo participante debe aparecer en los resultados.
+* DNF tiene 0 puntos.
+* El admin introduce la posición.
+* El backend calcula los puntos.
+* El frontend **NO calcula scoring competitivo**.
+
+---
+
+# 5. MATCH / MAP STATE MACHINE
+
+Match:
+
+```text
+UPCOMING → LIVE → COMPLETED
+```
+
+Map:
+
+```text
+PENDING → ACTIVE → COMPLETED
+```
+
+Flujo:
+
+```text
+Admin START MATCH
+        ↓
+Match LIVE
+        ↓
+Map 1 ACTIVE
+        ↓
+Confirm Map 1
+        ↓
+Map 1 COMPLETED
+Map 2 ACTIVE
+        ↓
+Confirm Map 2
+        ↓
+Map 2 COMPLETED
+Map 3 ACTIVE
+        ↓
+Confirm Map 3
+        ↓
+Map 3 COMPLETED
+Match COMPLETED
+```
+
+El inicio de cada match es manual.
+
+La progresión de mapas dentro del match es automática.
+
+El siguiente match espera a que el Admin lo inicie manualmente.
+
+---
+
+# 6. CORRECCIONES
+
+Los resultados de mapas completados pueden corregirse.
+
+Al corregir:
+
+```text
+Resultado corregido
+      ↓
+Scoring
+      ↓
+Player score
+      ↓
+Team score
+      ↓
+Ranking
+      ↓
+Historical snapshots
+      ↓
+Statistics futuras
+      ↓
+Realtime
+```
+
+Las correcciones deben recalcular todos los valores derivados.
+
+No se deben guardar puntuaciones manuales independientes que puedan quedar desincronizadas.
+
+---
+
+# 7. TIEBREAK
+
+El tiebreak solo puede ser necesario en la clasificación final.
+
+Si hay empate final:
+
+* el sistema muestra el empate;
+* no existe fórmula automática de tiebreak actualmente.
+
+El tiebreak es una fase independiente:
+
+* 3 mapas;
+* solo creators;
+* mismo sistema de puntuación.
+
+Si hay más de dos equipos empatados, el comportamiento concreto queda pendiente de definir.
+
+**No inventar una regla.**
+
+---
+
+# 8. ARQUITECTURA
+
+Arquitectura actual:
+
+```text
+                 ┌──────────────┐
+                 │    ADMIN     │
+                 └──────┬───────┘
+                        │
+                        ▼
+              ┌──────────────────┐
+              │ Competition Core │
+              └────────┬─────────┘
+                       │
+              ┌────────▼─────────┐
+              │ Scoring Engine   │
+              └────────┬─────────┘
+                       │
+              ┌────────▼─────────┐
+              │ Ranking Engine   │
+              └────────┬─────────┘
+                       │
+             ┌─────────▼─────────┐
+             │    Realtime       │
+             │    Socket.IO      │
+             └──────┬──────┬─────┘
+                    │      │
+          ┌─────────▼─┐  ┌─▼──────────┐
+          │ Public Web│  │  Broadcast │
+          └───────────┘  └────────────┘
+```
+
+Statistics y Export consumen los datos derivados del Core.
+
+Broadcast **no es fuente de verdad**.
+
+---
+
+# 9. STACK
+
+Actualmente:
+
+### Frontend
+
+* React 19
+* TypeScript
+* Vite
+* react-router-dom 7
+* CSS propio
+* socket.io-client
+
+### Backend
+
+* Node.js
+* TypeScript
+* Express
+* PostgreSQL
+* pg
+* Socket.IO
+* uuid
+* dotenv
+* cors
+
+No Docker.
+
+No Redis.
+
+---
+
+# 10. ESTRUCTURA PRINCIPAL
+
+Actualmente existe aproximadamente:
+
+```text
+dronecup/
+├── shared/
+│   └── types.ts
+│
+├── server/
+│   ├── .env
+│   ├── .env.example
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── src/
+│       ├── index.ts
+│       ├── db/
+│       │   ├── pool.ts
+│       │   ├── migrate.ts
+│       │   ├── seed.ts
+│       │   └── reset.ts
+│       ├── engine/
+│       │   ├── scoring.ts
+│       │   └── ranking.ts
+│       ├── core/
+│       │   ├── stateMachine.ts
+│       │   ├── errors.ts
+│       │   ├── tournament.ts
+│       │   ├── teams.ts
+│       │   ├── participants.ts
+│       │   ├── matches.ts
+│       │   ├── maps.ts
+│       │   └── rankings.ts
+│       └── realtime/
+│           ├── emitter.ts
+│           └── setup.ts
+│
+├── client/
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.ts
+│   ├── public/
+│   │   └── assets/
+│   │       ├── r6-emblem.png
+│   │       ├── hero-wasteland.jpg
+│   │       └── avatars/
+│   │           ├── caramelo.png
+│   │           ├── vetel.png
+│   │           ├── miwell.png
+│   │           ├── soramusic.png
+│   │           └── barra.png
+│   └── src/
+│       ├── main.tsx
+│       ├── App.tsx
+│       ├── assets.ts
+│       ├── hooks/
+│       │   └── useCompetition.ts
+│       ├── components/
+│       ├── pages/
+│       └── styles/
+│           └── public.css
+│
+├── index.html
+└── docs/
+    ├── README.md
+    ├── ARCHITECTURE.md
+    ├── DATABASE.md
+    ├── API.md
+    ├── REALTIME.md
+    ├── UI_UX.md
+    ├── BROADCAST.md
+    ├── STATISTICS.md
+    └── ROADMAP.md
+```
+
+La estructura exacta puede haber evolucionado ligeramente durante las últimas mejoras de frontend. **Antes de asumir nombres exactos, inspeccionar el repo.**
+
+---
+
+# 11. DATABASE
+
+Modelo conceptual:
+
+* tournament
+* team
+* participant
+* match
+* match_participation
+* map
+* map_result
+* ranking_snapshot
+
+Participant type:
+
+```text
+CREATOR
+PLAYER_1
+PLAYER_2
+```
+
+Result status:
+
+```text
+FINISHED
+DNF
+```
+
+Cada match tiene 3 maps.
+
+Los resultados de mapa se almacenan individualmente.
+
+DB seed actual:
+
+* 1 tournament
+* 5 teams
+* 15 participants
+* 4 matches
+* 40 participations
+* 12 maps
+* 0 resultados cuando se hace reset/seed limpio
+
+---
+
+# 12. API
+
+Existe API REST bajo:
+
+```text
+/api
+```
+
+Incluye endpoints para:
+
+* tournament
+* teams
+* participants
+* matches
+* maps
+* results
+* rankings
+* public state
+* overlay state
+* admin state
+* statistics
+* export
+
+Endpoints ya verificados:
+
+```text
+GET /api/tournament
+GET /api/teams
+GET /api/matches
+GET /api/rankings
+```
+
+Funcionan correctamente.
+
+---
+
+# 13. REALTIME
+
+Se utiliza Socket.IO.
+
+Room:
+
+```text
+competition
+```
+
+Eventos existentes:
+
+```text
+competition.updated
+match.started
+match.completed
+map.started
+map.completed
+result.updated
+ranking.updated
+```
+
+Flujo:
+
+```text
+Admin action
+   ↓
+Backend
+   ↓
+DB
+   ↓
+Scoring / Ranking
+   ↓
+Commit
+   ↓
+Socket.IO emit
+   ↓
+Public / Broadcast
+```
+
+Los eventos se emiten después del commit exitoso.
+
+Socket.IO no es la fuente única de verdad.
+
+Después de reconectar:
+
+```text
+Socket reconnect
+      ↓
+REST refetch
+      ↓
+local state actualizado
+```
+
+Esto ya fue probado correctamente.
+
+---
+
+# 14. TESTS ACTUALES
+
+Actualmente:
+
+**62/62 tests pasan.**
+
+Distribución:
+
+* scoring: 15
+* ranking: 13
+* stateMachine: 24
+* realtime: 10
+
+También están verificados:
+
+* client build
+* server build
+* DB reset/seed
+* Admin
+* Public Web
+* realtime
+
+---
+
+# 15. ADMIN PANEL
+
+Admin ya está implementado.
+
+Rutas:
+
+```text
+/admin
+/admin/matches
+/admin/teams
+/admin/participants
+```
+
+Funciones:
+
+### Dashboard
+
+* estado de competición;
+* partida actual;
+* mapa actual;
+* ranking.
+
+### Matches
+
+* visualizar matches;
+* START MATCH;
+* visualizar mapas;
+* progreso;
+* introducir resultados;
+* confirmar mapa;
+* corregir resultados.
+
+### Result entry
+
+Admin selecciona:
+
+* posición 1-10;
+* o DNF.
+
+El frontend no calcula puntos.
+
+### Correcciones
+
+Editar resultados de mapas completados.
+
+Existe confirmación advirtiendo del recálculo histórico.
+
+### Teams
+
+Gestionar/visualizar equipos.
+
+### Participants
+
+Gestionar/visualizar participantes.
+
+---
+
+# 16. PUBLIC WEB — ESTADO ACTUAL
+
+La Public Web ya ha sido reconstruida y posteriormente **yo mismo he seguido haciendo mejoras de UX/UI**, sin tocar la lógica competitiva.
+
+Por tanto, el estado visual actual puede ser más avanzado que el último código que Claude auditó.
+
+Rutas actuales:
+
+```text
+/
+/classification
+/matches
+/teams
+/teams/:slug
+/streams
+```
+
+No cambiar estas URLs simplemente para traducirlas.
+
+---
+
+# 17. PUBLIC WEB — FILOSOFÍA
+
+La Public Web debe sentirse como:
+
+**sitio oficial/editorial de una competición de esports**
+
+NO debe parecer:
+
+* dashboard administrativo;
+* SaaS genérico;
+* template moderno de cards;
+* CRUD.
+
+Debe ser:
+
+* oscuro;
+* esports;
+* editorial;
+* visual;
+* profesional;
+* con los creators como protagonistas;
+* con identidad propia de Wasteland Circuit / Drone Cup.
+
+---
+
+# 18. IDENTIDAD VISUAL
+
+El `index.html` original es una referencia visual importante.
+
+**NO ELIMINARLO.**
+
+El original contiene:
+
+* hero;
+* R6 emblem;
+* avatars;
+* branding;
+* colores;
+* patrones;
+* estructura;
+* contenido editorial;
+* imágenes Base64.
+
+Las imágenes ya fueron extraídas a:
+
+```text
+client/public/assets/
+```
+
+Assets:
+
+```text
+r6-emblem.png
+hero-wasteland.jpg
+
+avatars/caramelo.png
+avatars/vetel.png
+avatars/miwell.png
+avatars/soramusic.png
+avatars/barra.png
+```
+
+El original permanece intacto.
+
+---
+
+# 19. DESIGN SYSTEM ORIGINAL
+
+Colores principales aproximados del original:
+
+```css
+--bg: #06090d
+--surface: #0c1119
+--surface2: #131b25
+--border: #192231
+--text: #c2d4e6
+--muted: #3d556d
+--accent: #e05520
+```
+
+Team colors:
+
+```text
+Caramelo → #f5c842
+Vetel → #3b82f6
+Miwell → #22c55e
+SoraMusic → #a855f7
+Barra → #ef4444
+```
+
+El original utiliza:
+
+* Rajdhani
+* Barlow Condensed
+* dark background
+* grid background
+* corner glow
+* clip-path badges
+* borders
+* leader pulse
+* sharp/esports cards
+* accent gradients
+
+---
+
+# 20. HOME
+
+La Home actual sigue la estructura planteada en el plan 7.2.
+
+Jerarquía prevista:
+
+```text
+Hero
+↓
+Current Match / Live
+↓
+¿Qué es Drone Cup?
+↓
+Creadores
+↓
+Formato
+↓
+Sistema de puntuación
+↓
+Rotación
+↓
+¿Cómo participar?
+↓
+Clasificación preview
+↓
+Calendario
+↓
+Últimos resultados
+↓
+Footer
+```
+
+Contenido importante:
+
+### Hero
+
+Texto original:
+
+```text
+WASTELAND CIRCUIT 6
+DRONE TOURNAMENT · R6 SIEGE
+```
+
+Utiliza el hero original.
+
+### Creadores
+
+Los 5 creators deben ser protagonistas.
+
+Creator identity:
+
+* avatar;
+* nombre;
+* team color;
+* Twitch;
+* puntos/rank cuando exista.
+
+### Formato
+
+Originalmente:
+
+```text
+4 PARTIDAS
+5 STREAMERS
+10 JUGADORES COMUNIDAD
+10K CRÉDITOS EN JUEGO
+```
+
+IMPORTANTE:
+
+Estos datos provienen del material original/plan y algunos pueden ser datos editoriales antiguos.
+
+**No asumir que 10K créditos o URLs de inscripción son definitivos para producción sin confirmación.**
+
+### Scoring
+
+Mostrar:
+
+```text
+25 / 18 / 15 / 12 / 10 / 8 / 6 / 4 / 2 / 1 / DNF 0
+```
+
+### Rotación
+
+```text
+PARTIDAS 1-2
+Creator + Player 1
+
+PARTIDAS 3-4
+Creator + Player 2
+```
+
+---
+
+# 21. CREATOR DATA
+
+`assets.ts` actualmente contiene datos de creators y nuevos campos añadidos durante las mejoras:
+
+```text
+registrationUrl
+registrationPlatform
+registrationLabel
+communityNote
+```
+
+También:
+
+```text
+ICONS
+SCORING_TABLE
+```
+
+Y helpers:
+
+```text
+getAvatarBySlug()
+getCreatorBySlug()
+```
+
+Hay que tener cuidado con:
+
+```text
+registrationUrl
+```
+
+Claude detectó que algunas son actualmente placeholders, por ejemplo URLs de Twitter/Discord inventadas.
+
+**No publicar esas URLs como definitivas.**
+
+Deben sustituirse por URLs reales cuando estén disponibles.
+
+---
+
+# 22. CAMBIOS DE UX/UI POSTERIORES
+
+Después de FASE E/F, he seguido mejorando personalmente el frontend.
+
+Claude hizo posteriormente un análisis y detectó:
+
+### Design system
+
+Nuevos tokens:
+
+```text
+--canvas
+--surface-raised
+--ink-bright
+--ink-secondary
+--ink-tertiary
+--radius-lg
+```
+
+También cambió el body a Inter como fuente principal, con fallback de sistema.
+
+### Header
+
+Nuevo:
+
+* branding centrado;
+* R6 logo;
+* título gradient;
+* tab navigation;
+* hamburger;
+* mobile drawer.
+
+### Home
+
+Mejoras:
+
+* hero dock;
+* stats;
+* creators;
+* botones de inscripción;
+* formato;
+* scoring horizontal.
+
+### Classification
+
+Nuevo layout:
+
+* 2 columnas;
+* sidebar;
+* scoring;
+* progreso;
+* premio;
+* tabs Equipos/Pilotos;
+* filas expandibles;
+* desglose individual;
+* alerta de tiebreak.
+
+### Matches
+
+Mejoras:
+
+* spotlight;
+* duplas activas;
+* filtros;
+* cards expandibles;
+* tabs de mapas;
+* resumen de puntos por equipo/mapa.
+
+### Teams
+
+Mejoras:
+
+* cards esports;
+* ranking grande;
+* victorias;
+* podios;
+* alineación.
+
+### Team Detail
+
+Mejoras:
+
+* team switcher;
+* hero;
+* métricas;
+* miembros;
+* puntos individuales;
+* rendimiento mapa a mapa;
+* tabla expandible.
+
+### Streams
+
+Mejoras:
+
+* modo Enfoque;
+* Dúo;
+* Mosaico;
+* chat integrado;
+* telemetría del creator;
+* selector rápido.
+
+### Footer
+
+Footer completo con:
+
+* logo;
+* links;
+* copyright.
+
+---
+
+# 23. ESTADO TÉCNICO TRAS LAS MEJORAS UI
+
+Último análisis de Claude:
+
+```text
+TypeScript: 0 errores
+Build producción: OK
+CSS: ~81.88 KB
+JS: ~406 KB
+Errores consola: 0
+APIs: 200 OK
+Responsive 375px: OK
+```
+
+Rutas verificadas visualmente:
+
+```text
+Home
+Classification
+Matches
+Teams
+Team Detail
+Streams
+```
+
+No se detectaron regresiones lógicas.
+
+---
+
+# 24. OBSERVACIÓN IMPORTANTE SOBRE FASE E/F
+
+Antes de las últimas mejoras UI, FASE E fue validada:
+
+* REST/API OK
+* Socket.IO OK
+* START MATCH OK
+* map progression OK
+* match completion OK
+* corrections OK
+* reconnection OK
+* responsive 1440/1100/768/375 OK
+* Admin OK
+* client build OK
+* server build OK
+* 62/62 tests
+* DB limpia
+
+FASE F también fue revisada visualmente contra el `index.html` original.
+
+El análisis encontró que la implementación React era muy fiel visualmente al original.
+
+Discrepancias menores:
+
+1. `pub-cal-card` no tenía `border-radius: 4px`.
+2. `pub-cal-avatar-placeholder` no tenía `letter-spacing: .05em`.
+3. Diferencia menor en margin de "Cómo participar".
+
+Ninguna fue considerada crítica.
+
+Posteriormente el frontend fue modificado nuevamente para mejorar UX/UI, por lo que **no asumir que esos detalles siguen exactamente igual**.
+
+---
+
+# 25. BROADCAST — SIGUIENTE GRAN OBJETIVO
+
+El siguiente bloque funcional importante es:
+
+# FASE G — BROADCAST / OBS OVERLAYS
+
+El sistema debe soportar Browser Sources de OBS.
+
+No queremos una página normal adaptada a OBS.
+
+Queremos overlays específicos.
+
+---
+
+# 26. CREATOR OVERLAY
+
+Cada creator debe poder tener su propio overlay.
+
+Debe mostrar:
+
+* Creator name
+* Creator points
+* Current companion name
+* Companion points
+* Current team position
+* Team points
+* Creator/team identity
+* Avatar/logo
+* Current match
+* Current map
+* LIVE state
+
+Ejemplo conceptual:
+
+```text
+┌────────────────────────────────────┐
+│ CREATOR                            │
+│ Tebi                               │
+│ 42 PTS                             │
+│                                    │
+│ + COMPANION                        │
+│ Player 1                           │
+│ 18 PTS                             │
+│                                    │
+│ TEAM                               │
+│ #2   60 PTS                        │
+└────────────────────────────────────┘
+```
+
+El diseño real todavía debe definirse.
+
+---
+
+# 27. BROADCAST GLOBAL
+
+Debe poder mostrar información global como:
+
+* match;
+* map;
+* status;
+* resultado de mapa;
+* información puntual;
+* estadísticas.
+
+**No debe mostrar permanentemente el leaderboard completo.**
+
+La clasificación completa pertenece a Public Web.
+
+---
+
+# 28. BROADCAST — PRINCIPIO CLAVE
+
+Broadcast consume:
+
+```text
+API + Socket.IO
+```
+
+Nunca debe tener datos competitivos independientes.
+
+Ejemplo:
+
+```text
+Admin result
+     ↓
+Core
+     ↓
+Ranking
+     ↓
+Realtime
+     ↓
+Creator overlay
+```
+
+No:
+
+```text
+Admin → overlay-specific score calculation
+```
+
+---
+
+# 29. ESTADÍSTICAS — FUTURO
+
+Después de Broadcast:
+
+* stats por jugador;
+* stats por creator;
+* stats por equipo;
+* rendimiento por mapa;
+* evolución;
+* posiciones;
+* podios;
+* victorias;
+* historial;
+* records;
+* progresión.
+
+Las estadísticas deben derivarse del Core.
+
+No almacenar manualmente datos duplicados.
+
+---
+
+# 30. EXPORT — FUTURO
+
+Admin-only:
+
+* CSV
+* JSON
+
+Posibles exports:
+
+* clasificación;
+* resultados por mapa;
+* estadísticas;
+* historial.
+
+---
+
+# 31. NO-GOALS
+
+No implementar salvo que se solicite expresamente:
+
+* API del juego;
+* integración automática con Siege;
+* viewer accounts;
+* social network;
+* chat propio;
+* clips;
+* replay processing;
+* automatic moments engine;
+* video processing;
+* Redis;
+* Docker;
+* microservices;
+* matchmaking;
+* sistemas complejos de permisos;
+* sobreingeniería.
+
+---
+
+# 32. DECISIONES IMPORTANTES YA TOMADAS
+
+### Backend
+
+El backend es la fuente de verdad.
+
+### Scoring
+
+Backend calcula.
+
+### Ranking
+
+Backend calcula.
+
+### Frontend
+
+Renderiza y consume datos.
+
+### Realtime
+
+Socket.IO.
+
+### DB
+
+PostgreSQL.
+
+### Admin
+
+Operación manual.
+
+### Match start
+
+Manual.
+
+### Map progression
+
+Automática tras confirmar.
+
+### Public
+
+Editorial/esports.
+
+### Broadcast
+
+Consumer del Core.
+
+### Statistics
+
+Derivadas.
+
+---
+
+# 33. METODOLOGÍA CON CLAUDE CODE
+
+Cuando prepares prompts para Claude:
+
+* Sé extremadamente específico.
+* Divide en fases.
+* No permitir que Claude implemente todo de golpe.
+* Al terminar cada fase debe parar.
+* Debe devolver:
+
+  * archivos modificados;
+  * tests;
+  * builds;
+  * verificaciones;
+  * problemas encontrados.
+* Si encuentra algo fuera del scope, debe parar y preguntar.
+* No hacer refactors innecesarios.
+* No tocar lógica cuando trabajamos en UI.
+* No tocar UI cuando trabajamos en backend salvo que sea necesario.
+
+---
+
+# 34. CÓMO REVISAR LAS RESPUESTAS DE CLAUDE
+
+Cuando te pase un informe de Claude:
+
+No debes aprobar automáticamente.
+
+Comprueba:
+
+1. ¿Cumple exactamente el bloque?
+2. ¿Ha modificado archivos fuera del scope?
+3. ¿Ha introducido lógica duplicada?
+4. ¿Ha roto algo existente?
+5. ¿Los tests pasan?
+6. ¿Build pasa?
+7. ¿DB está correcta?
+8. ¿Realtime sigue funcionando?
+9. ¿Se ha respetado la arquitectura?
+10. ¿Se ha mantenido la identidad visual?
+11. ¿Ha inventado datos?
+12. ¿Ha avanzado fases sin permiso?
+
+Si todo está correcto:
+
+**"FASE X APROBADA."**
+
+Si no:
+
+explicar exactamente qué corregir y preparar un prompt de corrección.
+
+---
+
+# 35. ESTADO ACTUAL REAL
+
+Actualmente podemos considerar:
+
+```text
+CORE                         ✅
+DATABASE                     ✅
+SCORING                      ✅
+RANKING                      ✅
+STATE MACHINE                ✅
+API                          ✅
+REALTIME                     ✅
+ADMIN                        ✅
+PUBLIC WEB                   ✅
+PUBLIC UX/UI                 🟢 EN EVOLUCIÓN
+RESPONSIVE                   ✅
+ASSETS                       ✅
+BROADCAST                    ⏳
+STATISTICS                   ⏳
+EXPORT                       ⏳
+FINAL QA                     ⏳
+```
+
+La infraestructura principal está estable.
+
+El frontend público está siendo refinado continuamente.
+
+---
+
+# 36. SIGUIENTE PASO
+
+**No empieces directamente a programar Broadcast.**
+
+Primero debemos definir el diseño funcional de:
+
+### FASE G — BROADCAST / OBS
+
+Hay que decidir antes:
+
+1. Creator Overlay.
+2. Global Overlay.
+3. Map Result Overlay.
+4. Temporary Classification/Stats Overlay.
+5. Dimensiones.
+6. Información exacta.
+7. Animaciones.
+8. Estados sin LIVE.
+9. Comportamiento de transición.
+10. URLs de Browser Source.
+11. Integración Socket.IO.
+12. Cómo se configurará cada creator.
+13. Qué información queda fuera de cada overlay.
+
+Una vez definido esto, crear un **plan/wireframe de FASE G**.
+
+Después:
+
+```text
+Plan FASE G
+↓
+Aprobación
+↓
+Implementación por subfases
+↓
+QA
+```
+
+---
+
+# 37. REGLA FINAL
+
+Este proyecto ya tiene bastante trabajo implementado.
+
+**No quiero volver a empezar.**
+
+Antes de modificar cualquier parte importante:
+
+* inspeccionar el código existente;
+* reutilizar lo existente;
+* mantener la lógica;
+* mantener API/DB;
+* mantener realtime;
+* preservar `index.html` como referencia;
+* preservar assets;
+* respetar las decisiones documentadas;
+* hacer cambios pequeños;
+* verificar después de cada bloque.
+
+El objetivo es terminar una plataforma profesional y usable para una competición real, no crear una demo genérica.
+# 37. RIESGOS PENDIENTES
+
+Estos puntos **no significan que el proyecto esté roto**. Son aspectos pendientes que deben controlarse antes de considerar el producto listo para una competición/evento real.
+
+## R1 — Datos reales de producción
+
+Los nombres actuales de equipos/creators son seed data:
+
+* Caramelo
+* Vetel
+* Miwell
+* SoraMusic
+* Barra
+
+Los nombres, participantes y configuración definitiva pueden cambiar antes del evento.
+
+**Riesgo:** publicar datos de seed como si fueran definitivos.
+
+**Acción:** configurar/verificar todos los datos reales antes del evento.
+
+---
+
+## R2 — URLs de creators / inscripción
+
+`assets.ts` contiene actualmente algunos `registrationUrl` que fueron identificados como placeholders.
+
+Ejemplos:
+
+```text
+https://twitter.com/CarameloOficial
+https://discord.gg/vetel
+```
+
+No asumir que son URLs reales.
+
+**Riesgo:** enlaces incorrectos en producción.
+
+**Acción:** sustituir por URLs reales o eliminar el CTA si no existe inscripción para ese creator.
+
+---
+
+## R3 — Datos editoriales antiguos
+
+Algunos contenidos proceden del `index.html` original, por ejemplo:
+
+* "Y11S3"
+* "10K créditos en juego"
+* textos de inscripción;
+* fechas/calendario;
+* información de comunidad.
+
+**Riesgo:** información antigua o provisional presentada como información oficial.
+
+**Acción:** revisar todo el contenido editorial antes de producción.
+
+---
+
+## R4 — Tiebreak incompletamente definido
+
+El sistema puede detectar un empate final, pero no existe una fórmula automática definitiva.
+
+El tiebreak previsto actualmente:
+
+* 3 mapas;
+* solo creators;
+* mismo scoring.
+
+Para más de dos equipos empatados, el comportamiento todavía no está definido.
+
+**Riesgo:** llegar al final del evento con un empate y no tener el procedimiento operativo definido.
+
+**Acción:** definir las reglas oficiales del tiebreak antes del evento.
+
+---
+
+## R5 — Dependencia de introducción manual
+
+No existe integración automática con el juego.
+
+Todos los resultados dependen de que el operador introduzca correctamente:
+
+* posición;
+* DNF;
+* participantes;
+* confirmación del mapa.
+
+**Riesgo:** error humano durante una competición en directo.
+
+**Mitigación existente:**
+
+* validaciones backend;
+* posiciones únicas;
+* DNF;
+* exactamente 10 participantes;
+* confirmaciones;
+* correcciones;
+* recálculo automático.
+
+**Acción pendiente:** hacer una prueba operativa completa con los dos admins antes del evento.
+
+---
+
+## R6 — Correcciones durante competición
+
+Las correcciones recalculan ranking e histórico.
+
+Esto ya está implementado y probado.
+
+**Riesgo:** un operador puede corregir accidentalmente un resultado.
+
+**Acción pendiente:** revisar UX de confirmación y, si se considera necesario, añadir posteriormente un historial/audit log de modificaciones.
+
+No implementar un sistema de auditoría complejo sin necesidad.
+
+---
+
+## R7 — Realtime durante evento real
+
+Socket.IO está probado correctamente en entorno de desarrollo.
+
+**Riesgo:** problemas de red, desconexiones o pérdida temporal de conexión durante el evento.
+
+**Mitigación existente:**
+
+* REST como fuente de verdad;
+* refetch después de reconexión;
+* eventos después del commit.
+
+**Acción pendiente:** realizar una prueba con condiciones similares al entorno real de producción.
+
+---
+
+## R8 — Broadcast / OBS todavía pendiente
+
+La Public Web y el realtime están implementados, pero el sistema definitivo de Broadcast/OBS todavía no está implementado.
+
+Pendiente:
+
+* Creator Overlay;
+* Global Overlay;
+* Map Result Overlay;
+* overlays temporales;
+* Browser Sources;
+* diseño definitivo;
+* integración realtime.
+
+**Riesgo:** no disponer de una capa broadcast lista para el evento.
+
+**Prioridad:** ALTA.
+
+---
+
+## R9 — Estadísticas todavía pendientes
+
+Las estadísticas avanzadas todavía no están implementadas.
+
+Pendiente:
+
+* evolución;
+* rendimiento por mapa;
+* estadísticas individuales;
+* estadísticas por creator;
+* estadísticas por equipo;
+* records;
+* historial avanzado.
+
+**Riesgo:** funcionalidades de contenido/post-evento todavía incompletas.
+
+**Prioridad:** MEDIA después de Broadcast.
+
+---
+
+## R10 — Exportación todavía pendiente
+
+CSV/JSON todavía pendiente.
+
+**Riesgo:** dificultad para sacar rápidamente los resultados/datos después del evento.
+
+**Prioridad:** MEDIA.
+
+---
+
+## R11 — Seguridad de credenciales
+
+El backend utiliza `.env` para configuración de base de datos.
+
+El archivo `.env` **no debe entrar nunca en Git ni compartirse públicamente**.
+
+Si una credencial real fue expuesta durante el desarrollo, debe rotarse antes de producción.
+
+**Acción:** verificar `.gitignore`, variables de producción y credenciales finales antes del deployment.
+
+---
+
+## R12 — Dependencia del entorno de producción
+
+El sistema ha sido probado localmente.
+
+Todavía hay que validar el entorno definitivo:
+
+* servidor;
+* PostgreSQL;
+* dominio;
+* HTTPS;
+* CORS;
+* WebSocket;
+* OBS Browser Sources;
+* URLs públicas;
+* rendimiento.
+
+**Riesgo:** diferencias entre entorno local y producción.
+
+**Acción:** realizar deployment de staging antes del evento.
+
+---
+
+## R13 — Assets y contenido
+
+Los 7 assets originales ya fueron extraídos correctamente:
+
+* R6 emblem;
+* hero;
+* 5 avatars.
+
+El `index.html` original permanece como referencia.
+
+**Riesgo:** sustituir/eliminar accidentalmente assets durante futuros refactors.
+
+**Regla:** no eliminar el original ni los assets sin comprobar primero sus referencias.
+
+---
+
+## R14 — Evolución del frontend
+
+El frontend ha recibido posteriormente mejoras importantes de UX/UI realizadas fuera de las fases originales.
+
+Último análisis:
+
+* TypeScript: 0 errores;
+* build: OK;
+* consola: 0 errores;
+* APIs: OK;
+* responsive: OK.
+
+El bundle ha aumentado aproximadamente a:
+
+```text
+CSS ≈ 81.88 KB
+JS ≈ 406 KB
+```
+
+Esto no se considera actualmente un problema, pero debe vigilarse.
+
+**Riesgo:** crecimiento progresivo del frontend por duplicación de componentes, estilos o funcionalidades.
+
+**Acción:** evitar refactors prematuros; revisar bundle solo si sigue creciendo de forma significativa o afecta rendimiento.
+
+---
+
+## R15 — Responsive no equivale a UX final
+
+Las resoluciones principales ya fueron verificadas:
+
+* 1440px
+* 1100px
+* 768px
+* 375px
+
+Esto valida comportamiento técnico, pero no significa que el UX final esté cerrado.
+
+**Acción:** realizar una última revisión visual/UX antes de producción real.
+
+---
+
+## R16 — Datos derivados y consistencia
+
+El principio arquitectónico es:
+
+```text
+MAP RESULT
+→ POSITION
+→ POINTS
+→ PLAYER SCORE
+→ TEAM SCORE
+→ RANKING
+→ HISTORY
+→ STATISTICS
+→ BROADCAST
+```
+
+**Riesgo:** futuras funcionalidades podrían empezar a calcular datos competitivos directamente en frontend.
+
+**Regla:** nunca duplicar scoring/ranking en Public Web, Broadcast o Statistics.
+
+El backend/Core continúa siendo la fuente de verdad.
+
+---
+
+## R17 — Falta de prueba completa de evento
+
+Aunque los componentes individuales están verificados, todavía falta una prueba general simulando el evento completo:
+
+```text
+Match 1
+→ Map 1
+→ Map 2
+→ Map 3
+→ Match complete
+
+Match 2
+→ Map 1
+→ Map 2
+→ Map 3
+→ Match complete
+
+Match 3
+→ Map 1
+→ Map 2
+→ Map 3
+→ Match complete
+
+Match 4
+→ Map 1
+→ Map 2
+→ Map 3
+→ Match complete
+```
+
+Incluyendo:
+
+* DNF;
+* correcciones;
+* ranking;
+* realtime;
+* Public Web;
+* Broadcast;
+* reconexiones.
+
+**Prioridad:** ALTA antes del evento real.
+
+---
+
+# MATRIZ DE PRIORIDAD
+
+| Riesgo                    | Prioridad   | Estado                      |
+| ------------------------- | ----------- | --------------------------- |
+| Datos reales              | Alta        | Pendiente                   |
+| URLs reales               | Alta        | Pendiente                   |
+| Contenido editorial       | Alta        | Pendiente                   |
+| Tiebreak                  | Alta        | Pendiente                   |
+| Operación manual          | Alta        | Mitigado                    |
+| Realtime producción       | Alta        | Pendiente                   |
+| Broadcast / OBS           | **Crítica** | Pendiente                   |
+| Estadísticas              | Media       | Pendiente                   |
+| Export                    | Media       | Pendiente                   |
+| Credenciales              | **Crítica** | Revisar antes de producción |
+| Deployment                | **Crítica** | Pendiente                   |
+| UX final                  | Media       | Pendiente                   |
+| Prueba completa de evento | **Crítica** | Pendiente                   |
+
+---
+
+# CRITERIO PARA CONSIDERAR EL PROYECTO "EVENT READY"
+
+No considerar el proyecto terminado simplemente porque:
+
+```text
+tests = OK
+build = OK
+```
+
+Para considerar el sistema listo para un evento real deben estar validados:
+
+```text
+Core                         ✅
+DB                           ✅
+Scoring                      ✅
+Ranking                      ✅
+State Machine                ✅
+API                          ✅
+Realtime                     ✅
+Admin                        ✅
+Public Web                   ✅
+Broadcast                    ⏳
+Production deployment       ⏳
+Datos reales                 ⏳
+Tiebreak                     ⏳
+Prueba completa de evento    ⏳
+Credenciales/seguridad       ⏳
+```
+
+El objetivo final es:
+
+**EVENT READY = técnicamente estable + operativamente probado + visualmente terminado + datos reales configurados.**
