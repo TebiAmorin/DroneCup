@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Link, Outlet } from 'react-router-dom';
-import { getAdminSecret, setAdminSecret, clearAdminSecret } from '../api';
+import { getAdminSecret, setAdminSecret, clearAdminSecret, validateSecret } from '../api';
 import { useSocketStatus } from './useSocket';
 import type { ConnectionStatus } from './useSocket';
 import { ASSETS } from '../public/assets';
@@ -15,18 +15,28 @@ const STATUS_LABELS: Record<ConnectionStatus, string> = {
 export default function AdminLayout() {
   const [hasSecret, setHasSecret] = useState(false);
   const [input, setInput] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [loginLoading, setLoginLoading] = useState(false);
   const socketStatus = useSocketStatus();
 
   useEffect(() => {
     setHasSecret(!!getAdminSecret());
   }, []);
 
-  function handleSave() {
-    if (input.trim()) {
-      setAdminSecret(input.trim());
+  async function handleSave() {
+    const trimmed = input.trim();
+    if (!trimmed) return;
+    setLoginLoading(true);
+    setLoginError('');
+    const valid = await validateSecret(trimmed);
+    if (valid) {
+      setAdminSecret(trimmed);
       setHasSecret(true);
       setInput('');
+    } else {
+      setLoginError('Clave incorrecta.');
     }
+    setLoginLoading(false);
   }
 
   function handleLogout() {
@@ -74,12 +84,16 @@ export default function AdminLayout() {
               />
             </div>
 
+            {loginError && (
+              <div className="admin-login-error">{loginError}</div>
+            )}
+
             <button
               type="submit"
               className="btn btn-primary admin-login-btn"
-              disabled={!input.trim()}
+              disabled={!input.trim() || loginLoading}
             >
-              Entrar al Panel
+              {loginLoading ? 'Verificando…' : 'Entrar al Panel'}
             </button>
           </form>
 

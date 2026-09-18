@@ -162,6 +162,13 @@ body {
   color: var(--text-muted);
 }
 
+.admin-login-error {
+  color: var(--danger, #ef4444);
+  font-size: 13px;
+  text-align: center;
+  padding: 8px 0;
+}
+
 .admin-login-btn {
   width: 100%;
   padding: 12px 18px;

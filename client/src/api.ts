@@ -210,6 +210,21 @@ export interface ProgressionResponse {
   participants: ProgressionParticipant[];
 }
 
+export async function validateSecret(token: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${BASE}/auth/validate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    return data.valid === true;
+  } catch {
+    return false;
+  }
+}
+
 export const api = {
   getTournament: () => request<TournamentData>('/tournament'),
   getTeams: () => request<TeamData[]>('/teams'),
