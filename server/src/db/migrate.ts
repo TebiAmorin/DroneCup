@@ -155,6 +155,52 @@ ALTER TABLE tournament
   ADD CONSTRAINT fk_tournament_current_map
   FOREIGN KEY (current_map_id) REFERENCES map(id) ON DELETE SET NULL;
 
+-- Registration fields on team (F5.1)
+ALTER TABLE team ADD COLUMN IF NOT EXISTS registration_url TEXT;
+ALTER TABLE team ADD COLUMN IF NOT EXISTS registration_type VARCHAR(30);
+ALTER TABLE team ADD COLUMN IF NOT EXISTS community_note TEXT;
+
+-- Registration platform field on team (F5.2.2)
+ALTER TABLE team ADD COLUMN IF NOT EXISTS registration_platform VARCHAR(30);
+
+-- Populate registration fields from current frontend data (F5.1)
+UPDATE team SET
+  registration_url = CASE slug
+    WHEN 'caramelo' THEN 'https://twitter.com/CarameloOficial'
+    WHEN 'vetel'    THEN 'https://discord.gg/vetel'
+    WHEN 'miwell'   THEN 'https://www.twitch.tv/DonMiwell'
+    WHEN 'sora'     THEN 'https://twitter.com/soramusicr6'
+    WHEN 'barra'    THEN 'https://discord.gg/barra'
+  END,
+  registration_type = CASE slug
+    WHEN 'caramelo' THEN 'external'
+    WHEN 'vetel'    THEN 'external'
+    WHEN 'miwell'   THEN 'external'
+    WHEN 'sora'     THEN 'external'
+    WHEN 'barra'    THEN 'external'
+  END,
+  community_note = CASE slug
+    WHEN 'caramelo' THEN 'Draft y plazas abiertas en su post de X'
+    WHEN 'vetel'    THEN 'Inscripciones en el canal #drone-cup'
+    WHEN 'miwell'   THEN 'Clasificatorio en directo durante su stream'
+    WHEN 'sora'     THEN 'Responde al tweet oficial fijado'
+    WHEN 'barra'    THEN 'Formulario disponible en su servidor'
+  END
+WHERE slug IN ('caramelo', 'vetel', 'miwell', 'sora', 'barra')
+  AND registration_url IS NULL;
+
+-- Populate registration platform from current frontend data (F5.2.2)
+UPDATE team SET
+  registration_platform = CASE slug
+    WHEN 'caramelo' THEN 'twitter'
+    WHEN 'vetel'    THEN 'discord'
+    WHEN 'miwell'   THEN 'twitch'
+    WHEN 'sora'     THEN 'twitter'
+    WHEN 'barra'    THEN 'discord'
+  END
+WHERE slug IN ('caramelo', 'vetel', 'miwell', 'sora', 'barra')
+  AND registration_platform IS NULL;
+
 -- Indexes for common queries
 CREATE INDEX IF NOT EXISTS idx_team_tournament ON team(tournament_id);
 CREATE INDEX IF NOT EXISTS idx_participant_team ON participant(team_id);

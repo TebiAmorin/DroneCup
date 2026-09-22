@@ -12,12 +12,20 @@ export interface Tournament {
 }
 
 // ── Team ────────────────────────────────────────────
+export type RegistrationType = 'google_forms' | 'typeform' | 'external';
+export type RegistrationPlatform = 'twitter' | 'discord' | 'twitch' | 'google_forms' | 'typeform' | 'external';
+
 export interface Team {
   id: string;
   tournamentId: string;
   name: string;
   slug: string;
+  color: string | null;
   logoUrl: string | null;
+  registrationUrl: string | null;
+  registrationType: RegistrationType | null;
+  registrationPlatform: RegistrationPlatform | null;
+  communityNote: string | null;
   createdAt: string;
   updatedAt: string;
 }
