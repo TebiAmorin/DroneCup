@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { api, type TeamData } from '../api';
 import { useRefetchOnReconnect } from './useSocket';
 import { useAdminToast, AdminToast } from './AdminToast';
+import { getTeamColor } from '../public/assets';
 
 const REGISTRATION_STATUSES = [
   { value: 'upcoming', label: 'Próximamente' },
@@ -182,12 +183,12 @@ export default function Creators() {
             <div
               key={team.id}
               className="admin-creator-card"
-              style={{ borderTopColor: team.color ?? 'var(--border)' }}
+              style={{ borderTopColor: getTeamColor(team) }}
             >
               <div className="admin-creator-header">
                 <span
                   className="admin-creator-dot"
-                  style={{ background: team.color ?? 'var(--text-muted)' }}
+                  style={{ background: getTeamColor(team) }}
                 />
                 <h3 className="admin-creator-name">{team.name}</h3>
                 <span className="admin-creator-slug">/{team.slug}</span>
