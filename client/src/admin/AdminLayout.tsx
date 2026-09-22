@@ -132,6 +132,9 @@ export default function AdminLayout() {
           <NavLink to="/admin/teams" className={({ isActive }) => (isActive ? 'active' : '')}>
             <span className="admin-nav-icon">🛡</span> Equipos
           </NavLink>
+          <NavLink to="/admin/creators" className={({ isActive }) => (isActive ? 'active' : '')}>
+            <span className="admin-nav-icon">🎬</span> Creadores
+          </NavLink>
           <NavLink to="/admin/participants" className={({ isActive }) => (isActive ? 'active' : '')}>
             <span className="admin-nav-icon">👤</span> Participantes
           </NavLink>

@@ -21,6 +21,19 @@ function TwitchIcon({ size = 14 }: { size?: number }) {
   );
 }
 
+const PLATFORM_LABELS: Record<string, string> = {
+  twitter: 'Twitter / X',
+  discord: 'Discord',
+  twitch: 'Twitch',
+  google_forms: 'Google Forms',
+  typeform: 'Typeform',
+  external: 'Enlace externo',
+};
+
+function getPlatformLabel(platform: string): string {
+  return PLATFORM_LABELS[platform] ?? platform;
+}
+
 function PlatformIcon({ platform, size = 16 }: { platform: string; size?: number }) {
   const svg = platform === 'discord' ? ICONS.discord : platform === 'twitter' ? ICONS.twitter : ICONS.twitch;
   return <span className="pub-sp-platform-icon" dangerouslySetInnerHTML={{ __html: svg }} style={{ width: size, height: size }} />;
@@ -45,6 +58,10 @@ export default function StreamerPage() {
     t.slug?.toLowerCase() === creatorSlug
   );
   const teamColor = team ? getTeamColor(team) : creator.color;
+
+  const regUrl = team?.registrationUrl ?? creator.registrationUrl;
+  const regNote = team?.communityNote ?? creator.communityNote;
+  const regPlatform = team?.registrationPlatform ?? creator.registrationPlatform;
 
   const otherCreators = CREATOR_SLUGS.filter(s => s !== creatorSlug);
 
@@ -110,11 +127,11 @@ export default function StreamerPage() {
           <div className="pub-sp-info-card">
             <h3 className="pub-sp-info-title">Cómo participar</h3>
             <p className="pub-sp-info-text">
-              {creator.communityNote}
+              {regNote}
             </p>
             <div className="pub-sp-info-platform">
-              <PlatformIcon platform={creator.registrationPlatform} />
-              <span>Plataforma: {creator.registrationPlatform === 'twitter' ? 'Twitter / X' : creator.registrationPlatform === 'discord' ? 'Discord' : 'Twitch'}</span>
+              <PlatformIcon platform={regPlatform} />
+              <span>Plataforma: {getPlatformLabel(regPlatform)}</span>
             </div>
           </div>
 
@@ -172,18 +189,18 @@ export default function StreamerPage() {
             </p>
           </div>
           <a
-            href={creator.registrationUrl}
+            href={regUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="pub-sp-cta-btn"
             style={{ background: teamColor, borderColor: teamColor }}
-            onClick={() => trackEvent('registration_click', { streamer: creatorSlug, platform: creator.registrationPlatform })}
+            onClick={() => trackEvent('registration_click', { streamer: creatorSlug, platform: regPlatform })}
           >
-            <PlatformIcon platform={creator.registrationPlatform} size={18} />
+            <PlatformIcon platform={regPlatform} size={18} />
             Inscríbete al clasificatorio
           </a>
           <span className="pub-sp-cta-note">
-            Se abrirá en {creator.registrationPlatform === 'twitter' ? 'Twitter / X' : creator.registrationPlatform === 'discord' ? 'Discord' : 'Twitch'}
+            Se abrirá en {getPlatformLabel(regPlatform)}
           </span>
         </div>
       </section>

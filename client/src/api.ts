@@ -52,6 +52,10 @@ export interface TeamData {
   name: string;
   slug: string;
   color: string | null;
+  registrationUrl?: string | null;
+  registrationType?: string | null;
+  registrationPlatform?: string | null;
+  communityNote?: string | null;
   participants?: ParticipantData[];
 }
 
@@ -268,4 +272,9 @@ export const api = {
   getStatisticsParticipants: () => request<ParticipantStats[]>('/statistics/participants'),
   getStatisticsParticipant: (id: string) => request<ParticipantStats>(`/statistics/participants/${id}`),
   getStatisticsProgression: () => request<ProgressionResponse>('/statistics/progression'),
+  updateTeamRegistration: (id: string, data: { registrationUrl?: string | null; registrationType?: string | null; registrationPlatform?: string | null; communityNote?: string | null }) =>
+    authedRequest<{ success: boolean; team: TeamData }>(`/teams/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    }),
 };
