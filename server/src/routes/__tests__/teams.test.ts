@@ -25,8 +25,8 @@ async function seedTeams() {
     );
 
     const { rows: [team] } = await client.query(
-      `INSERT INTO team (tournament_id, name, slug, color, registration_url, registration_type, registration_platform, community_note)
-       VALUES ($1, 'TestTeam', 'testteam', '#ff0000', 'https://example.com/register', 'external', 'discord', 'Join via the link')
+      `INSERT INTO team (tournament_id, name, slug, color, registration_url, registration_type, registration_platform, registration_status, community_note)
+       VALUES ($1, 'TestTeam', 'testteam', '#ff0000', 'https://example.com/register', 'external', 'discord', 'upcoming', 'Join via the link')
        RETURNING id`,
       [t.id]
     );
@@ -66,6 +66,7 @@ describe('Teams API — registration fields (F5.1)', () => {
       expect(team.registrationUrl).toBe('https://example.com/register');
       expect(team.registrationType).toBe('external');
       expect(team.registrationPlatform).toBe('discord');
+      expect(team.registrationStatus).toBe('upcoming');
       expect(team.communityNote).toBe('Join via the link');
     });
   });
@@ -77,6 +78,7 @@ describe('Teams API — registration fields (F5.1)', () => {
       expect(res.body.registrationUrl).toBe('https://example.com/register');
       expect(res.body.registrationType).toBe('external');
       expect(res.body.registrationPlatform).toBe('discord');
+      expect(res.body.registrationStatus).toBe('upcoming');
       expect(res.body.communityNote).toBe('Join via the link');
     });
   });
@@ -125,6 +127,103 @@ describe('Teams API — registration fields (F5.1)', () => {
       expect(res.body.team.registrationPlatform).toBe('twitter');
     });
 
+    it('updates registrationStatus to open', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ registrationStatus: 'open' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.team.registrationStatus).toBe('open');
+    });
+
+    it('updates registrationStatus to closed', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ registrationStatus: 'closed' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.team.registrationStatus).toBe('closed');
+    });
+
+    it('updates registrationStatus to completed', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ registrationStatus: 'completed' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.team.registrationStatus).toBe('completed');
+    });
+
+    it('updates registrationStatus to upcoming', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ registrationStatus: 'upcoming' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.team.registrationStatus).toBe('upcoming');
+    });
+
+    it('updates all qualifier fields', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({
+          qualifierDate: '2026-09-28',
+          qualifierStartTime: '20:00',
+          qualifierEndTime: '22:00',
+          qualifierFormat: 'Clasificatorio en directo',
+          qualifierRequirements: 'Tener R6 en PC',
+          qualifierHowToParticipate: 'Enviar DM al creador',
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.team.qualifierDate).toBe('2026-09-28');
+      expect(res.body.team.qualifierStartTime).toBe('20:00:00');
+      expect(res.body.team.qualifierEndTime).toBe('22:00:00');
+      expect(res.body.team.qualifierFormat).toBe('Clasificatorio en directo');
+      expect(res.body.team.qualifierRequirements).toBe('Tener R6 en PC');
+      expect(res.body.team.qualifierHowToParticipate).toBe('Enviar DM al creador');
+    });
+
+    it('returns qualifier fields in GET after PATCH', async () => {
+      const res = await request(app).get(`/api/teams/${teamId}`);
+      expect(res.status).toBe(200);
+      expect(res.body.qualifierDate).toBe('2026-09-28');
+      expect(res.body.qualifierFormat).toBe('Clasificatorio en directo');
+    });
+
+    it('allows setting qualifier fields to null', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ qualifierDate: null, qualifierEndTime: null });
+
+      expect(res.status).toBe(200);
+      expect(res.body.team.qualifierDate).toBeNull();
+      expect(res.body.team.qualifierEndTime).toBeNull();
+    });
+
+    it('updates qualifierDate without affecting other qualifier fields', async () => {
+      await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ qualifierFormat: 'Draft abierto', qualifierStartTime: '19:00' });
+
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ qualifierDate: '2026-10-05' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.team.qualifierDate).toBe('2026-10-05');
+      expect(res.body.team.qualifierFormat).toBe('Draft abierto');
+      expect(res.body.team.qualifierStartTime).toBe('19:00:00');
+    });
+
     it('allows setting registrationPlatform to null', async () => {
       const res = await request(app)
         .patch(`/api/teams/${teamId}`)
@@ -144,6 +243,7 @@ describe('Teams API — registration fields (F5.1)', () => {
           registrationUrl: 'https://example.com/final',
           registrationType: 'typeform',
           registrationPlatform: 'twitch',
+          registrationStatus: 'open',
           communityNote: 'Final note',
         });
 
@@ -158,6 +258,7 @@ describe('Teams API — registration fields (F5.1)', () => {
       expect(res.body.team.registrationUrl).toBe('https://example.com/final');
       expect(res.body.team.registrationType).toBe('typeform');
       expect(res.body.team.registrationPlatform).toBe('twitch');
+      expect(res.body.team.registrationStatus).toBe('open');
     });
 
     it('allows setting registrationUrl to null', async () => {
@@ -177,6 +278,7 @@ describe('Teams API — registration fields (F5.1)', () => {
         .send({
           registrationUrl: 'https://persisted.example.com',
           registrationType: 'external',
+          registrationStatus: 'closed',
           communityNote: 'Persisted note',
         });
 
@@ -184,6 +286,7 @@ describe('Teams API — registration fields (F5.1)', () => {
       expect(res.status).toBe(200);
       expect(res.body.registrationUrl).toBe('https://persisted.example.com');
       expect(res.body.registrationType).toBe('external');
+      expect(res.body.registrationStatus).toBe('closed');
       expect(res.body.communityNote).toBe('Persisted note');
     });
   });
@@ -240,6 +343,26 @@ describe('Teams API — registration fields (F5.1)', () => {
 
       expect(res.status).toBe(400);
       expect(res.body.error.code).toBe('INVALID_URL');
+    });
+
+    it('rejects invalid registrationStatus', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ registrationStatus: 'invalid_status' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error.code).toBe('INVALID_STATUS');
+    });
+
+    it('rejects null registrationStatus', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ registrationStatus: null });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error.code).toBe('INVALID_STATUS');
     });
 
     it('rejects invalid registrationPlatform', async () => {
@@ -309,6 +432,66 @@ describe('Teams API — registration fields (F5.1)', () => {
         .send({ communityNote: 'test' });
 
       expect(res.status).toBe(404);
+    });
+
+    it('rejects invalid qualifierDate format', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ qualifierDate: '28/09/2026' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error.code).toBe('INVALID_DATE');
+    });
+
+    it('rejects invalid qualifierStartTime format', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ qualifierStartTime: '8pm' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error.code).toBe('INVALID_TIME');
+    });
+
+    it('rejects invalid qualifierEndTime format', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ qualifierEndTime: '22:00:00' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error.code).toBe('INVALID_TIME');
+    });
+
+    it('rejects qualifierFormat longer than 2000 characters', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ qualifierFormat: 'A'.repeat(2001) });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error.code).toBe('INVALID_FORMAT');
+    });
+
+    it('rejects qualifierRequirements longer than 2000 characters', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ qualifierRequirements: 'A'.repeat(2001) });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error.code).toBe('INVALID_REQUIREMENTS');
+    });
+
+    it('rejects qualifierHowToParticipate longer than 2000 characters', async () => {
+      const res = await request(app)
+        .patch(`/api/teams/${teamId}`)
+        .set('Authorization', `Bearer ${ADMIN_SECRET}`)
+        .send({ qualifierHowToParticipate: 'A'.repeat(2001) });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error.code).toBe('INVALID_HOW_TO_PARTICIPATE');
     });
 
     it('rejects empty body (no valid fields)', async () => {

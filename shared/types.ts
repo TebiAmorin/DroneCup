@@ -14,6 +14,7 @@ export interface Tournament {
 // ── Team ────────────────────────────────────────────
 export type RegistrationType = 'google_forms' | 'typeform' | 'external';
 export type RegistrationPlatform = 'twitter' | 'discord' | 'twitch' | 'google_forms' | 'typeform' | 'external';
+export type RegistrationStatus = 'upcoming' | 'open' | 'closed' | 'completed';
 
 export interface Team {
   id: string;
@@ -25,7 +26,14 @@ export interface Team {
   registrationUrl: string | null;
   registrationType: RegistrationType | null;
   registrationPlatform: RegistrationPlatform | null;
+  registrationStatus: RegistrationStatus | null;
   communityNote: string | null;
+  qualifierDate: string | null;
+  qualifierStartTime: string | null;
+  qualifierEndTime: string | null;
+  qualifierFormat: string | null;
+  qualifierRequirements: string | null;
+  qualifierHowToParticipate: string | null;
   createdAt: string;
   updatedAt: string;
 }

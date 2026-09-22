@@ -1151,6 +1151,17 @@ body {
   letter-spacing: 0;
 }
 
+.admin-field-separator {
+  border-top: 1px solid var(--border);
+  margin: 8px 0;
+}
+
+.admin-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
 .admin-creator-actions {
   display: flex;
   align-items: center;

@@ -776,6 +776,12 @@
   box-shadow: 0 4px 14px rgba(224, 85, 32, 0.4);
 }
 
+.pub-btn-disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
 /* ── FORMAT AND RULES CHAPTER ─── */
 .pub-format-layout {
   display: grid;

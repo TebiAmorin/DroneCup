@@ -202,6 +202,9 @@ export default function Home() {
               t.name.toLowerCase() === creator.name.toLowerCase() ||
               t.slug?.toLowerCase() === slug
             );
+            const status = team?.registrationStatus ?? 'upcoming';
+            const isOpen = status === 'open';
+            const isCompleted = status === 'completed';
 
             return (
               <div
@@ -227,16 +230,35 @@ export default function Home() {
                 </div>
 
                 <div className="pub-card-action">
-                  <Link
-                    className="pub-btn-register"
-                    to={`/streamers/${slug}`}
-                    onClick={e => {
-                      e.stopPropagation();
-                      trackEvent('streamer_card_click', { streamer: slug });
-                    }}
-                  >
-                    Inscribirte
-                  </Link>
+                  {isOpen && (
+                    <Link
+                      className="pub-btn-register"
+                      to={`/streamers/${slug}`}
+                      onClick={e => {
+                        e.stopPropagation();
+                        trackEvent('streamer_card_click', { streamer: slug });
+                      }}
+                    >
+                      Inscríbete
+                    </Link>
+                  )}
+                  {status === 'upcoming' && (
+                    <span className="pub-btn-register pub-btn-disabled">Próximamente</span>
+                  )}
+                  {status === 'closed' && (
+                    <span className="pub-btn-register pub-btn-disabled">Inscripciones cerradas</span>
+                  )}
+                  {isCompleted && team && (
+                    <Link
+                      className="pub-btn-register"
+                      to={`/teams/${team.slug}`}
+                      onClick={e => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      Ver equipo
+                    </Link>
+                  )}
                 </div>
               </div>
             );

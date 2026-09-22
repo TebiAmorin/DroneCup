@@ -1,4 +1,4 @@
-import { useParams, Link, useOutletContext } from 'react-router-dom';
+import { useParams, Link, useNavigate, useOutletContext } from 'react-router-dom';
 import type { CompetitionState } from './useCompetition';
 import {
   ASSETS,
@@ -34,6 +34,17 @@ function getPlatformLabel(platform: string): string {
   return PLATFORM_LABELS[platform] ?? platform;
 }
 
+const MONTHS_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+function formatQualifierDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return `${d} de ${MONTHS_ES[m - 1]} de ${y}`;
+}
+
+function formatTime(timeStr: string): string {
+  return timeStr.slice(0, 5);
+}
+
 function PlatformIcon({ platform, size = 16 }: { platform: string; size?: number }) {
   const svg = platform === 'discord' ? ICONS.discord : platform === 'twitter' ? ICONS.twitter : ICONS.twitch;
   return <span className="pub-sp-platform-icon" dangerouslySetInnerHTML={{ __html: svg }} style={{ width: size, height: size }} />;
@@ -42,6 +53,7 @@ function PlatformIcon({ platform, size = 16 }: { platform: string; size?: number
 export default function StreamerPage() {
   const { slug } = useParams<{ slug: string }>();
   const { teams } = useOutletContext<CompetitionState>();
+  const navigate = useNavigate();
 
   const normalizedSlug = slug?.toLowerCase() ?? '';
   const creator = getCreatorBySlug(normalizedSlug);
@@ -62,6 +74,7 @@ export default function StreamerPage() {
   const regUrl = team?.registrationUrl ?? creator.registrationUrl;
   const regNote = team?.communityNote ?? creator.communityNote;
   const regPlatform = team?.registrationPlatform ?? creator.registrationPlatform;
+  const registrationStatus = team?.registrationStatus ?? 'upcoming';
 
   const otherCreators = CREATOR_SLUGS.filter(s => s !== creatorSlug);
 
@@ -144,28 +157,41 @@ export default function StreamerPage() {
           </div>
 
           {/* Fecha y horario */}
-          <div className="pub-sp-info-card">
-            <h3 className="pub-sp-info-title">Fecha y horario</h3>
-            <p className="pub-sp-info-text pub-sp-pending">
-              Pendiente de confirmar por el creador.
-            </p>
-          </div>
+          {(team?.qualifierDate || team?.qualifierStartTime) && (
+            <div className="pub-sp-info-card">
+              <h3 className="pub-sp-info-title">Fecha y horario</h3>
+              <p className="pub-sp-info-text">
+                {team.qualifierDate && formatQualifierDate(team.qualifierDate)}
+                {team.qualifierStartTime && (
+                  <>{team.qualifierDate ? ' · ' : ''}{formatTime(team.qualifierStartTime)}{team.qualifierEndTime ? `–${formatTime(team.qualifierEndTime)}` : ''}</>
+                )}
+              </p>
+            </div>
+          )}
 
           {/* Formato */}
-          <div className="pub-sp-info-card">
-            <h3 className="pub-sp-info-title">Formato</h3>
-            <p className="pub-sp-info-text pub-sp-pending">
-              Pendiente de confirmar por el creador.
-            </p>
-          </div>
+          {team?.qualifierFormat && (
+            <div className="pub-sp-info-card">
+              <h3 className="pub-sp-info-title">Formato</h3>
+              <p className="pub-sp-info-text">{team.qualifierFormat}</p>
+            </div>
+          )}
 
           {/* Requisitos */}
-          <div className="pub-sp-info-card">
-            <h3 className="pub-sp-info-title">Requisitos</h3>
-            <p className="pub-sp-info-text pub-sp-pending">
-              Pendiente de confirmar por el creador.
-            </p>
-          </div>
+          {team?.qualifierRequirements && (
+            <div className="pub-sp-info-card">
+              <h3 className="pub-sp-info-title">Requisitos</h3>
+              <p className="pub-sp-info-text">{team.qualifierRequirements}</p>
+            </div>
+          )}
+
+          {/* Cómo participar (detallado) */}
+          {team?.qualifierHowToParticipate && (
+            <div className="pub-sp-info-card">
+              <h3 className="pub-sp-info-title">Cómo participar</h3>
+              <p className="pub-sp-info-text">{team.qualifierHowToParticipate}</p>
+            </div>
+          )}
 
           {/* Estructura del equipo */}
           <div className="pub-sp-info-card">
@@ -182,26 +208,70 @@ export default function StreamerPage() {
       <section className="pub-sp-cta-section" style={{ '--sp-color': teamColor } as React.CSSProperties}>
         <div className="pub-sp-cta-card">
           <div className="pub-sp-cta-content">
-            <span className="pub-kicker" style={{ color: teamColor }}>Inscripción abierta</span>
-            <h2 className="pub-sp-cta-title">¿Listo para competir?</h2>
-            <p className="pub-sp-cta-desc">
-              Accede a la convocatoria de {creator.name} y postúlate como piloto comunitario de su equipo.
-            </p>
+            {registrationStatus === 'open' && (
+              <>
+                <span className="pub-kicker" style={{ color: teamColor }}>Inscripción abierta</span>
+                <h2 className="pub-sp-cta-title">¿Listo para competir?</h2>
+                <p className="pub-sp-cta-desc">
+                  Accede a la convocatoria de {creator.name} y postúlate como piloto comunitario de su equipo.
+                </p>
+              </>
+            )}
+            {registrationStatus === 'upcoming' && (
+              <>
+                <span className="pub-kicker" style={{ color: teamColor }}>Próximamente</span>
+                <h2 className="pub-sp-cta-title">Inscripción aún no disponible</h2>
+                <p className="pub-sp-cta-desc">
+                  El clasificatorio de {creator.name} todavía no está abierto. Mantente atento a sus redes.
+                </p>
+              </>
+            )}
+            {registrationStatus === 'closed' && (
+              <>
+                <span className="pub-kicker" style={{ color: teamColor }}>Inscripciones cerradas</span>
+                <h2 className="pub-sp-cta-title">El periodo de inscripción ha finalizado</h2>
+                <p className="pub-sp-cta-desc">
+                  Las plazas comunitarias de {creator.name} están en proceso de selección.
+                </p>
+              </>
+            )}
+            {registrationStatus === 'completed' && (
+              <>
+                <span className="pub-kicker" style={{ color: teamColor }}>Equipo completo</span>
+                <h2 className="pub-sp-cta-title">El equipo de {creator.name} ya está formado</h2>
+                <p className="pub-sp-cta-desc">
+                  Los pilotos comunitarios han sido seleccionados. Consulta la ficha del equipo.
+                </p>
+              </>
+            )}
           </div>
-          <a
-            href={regUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="pub-sp-cta-btn"
-            style={{ background: teamColor, borderColor: teamColor }}
-            onClick={() => trackEvent('registration_click', { streamer: creatorSlug, platform: regPlatform })}
-          >
-            <PlatformIcon platform={regPlatform} size={18} />
-            Inscríbete al clasificatorio
-          </a>
-          <span className="pub-sp-cta-note">
-            Se abrirá en {getPlatformLabel(regPlatform)}
-          </span>
+          {registrationStatus === 'open' && (
+            <>
+              <a
+                href={regUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pub-sp-cta-btn"
+                style={{ background: teamColor, borderColor: teamColor }}
+                onClick={() => trackEvent('registration_click', { streamer: creatorSlug, platform: regPlatform })}
+              >
+                <PlatformIcon platform={regPlatform} size={18} />
+                Inscríbete al clasificatorio
+              </a>
+              <span className="pub-sp-cta-note">
+                Se abrirá en {getPlatformLabel(regPlatform)}
+              </span>
+            </>
+          )}
+          {registrationStatus === 'completed' && team && (
+            <button
+              className="pub-sp-cta-btn"
+              style={{ background: teamColor, borderColor: teamColor }}
+              onClick={() => navigate(`/teams/${team.slug}`)}
+            >
+              Ver equipo
+            </button>
+          )}
         </div>
       </section>
 

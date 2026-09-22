@@ -201,6 +201,18 @@ UPDATE team SET
 WHERE slug IN ('caramelo', 'vetel', 'miwell', 'sora', 'barra')
   AND registration_platform IS NULL;
 
+-- Registration status field on team (F6.1)
+ALTER TABLE team ADD COLUMN IF NOT EXISTS registration_status VARCHAR(20) DEFAULT 'upcoming';
+UPDATE team SET registration_status = 'upcoming' WHERE registration_status IS NULL;
+
+-- Qualifier content fields on team (F6.2)
+ALTER TABLE team ADD COLUMN IF NOT EXISTS qualifier_date DATE;
+ALTER TABLE team ADD COLUMN IF NOT EXISTS qualifier_start_time TIME;
+ALTER TABLE team ADD COLUMN IF NOT EXISTS qualifier_end_time TIME;
+ALTER TABLE team ADD COLUMN IF NOT EXISTS qualifier_format TEXT;
+ALTER TABLE team ADD COLUMN IF NOT EXISTS qualifier_requirements TEXT;
+ALTER TABLE team ADD COLUMN IF NOT EXISTS qualifier_how_to_participate TEXT;
+
 -- Indexes for common queries
 CREATE INDEX IF NOT EXISTS idx_team_tournament ON team(tournament_id);
 CREATE INDEX IF NOT EXISTS idx_participant_team ON participant(team_id);
