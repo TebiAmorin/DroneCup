@@ -14,6 +14,7 @@ import TeamsPage from './public/TeamsPage';
 import TeamDetail from './public/TeamDetail';
 import StreamsPage from './public/StreamsPage';
 import StatsPage from './public/StatsPage';
+import StreamerPage from './public/StreamerPage';
 import CreatorOverlay from './broadcast/CreatorOverlay';
 
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="stats" element={<StatsPage />} />
           <Route path="statistics" element={<Navigate to="/stats" replace />} />
           <Route path="streams" element={<StreamsPage />} />
+          <Route path="streamers/:slug" element={<StreamerPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

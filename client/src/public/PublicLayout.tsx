@@ -2,6 +2,7 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useCompetition } from './useCompetition';
 import { ASSETS } from './assets';
+import { trackPageView } from '../analytics';
 import './public.css';
 
 const NAV_ITEMS = [
@@ -20,6 +21,7 @@ export default function PublicLayout() {
 
   useEffect(() => {
     setMenuOpen(false);
+    trackPageView(location.pathname);
   }, [location.pathname]);
 
   const isLive = comp.matches.some(m => m.status === 'LIVE');

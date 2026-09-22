@@ -11,6 +11,7 @@ import {
   getTeamColor,
 } from './assets';
 import { StatusBadge, TeamDot, RankingTable, LoadingState } from './components';
+import { trackEvent } from '../analytics';
 
 const CREATOR_ENTRIES = Object.entries(CREATORS) as [CreatorSlug, typeof CREATORS[CreatorSlug]][];
 
@@ -226,15 +227,16 @@ export default function Home() {
                 </div>
 
                 <div className="pub-card-action">
-                  <a
+                  <Link
                     className="pub-btn-register"
-                    href={creator.registrationUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={e => e.stopPropagation()}
+                    to={`/streamers/${slug}`}
+                    onClick={e => {
+                      e.stopPropagation();
+                      trackEvent('streamer_card_click', { streamer: slug });
+                    }}
                   >
                     Inscribirte
-                  </a>
+                  </Link>
                 </div>
               </div>
             );
