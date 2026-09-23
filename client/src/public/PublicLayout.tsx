@@ -79,38 +79,39 @@ export default function PublicLayout() {
           </div>
         </nav>
 
-        {/* Mobile drawer */}
-        <nav className={`pub-mobile-nav${menuOpen ? ' open' : ''}`}>
-          <div className="pub-mobile-nav-header">
-            <span>Wasteland Drone Cup</span>
-            <button className="pub-mobile-close" onClick={() => setMenuOpen(false)} aria-label="Cerrar menú">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-          </div>
-          {NAV_ITEMS.map(item => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === '/'}
-              className={({ isActive }) => `pub-mobile-link${isActive ? ' active' : ''}`}
-              onClick={() => setMenuOpen(false)}
-            >
-              {item.label}
-              {item.to === '/streams' && isLive && <span className="pub-live-dot" />}
-            </NavLink>
-          ))}
-          <div className="pub-mobile-status">
-            {isLive ? (
-              <span><span className="pub-live-dot" /> En directo ahora</span>
-            ) : (
-              <span>{completedCount}/{totalMatches} partidas completadas</span>
-            )}
-          </div>
-        </nav>
       </header>
+
+      {/* Mobile drawer — outside header to avoid backdrop-filter containing block */}
+      <nav className={`pub-mobile-nav${menuOpen ? ' open' : ''}`}>
+        <div className="pub-mobile-nav-header">
+          <span>Wasteland Drone Cup</span>
+          <button className="pub-mobile-close" onClick={() => setMenuOpen(false)} aria-label="Cerrar menú">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        {NAV_ITEMS.map(item => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.to === '/'}
+            className={({ isActive }) => `pub-mobile-link${isActive ? ' active' : ''}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            {item.label}
+            {item.to === '/streams' && isLive && <span className="pub-live-dot" />}
+          </NavLink>
+        ))}
+        <div className="pub-mobile-status">
+          {isLive ? (
+            <span><span className="pub-live-dot" /> En directo ahora</span>
+          ) : (
+            <span>{completedCount}/{totalMatches} partidas completadas</span>
+          )}
+        </div>
+      </nav>
 
       <div className="pub-wrap">
         <Outlet context={comp} />

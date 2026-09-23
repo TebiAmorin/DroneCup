@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { api, TournamentData, MatchData, MatchDetail, RankingTeam, RankingIndividual, MapDetail, TeamData } from '../api';
 import { getSocket } from '../socket';
 
@@ -12,6 +12,8 @@ export interface CompetitionState {
   loading: boolean;
 }
 
+const DEDUP_WINDOW_MS = 2000;
+
 export function useCompetition(): CompetitionState & { refresh: () => void } {
   const [tournament, setTournament] = useState<TournamentData | null>(null);
   const [matches, setMatches] = useState<MatchData[]>([]);
@@ -21,7 +23,17 @@ export function useCompetition(): CompetitionState & { refresh: () => void } {
   const [hasResults, setHasResults] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const inflightRef = useRef(false);
+  const pendingRef = useRef(false);
+  const lastFetchRef = useRef(0);
+
   const fetchAll = useCallback(async () => {
+    if (inflightRef.current) {
+      pendingRef.current = true;
+      return;
+    }
+    inflightRef.current = true;
+    pendingRef.current = false;
     try {
       const [t, m, r, te] = await Promise.all([
         api.getTournament(),
@@ -35,10 +47,16 @@ export function useCompetition(): CompetitionState & { refresh: () => void } {
       setIndividuals(r.individuals || []);
       setHasResults(r.hasResults ?? r.teams.some(t => t.totalPoints > 0));
       setTeams(te);
+      lastFetchRef.current = Date.now();
     } catch (e) {
       console.error('Failed to fetch competition state', e);
     } finally {
       setLoading(false);
+      inflightRef.current = false;
+      if (pendingRef.current) {
+        pendingRef.current = false;
+        fetchAll();
+      }
     }
   }, []);
 
@@ -47,36 +65,33 @@ export function useCompetition(): CompetitionState & { refresh: () => void } {
     socket.emit('join', 'competition');
     fetchAll();
 
-    const onCompetitionUpdated = () => { fetchAll(); };
-    const onMatchStarted = () => { fetchAll(); };
-    const onMatchCompleted = () => { fetchAll(); };
-    const onMapStarted = () => { fetchAll(); };
-    const onMapCompleted = () => { fetchAll(); };
-    const onResultUpdated = () => { fetchAll(); };
+    const onEvent = () => { fetchAll(); };
     const onRankingUpdated = (data: RankingTeam[]) => {
       setRankings(data);
+    };
+    const onConnect = () => {
+      if (Date.now() - lastFetchRef.current < DEDUP_WINDOW_MS) return;
       fetchAll();
     };
 
-    socket.on('competition.updated', onCompetitionUpdated);
-    socket.on('match.started', onMatchStarted);
-    socket.on('match.completed', onMatchCompleted);
-    socket.on('map.started', onMapStarted);
-    socket.on('map.completed', onMapCompleted);
-    socket.on('result.updated', onResultUpdated);
+    socket.on('competition.updated', onEvent);
+    socket.on('match.started', onEvent);
+    socket.on('match.completed', onEvent);
+    socket.on('map.started', onEvent);
+    socket.on('map.completed', onEvent);
+    socket.on('result.updated', onEvent);
     socket.on('ranking.updated', onRankingUpdated);
-
-    socket.on('connect', fetchAll);
+    socket.on('connect', onConnect);
 
     return () => {
-      socket.off('competition.updated', onCompetitionUpdated);
-      socket.off('match.started', onMatchStarted);
-      socket.off('match.completed', onMatchCompleted);
-      socket.off('map.started', onMapStarted);
-      socket.off('map.completed', onMapCompleted);
-      socket.off('result.updated', onResultUpdated);
+      socket.off('competition.updated', onEvent);
+      socket.off('match.started', onEvent);
+      socket.off('match.completed', onEvent);
+      socket.off('map.started', onEvent);
+      socket.off('map.completed', onEvent);
+      socket.off('result.updated', onEvent);
       socket.off('ranking.updated', onRankingUpdated);
-      socket.off('connect', fetchAll);
+      socket.off('connect', onConnect);
     };
   }, [fetchAll]);
 
