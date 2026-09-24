@@ -144,6 +144,8 @@ export default function PublicLayout() {
               <NavLink to="/teams">Equipos</NavLink>
               {tournamentReady && <NavLink to="/stats">Estadísticas</NavLink>}
               <NavLink to="/streams">Directos</NavLink>
+              <NavLink to="/normativa">Normativa</NavLink>
+              <NavLink to="/copy">Copy</NavLink>
             </div>
           </div>
           <div className="pub-footer-bottom">

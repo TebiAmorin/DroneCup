@@ -3,7 +3,7 @@ import { useNavigate, useOutletContext, Link } from 'react-router-dom';
 import type { CompetitionState } from './useCompetition';
 import { api } from '../api';
 import { SectionHead, TeamDot, LoadingState, EmptyState } from './components';
-import { getAvatarBySlug, getCreatorBySlug, getTeamColor, getParticipantDisplay } from './assets';
+import { getAvatarBySlug, getCreatorBySlug, getTeamColor, getParticipantDisplay, getStreamerSlug } from './assets';
 
 function TwitchIcon({ size = 13 }: { size?: number }) {
   return (
@@ -314,27 +314,15 @@ export default function TeamsPage() {
                 {/* Pie de tarjeta con CTA según registration_status */}
                 <div className="pub-tec-footer">
                   {regStatus === 'open' && (
-                    hasValidUrl ? (
-                      <a
-                        href={regUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="pub-tec-cta pub-tec-cta-open"
-                        onClick={e => e.stopPropagation()}
-                        title={`Inscribirse en el equipo de ${team.name}`}
-                      >
-                        <span>INSCRÍBETE</span>
-                        <ExternalLinkIcon size={12} />
-                      </a>
-                    ) : (
-                      <span
-                        className="pub-tec-cta pub-tec-cta-disabled"
-                        onClick={e => e.stopPropagation()}
-                        title="Enlace de inscripción no disponible"
-                      >
-                        <span>INSCRÍBETE</span>
-                      </span>
-                    )
+                    <Link
+                      to={`/streamers/${getStreamerSlug(team.slug)}`}
+                      className="pub-tec-cta pub-tec-cta-open"
+                      onClick={e => e.stopPropagation()}
+                      title={`Convocatoria de inscripción de ${team.name}`}
+                    >
+                      <span>INSCRÍBETE</span>
+                      <ChevronRightIcon size={13} />
+                    </Link>
                   )}
 
                   {regStatus === 'upcoming' && (

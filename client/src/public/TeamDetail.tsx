@@ -4,7 +4,7 @@ import type { CompetitionState } from './useCompetition';
 import { api, ParticipantData, MapDetail } from '../api';
 import { getSocket } from '../socket';
 import { SectionHead, StatusBadge, LoadingState, EmptyState, MapResultTable, TeamDot } from './components';
-import { getAvatarBySlug, getCreatorBySlug, getTeamColor, getParticipantDisplay } from './assets';
+import { getAvatarBySlug, getCreatorBySlug, getTeamColor, getParticipantDisplay, getStreamerSlug } from './assets';
 
 interface TeamResults {
   map: MapDetail;
@@ -280,6 +280,14 @@ export default function TeamDetail() {
               </div>
 
               <div className="pub-tph-actions">
+                {team?.registrationStatus?.toLowerCase() === 'open' && (
+                  <Link
+                    to={`/streamers/${getStreamerSlug(team.slug)}`}
+                    className="pub-tph-register-btn"
+                  >
+                    <span>INSCRÍBETE</span>
+                  </Link>
+                )}
                 {creatorData && (
                   <a
                     className="pub-tph-twitch-btn"

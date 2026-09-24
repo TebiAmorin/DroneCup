@@ -16,6 +16,9 @@ import TeamDetail from './public/TeamDetail';
 import StreamsPage from './public/StreamsPage';
 import StatsPage from './public/StatsPage';
 import StreamerPage from './public/StreamerPage';
+import NormativaPage from './public/NormativaPage';
+import CopyPage from './public/CopyPage';
+import NotFoundPage from './public/NotFoundPage';
 import CreatorOverlay from './broadcast/CreatorOverlay';
 
 export default function App() {
@@ -42,6 +45,10 @@ export default function App() {
           <Route path="statistics" element={<Navigate to="/stats" replace />} />
           <Route path="streams" element={<StreamsPage />} />
           <Route path="streamers/:slug" element={<StreamerPage />} />
+          <Route path="normativa" element={<NormativaPage />} />
+          <Route path="copy" element={<CopyPage />} />
+          <Route path="404" element={<NotFoundPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

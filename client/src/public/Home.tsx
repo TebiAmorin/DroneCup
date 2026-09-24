@@ -9,6 +9,7 @@ import {
   getAvatarBySlug,
   getCreatorBySlug,
   getTeamColor,
+  getStreamerSlug,
 } from './assets';
 import { StatusBadge, TeamDot, RankingTable, LoadingState } from './components';
 import { trackEvent } from '../analytics';
@@ -235,24 +236,16 @@ export default function Home() {
 
                 <div className="pub-card-action">
                   {isOpen && (
-                    hasValidUrl ? (
-                      <a
-                        className="pub-btn-register"
-                        href={regUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={e => {
-                          e.stopPropagation();
-                          trackEvent('registration_click', { streamer: slug, platform: team?.registrationPlatform || creator.registrationPlatform });
-                        }}
-                      >
-                        Inscríbete
-                      </a>
-                    ) : (
-                      <span className="pub-btn-register pub-btn-disabled" onClick={e => e.stopPropagation()}>
-                        Inscríbete
-                      </span>
-                    )
+                    <Link
+                      className="pub-btn-register"
+                      to={`/streamers/${getStreamerSlug(slug)}`}
+                      onClick={e => {
+                        e.stopPropagation();
+                        trackEvent('streamer_card_click', { streamer: slug });
+                      }}
+                    >
+                      Inscríbete
+                    </Link>
                   )}
                   {status === 'upcoming' && (
                     <span className="pub-btn-register pub-btn-disabled" onClick={e => e.stopPropagation()}>

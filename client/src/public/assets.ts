@@ -142,3 +142,9 @@ export function getParticipantDisplay(p?: { name?: string | null } | null): { na
   return { name: trimmed, isAvailable: true };
 }
 
+export function getStreamerSlug(slug: string): string {
+  const s = (slug || '').toLowerCase();
+  if (s === 'sora' || s === 'soramusic') return 'soramusic';
+  return s;
+}
+
