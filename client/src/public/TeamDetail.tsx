@@ -4,7 +4,7 @@ import type { CompetitionState } from './useCompetition';
 import { api, ParticipantData, MapDetail } from '../api';
 import { getSocket } from '../socket';
 import { SectionHead, StatusBadge, LoadingState, EmptyState, MapResultTable, TeamDot } from './components';
-import { getAvatarBySlug, getCreatorBySlug, getTeamColor } from './assets';
+import { getAvatarBySlug, getCreatorBySlug, getTeamColor, getParticipantDisplay } from './assets';
 
 interface TeamResults {
   map: MapDetail;
@@ -65,7 +65,7 @@ function ChevronIcon({ isOpen, size = 13 }: { isOpen: boolean; size?: number }) 
 
 export default function TeamDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const { teams, rankings, individuals, matches, loading: compLoading } = useOutletContext<CompetitionState>();
+  const { teams, rankings, individuals, matches, loading: compLoading, hasResults } = useOutletContext<CompetitionState>();
   const navigate = useNavigate();
 
   const team = teams.find(t => t.slug === slug);
@@ -135,6 +135,11 @@ export default function TeamDetail() {
   const player1 = participants.find(p => p.type === 'PLAYER_1');
   const player2 = participants.find(p => p.type === 'PLAYER_2');
   const teamColor = team ? getTeamColor(team) : (slug ? getTeamColor({ slug }) : 'var(--accent)');
+
+  const creatorDisp = getParticipantDisplay(creator || (creatorData ? { name: creatorData.name } : (team ? { name: team.name } : null)));
+  const p1Disp = getParticipantDisplay(player1);
+  const p2Disp = getParticipantDisplay(player2);
+  const hasValidRank = Boolean(hasResults && typeof rank?.rank === 'number' && rank.rank > 0);
 
   // Desglose de puntos individuales desde useCompetition
   const creatorIndiv = individuals?.find(i => i.participantId === creator?.id);
@@ -297,13 +302,13 @@ export default function TeamDetail() {
           <div className="pub-tph-stats-grid">
             <div className="pub-tph-stat-card">
               <span className="pub-tph-stat-val highlight" style={{ color: teamColor }}>
-                {rank?.totalPoints ?? 0}
+                {hasResults ? (rank?.totalPoints ?? 0) : '—'}
               </span>
               <span className="pub-tph-stat-lbl">Puntos Totales</span>
             </div>
 
             <div className="pub-tph-stat-card">
-              <span className="pub-tph-stat-val">#{rank?.rank ?? '—'}</span>
+              <span className="pub-tph-stat-val">{hasValidRank ? `#${rank?.rank}` : '—'}</span>
               <span className="pub-tph-stat-lbl">Posición General</span>
             </div>
 
@@ -335,94 +340,106 @@ export default function TeamDetail() {
       <div className="pub-team-section-wrap">
         <SectionHead
           title="Alineación Oficial de la Comunidad"
-          chip="3 Pilotos Registrados"
+          chip="3 Pilotos Oficiales"
           subtitle="Rotación oficial por tramo de partidas y puntos individuales aportados"
         />
 
         <div className="pub-team-roster-grid">
           {/* Tarjeta Capitán */}
-          {creator && (
-            <div className="pub-trc-member-card" style={{ borderLeft: `3px solid ${teamColor}` }}>
-              <div className="pub-trm-head">
-                <span className="pub-trm-role cap">Capitán Creador</span>
-                {creatorIndiv?.rank && (
-                  <span className="pub-trm-rank">#{creatorIndiv.rank} Individual</span>
-                )}
-              </div>
-              <h3 className="pub-trm-name">{creator.name}</h3>
-              <div className="pub-trm-schedule">
-                Disputa las 4 Partidas Oficiales (12 Mapas)
-              </div>
-              <div className="pub-trm-stats">
-                <div className="pub-trm-stat">
-                  <span className="pub-trm-stat-v" style={{ color: teamColor }}>
-                    {creatorIndiv?.totalPoints ?? 0}
-                  </span>
-                  <span className="pub-trm-stat-l">Puntos Aportados</span>
-                </div>
-                {creatorData && (
-                  <a
-                    href={`https://www.twitch.tv/${creatorData.twitch}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="pub-trm-twitch"
-                  >
-                    <TwitchIcon size={12} /> Directo
-                  </a>
-                )}
-              </div>
+          <div className="pub-trc-member-card" style={{ borderLeft: `3px solid ${teamColor}` }}>
+            <div className="pub-trm-head">
+              <span className="pub-trm-role cap">CAPITÁN</span>
+              {hasResults && creatorDisp.isAvailable && creatorIndiv?.rank ? (
+                <span className="pub-trm-rank">#{creatorIndiv.rank} Individual</span>
+              ) : (
+                <span className="pub-trm-rank tbd">—</span>
+              )}
             </div>
-          )}
+            <h3 className={`pub-trm-name ${!creatorDisp.isAvailable ? 'pub-trm-tbd' : ''}`}>
+              {creatorDisp.name}
+            </h3>
+            <div className="pub-trm-schedule">
+              Disputa las 4 Partidas Oficiales (12 Mapas)
+            </div>
+            <div className="pub-trm-stats">
+              <div className="pub-trm-stat">
+                <span className="pub-trm-stat-v" style={{ color: creatorDisp.isAvailable ? teamColor : 'var(--ink-tertiary)' }}>
+                  {hasResults && creatorDisp.isAvailable ? (creatorIndiv?.totalPoints ?? 0) : '—'}
+                </span>
+                <span className="pub-trm-stat-l">Puntos Aportados</span>
+              </div>
+              {creatorData ? (
+                <a
+                  href={`https://www.twitch.tv/${creatorData.twitch}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pub-trm-twitch"
+                >
+                  <TwitchIcon size={12} /> Directo
+                </a>
+              ) : (
+                <span className="pub-trm-status-badge">Confirmado</span>
+              )}
+            </div>
+          </div>
 
           {/* Tarjeta Piloto 1 */}
-          {player1 && (
-            <div className="pub-trc-member-card" style={{ borderLeft: `3px solid ${teamColor}` }}>
-              <div className="pub-trm-head">
-                <span className="pub-trm-role p1">Piloto Comunitario 1</span>
-                {p1Indiv?.rank && (
-                  <span className="pub-trm-rank">#{p1Indiv.rank} Individual</span>
-                )}
-              </div>
-              <h3 className="pub-trm-name">{player1.name}</h3>
-              <div className="pub-trm-schedule">
-                Partidas 1 y 2 · Mapas 1 a 6 de competición
-              </div>
-              <div className="pub-trm-stats">
-                <div className="pub-trm-stat">
-                  <span className="pub-trm-stat-v" style={{ color: teamColor }}>
-                    {p1Indiv?.totalPoints ?? 0}
-                  </span>
-                  <span className="pub-trm-stat-l">Puntos Aportados</span>
-                </div>
-                <span className="pub-trm-status-badge">Rotación Inicial</span>
-              </div>
+          <div className="pub-trc-member-card" style={{ borderLeft: `3px solid ${teamColor}` }}>
+            <div className="pub-trm-head">
+              <span className="pub-trm-role p1">PLAYER 1</span>
+              {hasResults && p1Disp.isAvailable && p1Indiv?.rank ? (
+                <span className="pub-trm-rank">#{p1Indiv.rank} Individual</span>
+              ) : (
+                <span className="pub-trm-rank tbd">—</span>
+              )}
             </div>
-          )}
+            <h3 className={`pub-trm-name ${!p1Disp.isAvailable ? 'pub-trm-tbd' : ''}`}>
+              {p1Disp.name}
+            </h3>
+            <div className="pub-trm-schedule">
+              Partidas 1 y 2 · Mapas 1 a 6 de competición
+            </div>
+            <div className="pub-trm-stats">
+              <div className="pub-trm-stat">
+                <span className="pub-trm-stat-v" style={{ color: p1Disp.isAvailable ? teamColor : 'var(--ink-tertiary)' }}>
+                  {hasResults && p1Disp.isAvailable ? (p1Indiv?.totalPoints ?? 0) : '—'}
+                </span>
+                <span className="pub-trm-stat-l">Puntos Aportados</span>
+              </div>
+              <span className={`pub-trm-status-badge ${!p1Disp.isAvailable ? 'tbd' : ''}`}>
+                {p1Disp.isAvailable ? 'Rotación Inicial' : 'Por Determinar'}
+              </span>
+            </div>
+          </div>
 
           {/* Tarjeta Piloto 2 */}
-          {player2 && (
-            <div className="pub-trc-member-card" style={{ borderLeft: `3px solid ${teamColor}` }}>
-              <div className="pub-trm-head">
-                <span className="pub-trm-role p2">Piloto Comunitario 2</span>
-                {p2Indiv?.rank && (
-                  <span className="pub-trm-rank">#{p2Indiv.rank} Individual</span>
-                )}
-              </div>
-              <h3 className="pub-trm-name">{player2.name}</h3>
-              <div className="pub-trm-schedule">
-                Partidas 3 y 4 · Mapas 7 a 12 de competición
-              </div>
-              <div className="pub-trm-stats">
-                <div className="pub-trm-stat">
-                  <span className="pub-trm-stat-v" style={{ color: teamColor }}>
-                    {p2Indiv?.totalPoints ?? 0}
-                  </span>
-                  <span className="pub-trm-stat-l">Puntos Aportados</span>
-                </div>
-                <span className="pub-trm-status-badge">Rotación Final</span>
-              </div>
+          <div className="pub-trc-member-card" style={{ borderLeft: `3px solid ${teamColor}` }}>
+            <div className="pub-trm-head">
+              <span className="pub-trm-role p2">PLAYER 2</span>
+              {hasResults && p2Disp.isAvailable && p2Indiv?.rank ? (
+                <span className="pub-trm-rank">#{p2Indiv.rank} Individual</span>
+              ) : (
+                <span className="pub-trm-rank tbd">—</span>
+              )}
             </div>
-          )}
+            <h3 className={`pub-trm-name ${!p2Disp.isAvailable ? 'pub-trm-tbd' : ''}`}>
+              {p2Disp.name}
+            </h3>
+            <div className="pub-trm-schedule">
+              Partidas 3 y 4 · Mapas 7 a 12 de competición
+            </div>
+            <div className="pub-trm-stats">
+              <div className="pub-trm-stat">
+                <span className="pub-trm-stat-v" style={{ color: p2Disp.isAvailable ? teamColor : 'var(--ink-tertiary)' }}>
+                  {hasResults && p2Disp.isAvailable ? (p2Indiv?.totalPoints ?? 0) : '—'}
+                </span>
+                <span className="pub-trm-stat-l">Puntos Aportados</span>
+              </div>
+              <span className={`pub-trm-status-badge ${!p2Disp.isAvailable ? 'tbd' : ''}`}>
+                {p2Disp.isAvailable ? 'Rotación Final' : 'Por Determinar'}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 

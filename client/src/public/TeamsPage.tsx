@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext, Link } from 'react-router-dom';
 import type { CompetitionState } from './useCompetition';
 import { api } from '../api';
 import { SectionHead, TeamDot, LoadingState, EmptyState } from './components';
-import { getAvatarBySlug, getCreatorBySlug, getTeamColor } from './assets';
+import { getAvatarBySlug, getCreatorBySlug, getTeamColor, getParticipantDisplay } from './assets';
 
 function TwitchIcon({ size = 13 }: { size?: number }) {
   return (
@@ -34,8 +34,18 @@ function ChevronRightIcon({ size = 13 }: { size?: number }) {
   );
 }
 
+function ExternalLinkIcon({ size = 12 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <polyline points="15 3 21 3 21 9" />
+      <line x1="10" y1="14" x2="21" y2="3" />
+    </svg>
+  );
+}
+
 export default function TeamsPage() {
-  const { teams, rankings, individuals, matches, loading } = useOutletContext<CompetitionState>();
+  const { teams, rankings, individuals, matches, loading, hasResults } = useOutletContext<CompetitionState>();
   const navigate = useNavigate();
 
   // Telemetría de mapas completados: cálculo de victorias y podios por equipo
@@ -82,14 +92,15 @@ export default function TeamsPage() {
     return () => { isCurrent = false; };
   }, [teams, matches]);
 
-  // Ordenar equipos según ranking oficial
+  // Ordenar equipos según ranking oficial solo cuando haya resultados válidos
   const sortedTeams = useMemo(() => {
+    if (!hasResults) return teams;
     return [...teams].sort((a, b) => {
       const rA = rankings.find(r => r.teamId === a.id)?.rank ?? 99;
       const rB = rankings.find(r => r.teamId === b.id)?.rank ?? 99;
       return rA - rB;
     });
-  }, [teams, rankings]);
+  }, [teams, rankings, hasResults]);
 
   if (loading) return <LoadingState />;
   if (teams.length === 0) return <EmptyState message="Aún no hay equipos registrados." />;
@@ -140,19 +151,28 @@ export default function TeamsPage() {
           const creatorData = getCreatorBySlug(team.slug);
           const teamColor = getTeamColor(team);
           const avatar = getAvatarBySlug(team.slug);
+          const rawStatus = (team.registrationStatus || 'upcoming').toLowerCase();
+          const regStatus = ['open', 'upcoming', 'closed', 'completed'].includes(rawStatus) ? rawStatus : 'upcoming';
+          const regUrl = (team.registrationUrl || creatorData?.registrationUrl || '').trim();
+          const hasValidUrl = Boolean(regUrl && (regUrl.startsWith('http://') || regUrl.startsWith('https://')));
           const participants = team.participants ?? [];
           const creator = participants.find(p => p.type === 'CREATOR');
           const p1 = participants.find(p => p.type === 'PLAYER_1');
           const p2 = participants.find(p => p.type === 'PLAYER_2');
+
+          const creatorDisp = getParticipantDisplay(creator || (creatorData ? { name: creatorData.name } : { name: team.name }));
+          const p1Disp = getParticipantDisplay(p1);
+          const p2Disp = getParticipantDisplay(p2);
 
           const creatorIndiv = individuals?.find(i => i.participantId === creator?.id);
           const p1Indiv = individuals?.find(i => i.participantId === p1?.id);
           const p2Indiv = individuals?.find(i => i.participantId === p2?.id);
 
           const stats = teamStats[team.id] || { victories: 0, podiums: 0, mapsRaced: 0 };
-          const isRank1 = rank?.rank === 1;
-          const isRank2 = rank?.rank === 2;
-          const isRank3 = rank?.rank === 3;
+          const hasValidRank = Boolean(hasResults && typeof rank?.rank === 'number' && rank.rank > 0);
+          const isRank1 = hasValidRank && rank?.rank === 1;
+          const isRank2 = hasValidRank && rank?.rank === 2;
+          const isRank3 = hasValidRank && rank?.rank === 3;
 
           return (
             <div
@@ -205,7 +225,7 @@ export default function TeamsPage() {
 
                   {/* Posición grande a la derecha de la cabecera */}
                   <div className={`pub-tec-rank-huge ${isRank1 ? 'gold' : isRank2 ? 'silver' : isRank3 ? 'bronze' : 'default'}`}>
-                    #{rank?.rank ?? '—'}
+                    {hasValidRank ? `#${rank?.rank}` : '—'}
                   </div>
                 </div>
 
@@ -213,7 +233,7 @@ export default function TeamsPage() {
                 <div className="pub-tec-metrics-row">
                   <div className="pub-tec-metric">
                     <span className="pub-tem-val" style={{ color: teamColor }}>
-                      {rank?.totalPoints ?? 0}
+                      {hasResults ? (rank?.totalPoints ?? 0) : '—'}
                     </span>
                     <span className="pub-tem-lbl">Puntos</span>
                   </div>
@@ -244,41 +264,107 @@ export default function TeamsPage() {
                 <div className="pub-team-members-list">
                   <div className="pub-tmr-item">
                     <div className="pub-tmr-info">
-                      <span className="pub-tmr-role cap">Capitán</span>
-                      <span className="pub-tmr-name">{creator?.name ?? creatorData?.name ?? team.name}</span>
+                      <span className="pub-tmr-role cap">CAPITÁN</span>
+                      <span className={`pub-tmr-name ${!creatorDisp.isAvailable ? 'pub-tmr-tbd' : ''}`}>
+                        {creatorDisp.name}
+                      </span>
                     </div>
                     <div className="pub-tmr-pts">
-                      <strong>{creatorIndiv?.totalPoints ?? 0}</strong> <small>pts</small>
+                      {hasResults && creatorDisp.isAvailable ? (
+                        <><strong>{creatorIndiv?.totalPoints ?? 0}</strong> <small>pts</small></>
+                      ) : (
+                        <span className="pub-tmr-pts-tbd">—</span>
+                      )}
                     </div>
                   </div>
 
                   <div className="pub-tmr-item">
                     <div className="pub-tmr-info">
-                      <span className="pub-tmr-role">Piloto 1</span>
-                      <span className="pub-tmr-name">{p1?.name ?? 'Piloto 1'}</span>
+                      <span className="pub-tmr-role">PLAYER 1</span>
+                      <span className={`pub-tmr-name ${!p1Disp.isAvailable ? 'pub-tmr-tbd' : ''}`}>
+                        {p1Disp.name}
+                      </span>
                     </div>
                     <div className="pub-tmr-pts">
-                      <strong>{p1Indiv?.totalPoints ?? 0}</strong> <small>pts</small>
+                      {hasResults && p1Disp.isAvailable ? (
+                        <><strong>{p1Indiv?.totalPoints ?? 0}</strong> <small>pts</small></>
+                      ) : (
+                        <span className="pub-tmr-pts-tbd">—</span>
+                      )}
                     </div>
                   </div>
 
                   <div className="pub-tmr-item">
                     <div className="pub-tmr-info">
-                      <span className="pub-tmr-role">Piloto 2</span>
-                      <span className="pub-tmr-name">{p2?.name ?? 'Piloto 2'}</span>
+                      <span className="pub-tmr-role">PLAYER 2</span>
+                      <span className={`pub-tmr-name ${!p2Disp.isAvailable ? 'pub-tmr-tbd' : ''}`}>
+                        {p2Disp.name}
+                      </span>
                     </div>
                     <div className="pub-tmr-pts">
-                      <strong>{p2Indiv?.totalPoints ?? 0}</strong> <small>pts</small>
+                      {hasResults && p2Disp.isAvailable ? (
+                        <><strong>{p2Indiv?.totalPoints ?? 0}</strong> <small>pts</small></>
+                      ) : (
+                        <span className="pub-tmr-pts-tbd">—</span>
+                      )}
                     </div>
                   </div>
                 </div>
 
-                {/* Pie de tarjeta con acción */}
+                {/* Pie de tarjeta con CTA según registration_status */}
                 <div className="pub-tec-footer">
-                  <span className="pub-tec-action">
-                    Ver Ficha de Equipo y Carreras
-                    <ChevronRightIcon size={14} />
-                  </span>
+                  {regStatus === 'open' && (
+                    hasValidUrl ? (
+                      <a
+                        href={regUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="pub-tec-cta pub-tec-cta-open"
+                        onClick={e => e.stopPropagation()}
+                        title={`Inscribirse en el equipo de ${team.name}`}
+                      >
+                        <span>INSCRÍBETE</span>
+                        <ExternalLinkIcon size={12} />
+                      </a>
+                    ) : (
+                      <span
+                        className="pub-tec-cta pub-tec-cta-disabled"
+                        onClick={e => e.stopPropagation()}
+                        title="Enlace de inscripción no disponible"
+                      >
+                        <span>INSCRÍBETE</span>
+                      </span>
+                    )
+                  )}
+
+                  {regStatus === 'upcoming' && (
+                    <span
+                      className="pub-tec-cta pub-tec-cta-disabled"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <span>PRÓXIMAMENTE</span>
+                    </span>
+                  )}
+
+                  {regStatus === 'closed' && (
+                    <span
+                      className="pub-tec-cta pub-tec-cta-disabled"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <span>INSCRIPCIONES CERRADAS</span>
+                    </span>
+                  )}
+
+                  {regStatus === 'completed' && (
+                    <Link
+                      to={`/teams/${team.slug}`}
+                      className="pub-tec-cta pub-tec-cta-completed"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <span>VER EQUIPO</span>
+                      <ChevronRightIcon size={13} />
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

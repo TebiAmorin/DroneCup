@@ -9,6 +9,7 @@ export interface CompetitionState {
   individuals: RankingIndividual[];
   teams: TeamData[];
   hasResults: boolean;
+  tournamentReady: boolean;
   loading: boolean;
 }
 
@@ -95,7 +96,9 @@ export function useCompetition(): CompetitionState & { refresh: () => void } {
     };
   }, [fetchAll]);
 
-  return { tournament, matches, rankings, individuals, teams, hasResults, loading, refresh: fetchAll };
+  const tournamentReady = tournament?.tournamentReady ?? false;
+
+  return { tournament, matches, rankings, individuals, teams, hasResults, tournamentReady, loading, refresh: fetchAll };
 }
 
 export function useMatchDetail(matchId: string | null): { match: MatchDetail | null; loading: boolean } {

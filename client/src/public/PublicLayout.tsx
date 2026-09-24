@@ -1,18 +1,20 @@
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { NavLink, Outlet, Navigate, useLocation } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
 import { useCompetition } from './useCompetition';
 import { ASSETS } from './assets';
 import { trackPageView } from '../analytics';
 import './public.css';
 
-const NAV_ITEMS = [
-  { to: '/', label: 'Inicio' },
-  { to: '/classification', label: 'Clasificación' },
-  { to: '/matches', label: 'Partidas' },
-  { to: '/teams', label: 'Equipos' },
-  { to: '/stats', label: 'Estadísticas' },
-  { to: '/streams', label: 'Streams' },
+const ALL_NAV_ITEMS = [
+  { to: '/', label: 'Inicio', gated: false },
+  { to: '/classification', label: 'Clasificación', gated: true },
+  { to: '/matches', label: 'Partidas', gated: true },
+  { to: '/teams', label: 'Equipos', gated: false },
+  { to: '/stats', label: 'Estadísticas', gated: true },
+  { to: '/streams', label: 'Streams', gated: false },
 ];
+
+const GATED_PATHS = ['/classification', '/matches', '/stats', '/statistics'];
 
 export default function PublicLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,9 +26,20 @@ export default function PublicLayout() {
     trackPageView(location.pathname);
   }, [location.pathname]);
 
+  const { tournamentReady, loading: compLoading } = comp;
   const isLive = comp.matches.some(m => m.status === 'LIVE');
   const completedCount = comp.matches.filter(m => m.status === 'COMPLETED').length;
   const totalMatches = comp.matches.length || 4;
+
+  const navItems = useMemo(
+    () => ALL_NAV_ITEMS.filter(item => !item.gated || tournamentReady),
+    [tournamentReady]
+  );
+
+  const isGatedRoute = GATED_PATHS.includes(location.pathname);
+  if (!compLoading && !tournamentReady && isGatedRoute) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="pub">
@@ -63,7 +76,7 @@ export default function PublicLayout() {
 
         <nav className="pub-tab-nav">
           <div className="pub-tab-inner">
-            {NAV_ITEMS.map(item => (
+            {navItems.map(item => (
               <NavLink
                 key={item.to}
                 to={item.to}
@@ -92,7 +105,7 @@ export default function PublicLayout() {
             </svg>
           </button>
         </div>
-        {NAV_ITEMS.map(item => (
+        {navItems.map(item => (
           <NavLink
             key={item.to}
             to={item.to}
@@ -126,9 +139,10 @@ export default function PublicLayout() {
             </div>
             <div className="pub-footer-links">
               <NavLink to="/">Inicio</NavLink>
-              <NavLink to="/classification">Clasificación</NavLink>
-              <NavLink to="/matches">Partidas</NavLink>
+              {tournamentReady && <NavLink to="/classification">Clasificación</NavLink>}
+              {tournamentReady && <NavLink to="/matches">Partidas</NavLink>}
               <NavLink to="/teams">Equipos</NavLink>
+              {tournamentReady && <NavLink to="/stats">Estadísticas</NavLink>}
               <NavLink to="/streams">Directos</NavLink>
               <NavLink to="/admin" className="pub-footer-admin">Panel de control</NavLink>
             </div>

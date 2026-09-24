@@ -56,16 +56,16 @@ async function seed() {
       const p = PARTICIPANTS[t.slug];
 
       const { rows: [creator] } = await client.query(
-        `INSERT INTO participant (team_id, name, slug, type) VALUES ($1, $2, $3, $4) RETURNING id`,
-        [team.id, p.creator, p.creator.toLowerCase(), 'CREATOR']
+        `INSERT INTO participant (team_id, name, slug, type, confirmed) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+        [team.id, p.creator, p.creator.toLowerCase(), 'CREATOR', true]
       );
       const { rows: [player1] } = await client.query(
-        `INSERT INTO participant (team_id, name, slug, type) VALUES ($1, $2, $3, $4) RETURNING id`,
-        [team.id, p.player1, p.player1.toLowerCase(), 'PLAYER_1']
+        `INSERT INTO participant (team_id, name, slug, type, confirmed) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+        [team.id, p.player1, p.player1.toLowerCase(), 'PLAYER_1', false]
       );
       const { rows: [player2] } = await client.query(
-        `INSERT INTO participant (team_id, name, slug, type) VALUES ($1, $2, $3, $4) RETURNING id`,
-        [team.id, p.player2, p.player2.toLowerCase(), 'PLAYER_2']
+        `INSERT INTO participant (team_id, name, slug, type, confirmed) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+        [team.id, p.player2, p.player2.toLowerCase(), 'PLAYER_2', false]
       );
 
       participantIds[t.slug] = { creator: creator.id, player1: player1.id, player2: player2.id };

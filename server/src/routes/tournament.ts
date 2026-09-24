@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { pool } from '../db/pool.js';
+import { getTournamentReadiness } from '../engine/readiness.js';
 
 const router = Router();
 
@@ -16,7 +17,9 @@ router.get('/', async (_req, res, next) => {
       LIMIT 1
     `);
     if (!tournament) return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'No tournament found' } });
-    res.json(tournament);
+
+    const readiness = await getTournamentReadiness();
+    res.json({ ...tournament, ...readiness });
   } catch (err) { next(err); }
 });
 

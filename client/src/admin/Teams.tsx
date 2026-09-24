@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
-import { api, TeamData } from '../api';
+import { api, TeamData, ParticipantData } from '../api';
 import { useRefetchOnReconnect } from './useSocket';
 import { useAdminToast, AdminToast } from './AdminToast';
 
-type ParticipantInfo = { id: string; name: string; slug: string; type: string };
+type ParticipantInfo = ParticipantData & { confirmed: boolean };
 
 export default function Teams() {
   const [teams, setTeams] = useState<(TeamData & { participants?: ParticipantInfo[] })[]>([]);
@@ -11,6 +11,8 @@ export default function Teams() {
   const [error, setError] = useState<string | null>(null);
   const [editing, setEditing] = useState<{ id: string; name: string } | null>(null);
   const [editLoading, setEditLoading] = useState(false);
+  const [actionLoading, setActionLoading] = useState<Record<string, boolean>>({});
+  const [confirmDialog, setConfirmDialog] = useState<{ id: string; name: string } | null>(null);
   const { toast, showToast, dismissToast } = useAdminToast();
 
   const loadTeams = useCallback(async () => {
@@ -66,6 +68,35 @@ export default function Teams() {
     }
   }
 
+  async function handleConfirm(p: ParticipantInfo) {
+    setActionLoading(prev => ({ ...prev, [p.id]: true }));
+    try {
+      await api.confirmParticipant(p.id, p.name);
+      showToast('success', `${p.name} confirmado correctamente.`);
+      await loadTeams();
+    } catch (err: unknown) {
+      const apiErr = err as { error?: { message?: string } };
+      showToast('error', apiErr?.error?.message || 'No se pudo confirmar el participante.');
+    } finally {
+      setActionLoading(prev => ({ ...prev, [p.id]: false }));
+    }
+  }
+
+  async function handleReset(id: string) {
+    setActionLoading(prev => ({ ...prev, [id]: true }));
+    setConfirmDialog(null);
+    try {
+      await api.resetParticipant(id);
+      showToast('success', 'Participante reseteado a POR DETERMINAR.');
+      await loadTeams();
+    } catch (err: unknown) {
+      const apiErr = err as { error?: { message?: string } };
+      showToast('error', apiErr?.error?.message || 'No se pudo resetear el participante.');
+    } finally {
+      setActionLoading(prev => ({ ...prev, [id]: false }));
+    }
+  }
+
   if (loading) return <div className="loading">Cargando equipos...</div>;
   if (error) return <div className="error-message">{error}</div>;
 
@@ -75,8 +106,32 @@ export default function Teams() {
 
       <AdminToast toast={toast} onDismiss={dismissToast} />
 
+      {confirmDialog && (
+        <div className="confirm-dialog-overlay" onClick={() => setConfirmDialog(null)}>
+          <div className="confirm-dialog" onClick={e => e.stopPropagation()}>
+            <h3>Resetear participante</h3>
+            <p>Resetear <strong>{confirmDialog.name}</strong> a POR DETERMINAR?</p>
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px' }}>
+              Se eliminará el nombre y la confirmación. Los resultados existentes no se modificarán.
+            </p>
+            <div className="dialog-actions">
+              <button className="btn btn-secondary" onClick={() => setConfirmDialog(null)}>
+                Cancelar
+              </button>
+              <button
+                className="btn"
+                style={{ background: '#dc2626', color: '#fff', borderColor: '#dc2626' }}
+                onClick={() => handleReset(confirmDialog.id)}
+              >
+                Confirmar reset
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="grid-2">
-        {teams.map((team, idx) => {
+        {teams.map(team => {
           const color = team.color || '#e05520';
 
           return (
@@ -100,6 +155,7 @@ export default function Teams() {
                   {team.participants.map(p => {
                     const isEditing = editing?.id === p.id;
                     const isPlayer = p.type === 'PLAYER_1' || p.type === 'PLAYER_2';
+                    const isLoading = actionLoading[p.id] ?? false;
                     const roleLabel =
                       p.type === 'CREATOR'
                         ? 'Capitán'
@@ -109,7 +165,7 @@ export default function Teams() {
 
                     return (
                       <div key={p.id} style={{
-                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                        display: 'flex', flexDirection: 'column', gap: '6px',
                         padding: '10px 14px', background: 'var(--bg-secondary)', borderRadius: '6px',
                         border: '1px solid var(--border)',
                       }}>
@@ -137,8 +193,8 @@ export default function Teams() {
                           </div>
                         ) : (
                           <>
-                            <span style={{ fontWeight: 600, fontSize: '14px' }}>{p.name}</span>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontWeight: 600, fontSize: '14px' }}>{p.name}</span>
                               <span style={{
                                 fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em',
                                 fontWeight: 700,
@@ -146,16 +202,65 @@ export default function Teams() {
                               }}>
                                 {roleLabel}
                               </span>
-                              {isPlayer && (
-                                <button
-                                  className="btn-participant-edit"
-                                  onClick={() => startEdit(p)}
-                                  title="Editar nombre"
-                                >
-                                  ✎
-                                </button>
-                              )}
                             </div>
+
+                            {isPlayer && (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
+                                {p.confirmed ? (
+                                  <>
+                                    <span style={{
+                                      fontSize: '11px', fontWeight: 700, color: '#22c55e',
+                                      textTransform: 'uppercase', letterSpacing: '0.06em',
+                                    }}>
+                                      ✓ CONFIRMADO
+                                    </span>
+                                    <div style={{ marginLeft: 'auto', display: 'flex', gap: '6px' }}>
+                                      <button
+                                        className="btn btn-secondary btn-sm"
+                                        onClick={() => startEdit(p)}
+                                        disabled={isLoading}
+                                      >
+                                        Editar
+                                      </button>
+                                      <button
+                                        className="btn btn-sm"
+                                        style={{ background: 'transparent', color: '#dc2626', borderColor: '#dc2626' }}
+                                        onClick={() => setConfirmDialog({ id: p.id, name: p.name })}
+                                        disabled={isLoading}
+                                      >
+                                        Reset
+                                      </button>
+                                    </div>
+                                  </>
+                                ) : (
+                                  <>
+                                    <span style={{
+                                      fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)',
+                                      textTransform: 'uppercase', letterSpacing: '0.06em',
+                                    }}>
+                                      POR DETERMINAR
+                                    </span>
+                                    <div style={{ marginLeft: 'auto', display: 'flex', gap: '6px' }}>
+                                      <button
+                                        className="btn-participant-edit"
+                                        onClick={() => startEdit(p)}
+                                        title="Editar nombre"
+                                        disabled={isLoading}
+                                      >
+                                        ✎
+                                      </button>
+                                      <button
+                                        className="btn btn-primary btn-sm"
+                                        onClick={() => handleConfirm(p)}
+                                        disabled={isLoading}
+                                      >
+                                        {isLoading ? '...' : 'Confirmar'}
+                                      </button>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            )}
                           </>
                         )}
                       </div>

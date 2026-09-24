@@ -61,7 +61,7 @@ router.get('/:id', async (req, res, next) => {
     if (!team) return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Team not found' } });
 
     const { rows: participants } = await pool.query(`
-      SELECT id, name, slug, type, created_at AS "createdAt"
+      SELECT id, name, slug, type, confirmed, created_at AS "createdAt"
       FROM participant WHERE team_id = $1 ORDER BY type
     `, [team.id]);
 

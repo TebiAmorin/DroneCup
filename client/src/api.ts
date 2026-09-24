@@ -45,6 +45,9 @@ export interface TournamentData {
   status: string;
   currentMatchId: string | null;
   currentMapId: string | null;
+  tournamentReady?: boolean;
+  confirmedParticipants?: number;
+  totalParticipants?: number;
 }
 
 export interface TeamData {
@@ -72,6 +75,7 @@ export interface ParticipantData {
   name: string;
   slug: string;
   type: 'CREATOR' | 'PLAYER_1' | 'PLAYER_2';
+  confirmed: boolean;
   teamName: string;
 }
 
@@ -263,6 +267,15 @@ export const api = {
     authedRequest<{ success: boolean; participant: ParticipantData }>(`/participants/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ name }),
+    }),
+  confirmParticipant: (id: string, name: string) =>
+    authedRequest<{ success: boolean; participant: ParticipantData }>(`/participants/${id}/confirm`, {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+    }),
+  resetParticipant: (id: string) =>
+    authedRequest<{ success: boolean; participant: ParticipantData }>(`/participants/${id}/reset`, {
+      method: 'POST',
     }),
   resetMatch: (id: string) =>
     authedRequest<{ success: boolean; matchId: string; status: string; noop?: boolean; ranked?: RankingTeam[] }>(

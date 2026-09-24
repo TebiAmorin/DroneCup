@@ -128,3 +128,17 @@ export function getTeamColor(
   return PALETTE_FALLBACK[index % PALETTE_FALLBACK.length];
 }
 
+export function getParticipantDisplay(p?: { name?: string | null } | null): { name: string; isAvailable: boolean } {
+  if (!p || !p.name) return { name: 'POR DETERMINAR', isAvailable: false };
+  const trimmed = p.name.trim();
+  if (
+    !trimmed ||
+    /^(POR DETERMINAR|POR_DETERMINAR|TBD|PENDIENTE|A DETERMINAR)$/i.test(trimmed) ||
+    /^(PILOTO|PLAYER)\s*[12]$/i.test(trimmed) ||
+    /_P[12]$/i.test(trimmed)
+  ) {
+    return { name: 'POR DETERMINAR', isAvailable: false };
+  }
+  return { name: trimmed, isAvailable: true };
+}
+

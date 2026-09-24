@@ -213,6 +213,10 @@ ALTER TABLE team ADD COLUMN IF NOT EXISTS qualifier_format TEXT;
 ALTER TABLE team ADD COLUMN IF NOT EXISTS qualifier_requirements TEXT;
 ALTER TABLE team ADD COLUMN IF NOT EXISTS qualifier_how_to_participate TEXT;
 
+-- Participant confirmation field (L1)
+ALTER TABLE participant ADD COLUMN IF NOT EXISTS confirmed BOOLEAN NOT NULL DEFAULT false;
+UPDATE participant SET confirmed = true WHERE type = 'CREATOR' AND confirmed = false;
+
 -- Indexes for common queries
 CREATE INDEX IF NOT EXISTS idx_team_tournament ON team(tournament_id);
 CREATE INDEX IF NOT EXISTS idx_participant_team ON participant(team_id);

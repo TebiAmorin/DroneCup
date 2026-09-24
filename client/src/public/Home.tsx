@@ -83,10 +83,12 @@ export default function Home() {
             </div>
           </div>
           <div className="pub-stat-card highlight">
-            <div className="pub-stat-num">+10.000</div>
+            <div className="pub-stat-num">
+              +24.000 <span className="pub-stat-denom">CREDITS</span>
+            </div>
             <div className="pub-stat-label">
-              Credits
-              <span>Premio equipo campeón</span>
+              PRIZEPOOL TORNEO
+              <span>Bolsa total del torneo</span>
             </div>
           </div>
         </div>
@@ -205,12 +207,14 @@ export default function Home() {
             const status = team?.registrationStatus ?? 'upcoming';
             const isOpen = status === 'open';
             const isCompleted = status === 'completed';
+            const regUrl = (team?.registrationUrl || creator.registrationUrl || '').trim();
+            const hasValidUrl = Boolean(regUrl && (regUrl.startsWith('http://') || regUrl.startsWith('https://')));
 
             return (
               <div
                 key={slug}
                 className="pub-creator-card"
-                onClick={() => team && navigate(`/teams/${team.slug}`)}
+                onClick={() => { trackEvent('streamer_card_click', { streamer: slug }); team && navigate(`/teams/${team.slug}`); }}
                 style={{ '--c-accent': creator.color } as React.CSSProperties}
               >
                 <div className="pub-creator-media">
@@ -231,22 +235,34 @@ export default function Home() {
 
                 <div className="pub-card-action">
                   {isOpen && (
-                    <Link
-                      className="pub-btn-register"
-                      to={`/streamers/${slug}`}
-                      onClick={e => {
-                        e.stopPropagation();
-                        trackEvent('streamer_card_click', { streamer: slug });
-                      }}
-                    >
-                      Inscríbete
-                    </Link>
+                    hasValidUrl ? (
+                      <a
+                        className="pub-btn-register"
+                        href={regUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={e => {
+                          e.stopPropagation();
+                          trackEvent('registration_click', { streamer: slug, platform: team?.registrationPlatform || creator.registrationPlatform });
+                        }}
+                      >
+                        Inscríbete
+                      </a>
+                    ) : (
+                      <span className="pub-btn-register pub-btn-disabled" onClick={e => e.stopPropagation()}>
+                        Inscríbete
+                      </span>
+                    )
                   )}
                   {status === 'upcoming' && (
-                    <span className="pub-btn-register pub-btn-disabled">Próximamente</span>
+                    <span className="pub-btn-register pub-btn-disabled" onClick={e => e.stopPropagation()}>
+                      Próximamente
+                    </span>
                   )}
                   {status === 'closed' && (
-                    <span className="pub-btn-register pub-btn-disabled">Inscripciones cerradas</span>
+                    <span className="pub-btn-register pub-btn-disabled" onClick={e => e.stopPropagation()}>
+                      Inscripciones cerradas
+                    </span>
                   )}
                   {isCompleted && team && (
                     <Link
@@ -327,20 +343,22 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Bloque 3: Puntuación y premios */}
+          {/* Bloque 3: Puntuación por mapa */}
           <div className="pub-format-card pub-format-card-full">
             <div className="pub-format-prize-row">
               <div>
-                <span className="pub-format-sub">03 · Premios y puntuación</span>
-                <h3 className="pub-format-head">+10.000 Credits para el equipo campeón</h3>
+                <span className="pub-format-sub">03 · Sistema de puntuación</span>
+                <h3 className="pub-format-head">Puntuación acumulada por mapa</h3>
                 <p className="pub-format-lead">
-                  Los puntos obtenidos individualmente por el creador y su compañero en cada mapa se acumulan en la clasificación general de su equipo.
+                  Los puntos obtenidos individualmente por el creador y su compañero en cada mapa se acumulan en la clasificación general de su equipo para disputar los premios de la competición.
                 </p>
               </div>
-              <div className="pub-prize-pill">
-                <span className="pub-prize-amount">+10.000</span>
-                <span className="pub-prize-currency">Credits</span>
-              </div>
+              <a href="#premios" className="pub-prize-pill-link">
+                <div className="pub-prize-pill">
+                  <span className="pub-prize-amount">+24.000</span>
+                  <span className="pub-prize-currency">Credits Prizepool</span>
+                </div>
+              </a>
             </div>
 
             <div className="pub-score-table-wrap">
@@ -358,6 +376,107 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CHAPTER: PREMIOS ── */}
+      <section id="premios" className="pub-chapter pub-prizes-chapter">
+        <div className="pub-chapter-header">
+          <div>
+            <span className="pub-kicker">Prize Pool Oficial</span>
+            <h2 className="pub-chapter-title">Premios</h2>
+            <p className="pub-chapter-desc">
+              Distribución de los 24.000 Credits destinados a las comunidades de los creadores.
+            </p>
+          </div>
+          <div className="pub-prizes-total-badge">
+            <span className="pub-ptb-label">PRIZEPOOL TORNEO</span>
+            <span className="pub-ptb-val">+24.000 CREDITS</span>
+          </div>
+        </div>
+
+        <div className="pub-prizes-grid">
+          {/* 🥇 1º Puesto: Comunidad campeona */}
+          <div className="pub-prize-card pub-prize-champion">
+            <div className="pub-pcard-header">
+              <span className="pub-pcard-badge gold">
+                <span className="pub-pcard-icon">🥇</span> 1º PUESTO
+              </span>
+              <span className="pub-pcard-share">50% DEL TOTAL</span>
+            </div>
+            <div className="pub-pcard-body">
+              <div className="pub-pcard-val-row">
+                <span className="pub-pcard-amount gold">+12.000</span>
+                <span className="pub-pcard-currency">CREDITS</span>
+              </div>
+              <h3 className="pub-pcard-title">Comunidad campeona</h3>
+              <p className="pub-pcard-desc">
+                Premio principal para la comunidad de la escuadra ganadora de la Wasteland Drone Cup.
+              </p>
+            </div>
+          </div>
+
+          {/* 🥈 2º Puesto: 2ª comunidad */}
+          <div className="pub-prize-card pub-prize-runner">
+            <div className="pub-pcard-header">
+              <span className="pub-pcard-badge silver">
+                <span className="pub-pcard-icon">🥈</span> 2º PUESTO
+              </span>
+              <span className="pub-pcard-share">25% DEL TOTAL</span>
+            </div>
+            <div className="pub-pcard-body">
+              <div className="pub-pcard-val-row">
+                <span className="pub-pcard-amount">+6.000</span>
+                <span className="pub-pcard-currency">CREDITS</span>
+              </div>
+              <h3 className="pub-pcard-title">2ª comunidad</h3>
+              <p className="pub-pcard-desc">
+                Premio asignado a la comunidad del creador clasificado en segunda posición global.
+              </p>
+            </div>
+          </div>
+
+          {/* 🥉 3º Puesto: 3ª comunidad */}
+          <div className="pub-prize-card pub-prize-runner">
+            <div className="pub-pcard-header">
+              <span className="pub-pcard-badge bronze">
+                <span className="pub-pcard-icon">🥉</span> 3º PUESTO
+              </span>
+              <span className="pub-pcard-share">25% DEL TOTAL</span>
+            </div>
+            <div className="pub-pcard-body">
+              <div className="pub-pcard-val-row">
+                <span className="pub-pcard-amount">+6.000</span>
+                <span className="pub-pcard-currency">CREDITS</span>
+              </div>
+              <h3 className="pub-pcard-title">3ª comunidad</h3>
+              <p className="pub-pcard-desc">
+                Premio asignado a la comunidad del creador clasificado en tercera posición global.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Barra de desglose y aclaración oficial */}
+        <div className="pub-prizes-footer-bar">
+          <div className="pub-prizes-calc">
+            <span className="pub-pcalc-tag">REPARTO TOTAL</span>
+            <div className="pub-pcalc-equation">
+              <span className="pub-pcalc-term gold">12.000</span>
+              <span className="pub-pcalc-op">+</span>
+              <span className="pub-pcalc-term">6.000</span>
+              <span className="pub-pcalc-op">+</span>
+              <span className="pub-pcalc-term">6.000</span>
+              <span className="pub-pcalc-eq">=</span>
+              <span className="pub-pcalc-total">24.000 Credits</span>
+            </div>
+          </div>
+          <div className="pub-prizes-clarification">
+            <span className="pub-pclar-icon">ℹ</span>
+            <p className="pub-pclar-text">
+              Los premios corresponden a las comunidades de los creadores.
+            </p>
           </div>
         </div>
       </section>
