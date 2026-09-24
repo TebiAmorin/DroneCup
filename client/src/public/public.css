@@ -411,9 +411,6 @@
 .pub-footer-links a:hover {
   color: #fff;
 }
-.pub-footer-admin {
-  color: var(--ink-tertiary);
-}
 .pub-footer-bottom {
   font-size: 12px;
   color: var(--ink-tertiary);
