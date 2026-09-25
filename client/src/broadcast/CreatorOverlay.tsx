@@ -1,13 +1,11 @@
 import { useParams } from 'react-router-dom';
 import { useCreatorOverlay } from './useCreatorOverlay';
-import { getAvatarBySlug, getCreatorBySlug, getTeamColor } from '../public/assets';
+import { getTeamColor } from '../public/assets';
 import './overlay.css';
 
 export default function CreatorOverlay() {
   const { slug = '' } = useParams<{ slug: string }>();
   const data = useCreatorOverlay(slug);
-  const creatorData = getCreatorBySlug(slug);
-  const avatar = getAvatarBySlug(slug);
   const teamColor = data.team ? getTeamColor(data.team) : (slug ? getTeamColor({ slug }) : '#e05520');
 
   if (data.loading) {
@@ -21,81 +19,54 @@ export default function CreatorOverlay() {
   if (!data.team) {
     return (
       <div className="ov-root">
-        <div className="ov-error">
-          EQUIPO NO ENCONTRADO: {slug}
-        </div>
+        <div className="ov-error">EQUIPO NO ENCONTRADO: {slug}</div>
       </div>
     );
   }
 
-  const globalPosition = data.teamRank?.rank ?? '—';
-  const teamPoints = data.teamRank?.totalPoints ?? 0;
+  const positionDisplay = data.teamRank?.rank != null ? `${data.teamRank.rank}º` : '—';
+  const matchLabel = data.currentMatch ? `PARTIDA ${data.currentMatch.matchNumber}` : null;
+  const companionName = data.companion?.name ?? 'POR DETERMINAR';
+  const companionPts = data.companion?.points ?? 0;
 
   return (
     <div className="ov-root" style={{ '--ov-team': teamColor } as React.CSSProperties}>
-      <div className="ov-frame">
+      <div className="ov-plate">
+        {/* Top accent stripe — team color with angular cut */}
+        <div className="ov-accent" />
 
-        {/* Panel lateral derecho — centrado vertical */}
-        <div className="ov-panel">
-          {/* Cabecera: avatar + nombre + posición global */}
-          <div className="ov-team-header">
-            {avatar && (
-              <img
-                src={avatar}
-                alt={data.team.name}
-                className="ov-team-avatar"
-              />
-            )}
-            <div className="ov-team-info">
-              <div className="ov-team-name">{data.team.name}</div>
-              <div className="ov-team-label">DRONE CUP</div>
+        {/* Main content body */}
+        <div className="ov-content">
+          {matchLabel && (
+            <div className="ov-header">
+              <span className="ov-match-label">{matchLabel}</span>
             </div>
-            <span className="ov-team-rank">{globalPosition}º</span>
+          )}
+
+          <div className="ov-rank-block">
+            <span className="ov-position">{positionDisplay}</span>
+            <span className="ov-team-pts">{data.teamPoints} <span className="ov-pts-unit">PTS</span></span>
           </div>
 
-          {/* Pilotos con puntos individuales */}
-          {data.creator && (
-            <div className="ov-pilot-row">
-              <span className="ov-pilot-role">CAP</span>
-              <span className="ov-pilot-name">{data.creator.name}</span>
-              <span className="ov-pilot-pts">{data.creator.points}</span>
-            </div>
-          )}
-          {data.player1 && (
-            <div className="ov-pilot-row">
-              <span className="ov-pilot-role">P1</span>
-              <span className="ov-pilot-name">{data.player1.name}</span>
-              <span className="ov-pilot-pts">{data.player1.points}</span>
-            </div>
-          )}
-          {data.player2 && (
-            <div className="ov-pilot-row">
-              <span className="ov-pilot-role">P2</span>
-              <span className="ov-pilot-name">{data.player2.name}</span>
-              <span className="ov-pilot-pts">{data.player2.points}</span>
-            </div>
-          )}
+          <div className="ov-divider" />
 
-          {/* Total del equipo */}
-          <div className="ov-team-total">
-            <span className="ov-total-label">EQUIPO</span>
-            <span className="ov-total-pts">{teamPoints} PTS</span>
+          <div className="ov-individuals">
+            <div className="ov-individual-row creator">
+              <span className="ov-ind-name">{data.creatorName ?? slug.toUpperCase()}</span>
+              <span className="ov-ind-pts">{data.creatorPoints} <span className="ov-pts-unit">PTS</span></span>
+            </div>
+            <div className="ov-individual-row companion">
+              <span className="ov-ind-name">{companionName}</span>
+              <span className="ov-ind-pts">{companionPts} <span className="ov-pts-unit">PTS</span></span>
+            </div>
           </div>
+
+          {/* Decorative corner tick */}
+          <div className="ov-tech-line ov-tech-line--corner" />
         </div>
 
-        {/* Badge live debajo del panel */}
-        {data.liveMatch && (
-          <div className="ov-live-badge">
-            <span className="ov-footer-title">WASTELAND DRONE CUP</span>
-            <span className="ov-footer-live">
-              EN DIRECTO · PARTIDA {data.liveMatch.matchNumber}
-            </span>
-          </div>
-        )}
-      </div>
-
-      <div className={`ov-connection ${data.connected ? 'ok' : 'lost'}`}>
-        {data.connected ? 'LIVE' : 'RECONECTANDO...'}
+        {/* Bottom edge accent */}
+        <div className="ov-bottom-edge" />
       </div>
     </div>
   );

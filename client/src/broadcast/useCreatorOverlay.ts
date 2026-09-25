@@ -1,15 +1,20 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { api, TournamentData, MatchData, RankingTeam, RankingIndividual, TeamData } from '../api';
+import { api, TournamentData, MatchData, MatchDetail, RankingTeam, RankingIndividual, TeamData } from '../api';
 import { getSocket } from '../socket';
+
+export interface CompanionInfo {
+  name: string;
+  points: number;
+}
 
 export interface CreatorOverlayData {
   team: TeamData | null;
   teamRank: RankingTeam | null;
-  creator: { id: string; name: string; points: number } | null;
-  player1: { id: string; name: string; points: number } | null;
-  player2: { id: string; name: string; points: number } | null;
-  tournament: TournamentData | null;
-  liveMatch: MatchData | null;
+  creatorName: string | null;
+  creatorPoints: number;
+  companion: CompanionInfo | null;
+  currentMatch: MatchData | null;
+  teamPoints: number;
   loading: boolean;
   connected: boolean;
 }
@@ -20,6 +25,7 @@ export function useCreatorOverlay(slug: string): CreatorOverlayData {
   const [individuals, setIndividuals] = useState<RankingIndividual[]>([]);
   const [tournament, setTournament] = useState<TournamentData | null>(null);
   const [matches, setMatches] = useState<MatchData[]>([]);
+  const [matchDetail, setMatchDetail] = useState<MatchDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [connected, setConnected] = useState(false);
 
@@ -75,6 +81,21 @@ export function useCreatorOverlay(slug: string): CreatorOverlayData {
     };
   }, [fetchAll]);
 
+  const currentMatch = useMemo(() => {
+    const live = matches.find(m => m.status === 'LIVE');
+    if (live) return live;
+    const upcoming = matches.filter(m => m.status === 'PENDING' || m.status === 'DRAFT');
+    if (upcoming.length > 0) return upcoming[0];
+    const completed = matches.filter(m => m.status === 'COMPLETED');
+    if (completed.length > 0) return completed[completed.length - 1];
+    return null;
+  }, [matches]);
+
+  useEffect(() => {
+    if (!currentMatch) { setMatchDetail(null); return; }
+    api.getMatch(currentMatch.id).then(setMatchDetail).catch(() => setMatchDetail(null));
+  }, [currentMatch?.id]);
+
   const normalizedSlug = slug.toLowerCase();
 
   const team = useMemo(() => {
@@ -93,21 +114,42 @@ export function useCreatorOverlay(slug: string): CreatorOverlayData {
   }, [rankings, team]);
 
   const participants = team?.participants ?? [];
-
   const creatorP = participants.find(p => p.type === 'CREATOR');
-  const player1P = participants.find(p => p.type === 'PLAYER_1');
-  const player2P = participants.find(p => p.type === 'PLAYER_2');
 
-  const findPoints = (participantId: string | undefined) => {
-    if (!participantId) return 0;
-    return individuals.find(i => i.participantId === participantId)?.totalPoints ?? 0;
+  const creatorPoints = useMemo(() => {
+    if (!creatorP) return 0;
+    return individuals.find(i => i.participantId === creatorP.id)?.totalPoints ?? 0;
+  }, [creatorP, individuals]);
+
+  const companion = useMemo((): CompanionInfo | null => {
+    if (!team || !currentMatch) return null;
+
+    const p1 = participants.find(p => p.type === 'PLAYER_1');
+    const p2 = participants.find(p => p.type === 'PLAYER_2');
+
+    if (matchDetail) {
+      const inMatch = matchDetail.participants.find(
+        p => (p.teamSlug?.toLowerCase() === team.slug.toLowerCase()
+          || p.teamName?.toLowerCase() === team.name.toLowerCase())
+          && p.type !== 'CREATOR'
+      );
+      if (inMatch) {
+        const pts = individuals.find(i => i.participantId === inMatch.id)?.totalPoints ?? 0;
+        return { name: inMatch.name, points: pts };
+      }
+    }
+
+    const mn = currentMatch.matchNumber;
+    const fallback = mn <= 2 ? (p1 || p2) : (p2 || p1);
+    if (!fallback) return null;
+    const pts = individuals.find(i => i.participantId === fallback.id)?.totalPoints ?? 0;
+    return { name: fallback.name, points: pts };
+  }, [team, currentMatch, matchDetail, participants, individuals]);
+
+  const teamPoints = teamRank?.totalPoints ?? 0;
+
+  return {
+    team, teamRank, creatorName: creatorP?.name ?? null,
+    creatorPoints, companion, currentMatch, teamPoints, loading, connected,
   };
-
-  const creator = creatorP ? { id: creatorP.id, name: creatorP.name, points: findPoints(creatorP.id) } : null;
-  const player1 = player1P ? { id: player1P.id, name: player1P.name, points: findPoints(player1P.id) } : null;
-  const player2 = player2P ? { id: player2P.id, name: player2P.name, points: findPoints(player2P.id) } : null;
-
-  const liveMatch = matches.find(m => m.status === 'LIVE') ?? null;
-
-  return { team, teamRank, creator, player1, player2, tournament, liveMatch, loading, connected };
 }
