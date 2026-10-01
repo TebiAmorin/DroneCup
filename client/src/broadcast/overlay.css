@@ -323,3 +323,37 @@
   border-right: 1px solid color-mix(in srgb, var(--ov-team) 25%, transparent);
   border-bottom: 1px solid color-mix(in srgb, var(--ov-team) 25%, transparent);
 }
+
+/* ══════════════════════════════════════════════════════════ */
+/* ── MOTION — microanimations for live data changes       ── */
+/* ══════════════════════════════════════════════════════════ */
+
+/* Points change — brightness pulse + micro scale */
+@keyframes ov-pts-flash {
+  0%   { transform: scale(1);    filter: brightness(1);   }
+  25%  { transform: scale(1.05); filter: brightness(1.35); text-shadow: 0 0 14px var(--ov-glow); }
+  100% { transform: scale(1);    filter: brightness(1);   text-shadow: none; }
+}
+
+.ov-team-pts.ov-flash {
+  animation: ov-pts-flash 350ms ease-out;
+}
+
+/* Position change — glow intensification + micro lift */
+@keyframes ov-pos-flash {
+  0%   { transform: translateY(0);    text-shadow: 0 0 24px var(--ov-glow); }
+  20%  { transform: translateY(-2px); text-shadow: 0 0 40px var(--ov-glow), 0 0 10px var(--ov-team); }
+  100% { transform: translateY(0);    text-shadow: 0 0 24px var(--ov-glow); }
+}
+
+.ov-position.ov-flash-pos {
+  animation: ov-pos-flash 450ms ease-out;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .ov-team-pts.ov-flash,
+  .ov-position.ov-flash-pos {
+    animation: none;
+  }
+}
