@@ -17,7 +17,7 @@ import { trackEvent } from '../analytics';
 const CREATOR_ENTRIES = Object.entries(CREATORS) as [CreatorSlug, typeof CREATORS[CreatorSlug]][];
 
 export default function Home() {
-  const { matches, rankings, teams, hasResults, loading } = useOutletContext<CompetitionState>();
+  const { matches, rankings, individuals, teams, hasResults, loading } = useOutletContext<CompetitionState>();
   const navigate = useNavigate();
   const liveMatch = matches.find(m => m.status === 'LIVE');
   const { match: liveDetail } = useMatchDetail(liveMatch?.id ?? null);
@@ -25,10 +25,21 @@ export default function Home() {
   const completedMatches = matches.filter(m => m.status === 'COMPLETED');
   const totalMatches = matches.length || 4;
   const completedCount = completedMatches.length;
+  const isTournamentFinished = matches.length > 0 && matches.every(m => m.status === 'COMPLETED');
 
   const leader = hasResults && rankings.length > 0 ? rankings[0] : null;
   const leaderColor = leader ? getTeamColor(leader) : undefined;
   const activeMap = liveDetail?.maps.find(mp => mp.status === 'ACTIVE') || liveDetail?.maps[0];
+
+  const winner = isTournamentFinished && rankings.length > 0 ? rankings[0] : null;
+  const winnerColor = winner ? getTeamColor(winner) : undefined;
+  const winnerAvatar = winner ? getAvatarBySlug(winner.teamSlug) : undefined;
+  const winnerIndividuals = winner
+    ? individuals.filter(i => i.teamId === winner.teamId).sort((a, b) => {
+        const order = { CREATOR: 0, PLAYER_1: 1, PLAYER_2: 2 } as const;
+        return (order[a.participantType] ?? 3) - (order[b.participantType] ?? 3);
+      })
+    : [];
 
   if (loading) return <LoadingState />;
 
@@ -70,9 +81,11 @@ export default function Home() {
               {leader ? leader.teamName : '—'}
             </div>
             <div className="pub-stat-label">
-              LÍDER
+              {isTournamentFinished ? 'GANADOR' : 'LÍDER'}
               <span>
-                {leader ? `${leader.totalPoints} PTS · Líder del torneo` : 'Por disputar'}
+                {leader
+                  ? `${leader.totalPoints} PTS · ${isTournamentFinished ? 'Campeón del torneo' : 'Líder del torneo'}`
+                  : 'Por disputar'}
               </span>
             </div>
           </div>
@@ -94,6 +107,41 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── WINNER EDITORIAL (TORNEO FINALIZADO) ── */}
+      {winner && (
+        <section className="pub-winner-section" style={{ '--w-color': winnerColor } as React.CSSProperties}>
+          <div className="pub-winner-glow" />
+          <div className="pub-winner-content">
+            <span className="pub-winner-kicker">WASTELAND DRONE CUP</span>
+            <h2 className="pub-winner-title">GANADOR</h2>
+
+            <div className="pub-winner-hero">
+              {winnerAvatar && (
+                <img className="pub-winner-avatar" src={winnerAvatar} alt={winner.teamName} />
+              )}
+              <div className="pub-winner-identity">
+                <span className="pub-winner-team-name">{winner.teamName}</span>
+                <span className="pub-winner-points">{winner.totalPoints} <span className="pub-winner-pts-label">PTS</span></span>
+              </div>
+            </div>
+
+            <div className="pub-winner-divider" />
+
+            <div className="pub-winner-roster">
+              {winnerIndividuals.map(ind => (
+                <div key={ind.participantId} className={`pub-winner-member ${ind.participantType === 'CREATOR' ? 'captain' : ''}`}>
+                  <span className="pub-wm-role">
+                    {ind.participantType === 'CREATOR' ? 'Capitán' : ind.participantType === 'PLAYER_1' ? 'Piloto 1' : 'Piloto 2'}
+                  </span>
+                  <span className="pub-wm-name">{ind.participantName}</span>
+                  <span className="pub-wm-pts">{ind.totalPoints} PTS</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── LIVE SHOWCASE EN CURSO (SI APLICA) ── */}
       {isLive && (

@@ -7837,5 +7837,218 @@
   }
 }
 
+/* ══════════════════════════════════════════════════════════ */
+/* ── WINNER EDITORIAL — Tournament champion showcase      ── */
+/* ══════════════════════════════════════════════════════════ */
+.pub-winner-section {
+  --w-color: #f5c842;
+  position: relative;
+  text-align: center;
+  padding: 56px 24px 48px;
+  margin: 0 auto;
+  max-width: 640px;
+  overflow: hidden;
+}
 
+.pub-winner-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 30%,
+    color-mix(in srgb, var(--w-color) 10%, transparent) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
 
+.pub-winner-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.pub-winner-kicker {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-tertiary);
+  margin-bottom: 8px;
+}
+
+.pub-winner-title {
+  font-family: var(--f-display);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--w-color);
+  margin: 0 0 32px;
+  text-shadow: 0 0 30px color-mix(in srgb, var(--w-color) 40%, transparent);
+}
+
+.pub-winner-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.pub-winner-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 3px solid var(--w-color);
+  object-fit: cover;
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--w-color) 12%, transparent),
+    0 0 40px color-mix(in srgb, var(--w-color) 25%, transparent);
+}
+
+.pub-winner-identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.pub-winner-team-name {
+  font-family: var(--f-display);
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  line-height: 1;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.pub-winner-points {
+  font-family: var(--f-display);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--w-color);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.pub-winner-pts-label {
+  font-family: var(--f-mono);
+  font-size: 0.45em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ink-tertiary);
+  vertical-align: baseline;
+  margin-left: 4px;
+}
+
+.pub-winner-divider {
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--w-color) 50%, transparent) 50%,
+    transparent
+  );
+  margin-bottom: 24px;
+}
+
+.pub-winner-roster {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 340px;
+}
+
+.pub-winner-member {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+
+.pub-winner-member.captain {
+  border-color: color-mix(in srgb, var(--w-color) 30%, transparent);
+  background: color-mix(in srgb, var(--w-color) 4%, var(--surface));
+}
+
+.pub-wm-role {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-tertiary);
+  text-align: left;
+}
+
+.pub-winner-member.captain .pub-wm-role {
+  color: var(--w-color);
+}
+
+.pub-wm-name {
+  font-family: var(--f-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-bright);
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pub-wm-pts {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.pub-winner-member.captain .pub-wm-pts {
+  color: var(--w-color);
+}
+
+/* ── Winner Responsive ── */
+@media (max-width: 640px) {
+  .pub-winner-section {
+    padding: 40px 16px 36px;
+  }
+  .pub-winner-team-name {
+    font-size: 36px;
+  }
+  .pub-winner-points {
+    font-size: 26px;
+  }
+  .pub-winner-avatar {
+    width: 80px;
+    height: 80px;
+  }
+  .pub-winner-member {
+    grid-template-columns: 60px 1fr auto;
+    gap: 8px;
+    padding: 7px 12px;
+  }
+}
+@media (max-width: 380px) {
+  .pub-winner-team-name {
+    font-size: 28px;
+  }
+  .pub-winner-points {
+    font-size: 22px;
+  }
+}
