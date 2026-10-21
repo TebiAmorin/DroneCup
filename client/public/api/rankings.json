@@ -1,0 +1,182 @@
+{
+  "teams": [
+    {
+      "rank": 1,
+      "teamId": "a76ed924-1b3e-45cc-a9a3-10d7eb87fba1",
+      "teamName": "Barra",
+      "teamSlug": "barra",
+      "teamColor": "#f5c842",
+      "totalPoints": 315
+    },
+    {
+      "rank": 2,
+      "teamId": "6ab343eb-014e-4517-a53a-227d36e97b14",
+      "teamName": "Caramelo",
+      "teamSlug": "caramelo",
+      "teamColor": "#ef4444",
+      "totalPoints": 310
+    },
+    {
+      "rank": 3,
+      "teamId": "e499c8de-79b8-400b-8b95-0b514dc192d5",
+      "teamName": "Miwell",
+      "teamSlug": "miwell",
+      "teamColor": "#a855f7",
+      "totalPoints": 258
+    },
+    {
+      "rank": 4,
+      "teamId": "f5cdadf1-adc8-4bba-92b2-16ad8d92415f",
+      "teamName": "SoraMusic",
+      "teamSlug": "sora",
+      "teamColor": "#22c55e",
+      "totalPoints": 202
+    },
+    {
+      "rank": 5,
+      "teamId": "dac71406-69de-4987-9745-c62bef41b877",
+      "teamName": "Vetel",
+      "teamSlug": "vetel",
+      "teamColor": "#38bdf8",
+      "totalPoints": 127
+    }
+  ],
+  "individuals": [
+    {
+      "rank": 1,
+      "participantId": "f444e6f0-5eef-4390-a77f-83d172fb5654",
+      "participantName": "Caramelo",
+      "participantType": "CREATOR",
+      "teamId": "6ab343eb-014e-4517-a53a-227d36e97b14",
+      "teamName": "Caramelo",
+      "totalPoints": 220
+    },
+    {
+      "rank": 2,
+      "participantId": "06dd49d4-9b29-4336-b16e-27b1cf5e3ad1",
+      "participantName": "Barra",
+      "participantType": "CREATOR",
+      "teamId": "a76ed924-1b3e-45cc-a9a3-10d7eb87fba1",
+      "teamName": "Barra",
+      "totalPoints": 219
+    },
+    {
+      "rank": 3,
+      "participantId": "f7146fda-cb14-4e1b-b610-c822881e5be3",
+      "participantName": "Miwell",
+      "participantType": "CREATOR",
+      "teamId": "e499c8de-79b8-400b-8b95-0b514dc192d5",
+      "teamName": "Miwell",
+      "totalPoints": 210
+    },
+    {
+      "rank": 4,
+      "participantId": "591b732a-2a4c-474b-923a-4145ff30353d",
+      "participantName": "SoraMusic",
+      "participantType": "CREATOR",
+      "teamId": "f5cdadf1-adc8-4bba-92b2-16ad8d92415f",
+      "teamName": "SoraMusic",
+      "totalPoints": 185
+    },
+    {
+      "rank": 5,
+      "participantId": "33b12dd4-ffa5-4189-9ad5-d45b07f4e980",
+      "participantName": "Vetel",
+      "participantType": "CREATOR",
+      "teamId": "dac71406-69de-4987-9745-c62bef41b877",
+      "teamName": "Vetel",
+      "totalPoints": 108
+    },
+    {
+      "rank": 6,
+      "participantId": "1c726e9e-e30c-4139-98e0-fb9048b9754e",
+      "participantName": "BarraGhost",
+      "participantType": "PLAYER_1",
+      "teamId": "a76ed924-1b3e-45cc-a9a3-10d7eb87fba1",
+      "teamName": "Barra",
+      "totalPoints": 50
+    },
+    {
+      "rank": 7,
+      "participantId": "20451d4b-8411-4d3d-ad9e-a7950101730e",
+      "participantName": "CaraLion",
+      "participantType": "PLAYER_1",
+      "teamId": "6ab343eb-014e-4517-a53a-227d36e97b14",
+      "teamName": "Caramelo",
+      "totalPoints": 50
+    },
+    {
+      "rank": 8,
+      "participantId": "60ef2b75-6499-46fb-b35a-0407fea39dcf",
+      "participantName": "BarraStorm",
+      "participantType": "PLAYER_2",
+      "teamId": "a76ed924-1b3e-45cc-a9a3-10d7eb87fba1",
+      "teamName": "Barra",
+      "totalPoints": 46
+    },
+    {
+      "rank": 9,
+      "participantId": "df6b61dd-e355-41f6-bc5d-ee5bd56b04ab",
+      "participantName": "CaraShadow",
+      "participantType": "PLAYER_2",
+      "teamId": "6ab343eb-014e-4517-a53a-227d36e97b14",
+      "teamName": "Caramelo",
+      "totalPoints": 40
+    },
+    {
+      "rank": 10,
+      "participantId": "9f672162-474f-49c7-a9f0-69562b778f77",
+      "participantName": "MiwellDragon",
+      "participantType": "PLAYER_1",
+      "teamId": "e499c8de-79b8-400b-8b95-0b514dc192d5",
+      "teamName": "Miwell",
+      "totalPoints": 24
+    },
+    {
+      "rank": 11,
+      "participantId": "52548fd6-ba89-4a8b-adef-ec43c307c87b",
+      "participantName": "MiwellFox",
+      "participantType": "PLAYER_2",
+      "teamId": "e499c8de-79b8-400b-8b95-0b514dc192d5",
+      "teamName": "Miwell",
+      "totalPoints": 24
+    },
+    {
+      "rank": 12,
+      "participantId": "301aa6b2-26d9-4f5b-aac1-7c65e03d2410",
+      "participantName": "VetelAce",
+      "participantType": "PLAYER_1",
+      "teamId": "dac71406-69de-4987-9745-c62bef41b877",
+      "teamName": "Vetel",
+      "totalPoints": 10
+    },
+    {
+      "rank": 13,
+      "participantId": "906a76a2-8d01-46d1-b69a-2ae08b4a74e9",
+      "participantName": "SoraWind",
+      "participantType": "PLAYER_2",
+      "teamId": "f5cdadf1-adc8-4bba-92b2-16ad8d92415f",
+      "teamName": "SoraMusic",
+      "totalPoints": 9
+    },
+    {
+      "rank": 14,
+      "participantId": "9c1c8efe-2bee-4454-9b45-03e5b49340f3",
+      "participantName": "VetelNova",
+      "participantType": "PLAYER_2",
+      "teamId": "dac71406-69de-4987-9745-c62bef41b877",
+      "teamName": "Vetel",
+      "totalPoints": 9
+    },
+    {
+      "rank": 15,
+      "participantId": "e9750a1b-460c-4603-ac9c-5379879c0c86",
+      "participantName": "SoraBlaze",
+      "participantType": "PLAYER_1",
+      "teamId": "f5cdadf1-adc8-4bba-92b2-16ad8d92415f",
+      "teamName": "SoraMusic",
+      "totalPoints": 8
+    }
+  ],
+  "hasResults": true
+}

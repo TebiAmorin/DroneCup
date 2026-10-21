@@ -1,0 +1,110 @@
+{
+  "participantId": "e9750a1b-460c-4603-ac9c-5379879c0c86",
+  "participantName": "SoraBlaze",
+  "participantType": "PLAYER_1",
+  "teamId": "f5cdadf1-adc8-4bba-92b2-16ad8d92415f",
+  "teamName": "SoraMusic",
+  "totalPoints": 8,
+  "mapsPlayed": 6,
+  "averagePointsPerMap": 1.33,
+  "bestPosition": 9,
+  "positionCounts": [
+    {
+      "position": 9,
+      "count": 2
+    },
+    {
+      "position": 10,
+      "count": 4
+    }
+  ],
+  "dnfCount": 0,
+  "pointsByMap": [
+    {
+      "mapId": "eae5598b-b2cf-4076-a787-751c9c6b9a9b",
+      "mapCode": "P1M1",
+      "matchNumber": 1,
+      "mapIndex": 1,
+      "points": 2
+    },
+    {
+      "mapId": "d3c006f6-d688-436e-be75-39bf58feecaf",
+      "mapCode": "P1M2",
+      "matchNumber": 1,
+      "mapIndex": 2,
+      "points": 1
+    },
+    {
+      "mapId": "4eae0d2b-39b4-44b2-aa06-d49c10019f9e",
+      "mapCode": "P1M3",
+      "matchNumber": 1,
+      "mapIndex": 3,
+      "points": 1
+    },
+    {
+      "mapId": "57ba0566-5bf5-401b-94b0-e99a66cce867",
+      "mapCode": "P2M1",
+      "matchNumber": 2,
+      "mapIndex": 1,
+      "points": 1
+    },
+    {
+      "mapId": "4cdacaca-82d5-4c23-88e0-7b8ad8d27fe7",
+      "mapCode": "P2M2",
+      "matchNumber": 2,
+      "mapIndex": 2,
+      "points": 2
+    },
+    {
+      "mapId": "13c71ecb-bed0-4ffc-9fd8-c186ad7bfe1c",
+      "mapCode": "P2M3",
+      "matchNumber": 2,
+      "mapIndex": 3,
+      "points": 1
+    }
+  ],
+  "progression": [
+    {
+      "mapId": "eae5598b-b2cf-4076-a787-751c9c6b9a9b",
+      "mapCode": "P1M1",
+      "matchNumber": 1,
+      "mapIndex": 1,
+      "cumulativePoints": 2
+    },
+    {
+      "mapId": "d3c006f6-d688-436e-be75-39bf58feecaf",
+      "mapCode": "P1M2",
+      "matchNumber": 1,
+      "mapIndex": 2,
+      "cumulativePoints": 3
+    },
+    {
+      "mapId": "4eae0d2b-39b4-44b2-aa06-d49c10019f9e",
+      "mapCode": "P1M3",
+      "matchNumber": 1,
+      "mapIndex": 3,
+      "cumulativePoints": 4
+    },
+    {
+      "mapId": "57ba0566-5bf5-401b-94b0-e99a66cce867",
+      "mapCode": "P2M1",
+      "matchNumber": 2,
+      "mapIndex": 1,
+      "cumulativePoints": 5
+    },
+    {
+      "mapId": "4cdacaca-82d5-4c23-88e0-7b8ad8d27fe7",
+      "mapCode": "P2M2",
+      "matchNumber": 2,
+      "mapIndex": 2,
+      "cumulativePoints": 7
+    },
+    {
+      "mapId": "13c71ecb-bed0-4ffc-9fd8-c186ad7bfe1c",
+      "mapCode": "P2M3",
+      "matchNumber": 2,
+      "mapIndex": 3,
+      "cumulativePoints": 8
+    }
+  ]
+}

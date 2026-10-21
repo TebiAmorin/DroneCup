@@ -1,5 +1,45 @@
+/**
+ * API client with automatic static-data fallback.
+ *
+ * When the backend is unreachable (e.g. Render DB disabled)
+ * every request transparently fetches pre-built JSON files from /api/*.json.
+ * This lets the site run as a fully static portfolio without any server.
+ */
+
 const BASE = '/api';
 
+// ── Static-mode flag ────────────────────────────────
+// We try one real request; if it fails we flip this forever.
+let _staticMode: boolean | null = null;
+
+async function detectStaticMode(): Promise<boolean> {
+  if (_staticMode !== null) return _staticMode;
+  try {
+    const res = await fetch(`${BASE}/health`, { method: 'GET', signal: AbortSignal.timeout(3000) });
+    if (res.ok) {
+      const data = await res.json();
+      // If the health endpoint returns mode: 'static', we're serving pre-built JSON
+      if (data.mode === 'static') {
+        _staticMode = true;
+      } else {
+        _staticMode = false;
+      }
+    } else {
+      _staticMode = true;
+    }
+  } catch {
+    _staticMode = true;
+  }
+  if (_staticMode) {
+    console.info('[DroneCup] Running in static mode — serving pre-built data.');
+  }
+  return _staticMode;
+}
+
+// Kick off detection immediately so it resolves early.
+const staticModePromise = detectStaticMode();
+
+// ── Admin secret helpers (only used in live mode) ───
 export function getAdminSecret(): string | null {
   try { return sessionStorage.getItem('admin_secret'); } catch { return null; }
 }
@@ -12,6 +52,15 @@ export function clearAdminSecret() {
   try { sessionStorage.removeItem('admin_secret'); } catch { /* noop */ }
 }
 
+// ── Static data fetcher ─────────────────────────────
+async function fetchStatic<T>(jsonPath: string): Promise<T> {
+  const url = `${BASE}/${jsonPath}`;
+  const res = await fetch(url);
+  if (!res.ok) throw { error: { code: 'STATIC_NOT_FOUND', message: `Static file not found: ${url}` } };
+  return res.json() as Promise<T>;
+}
+
+// ── Live request helpers ────────────────────────────
 async function request<T>(path: string, opts?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     headers: { 'Content-Type': 'application/json' },
@@ -39,6 +88,7 @@ async function authedRequest<T>(path: string, opts?: RequestInit): Promise<T> {
   return data as T;
 }
 
+// ── Interfaces (unchanged) ──────────────────────────
 export interface TournamentData {
   id: string;
   name: string;
@@ -225,7 +275,11 @@ export interface ProgressionResponse {
   participants: ProgressionParticipant[];
 }
 
+// ── Auth validation ─────────────────────────────────
 export async function validateSecret(token: string): Promise<boolean> {
+  const isStatic = await staticModePromise;
+  if (isStatic) return false; // Admin auth is disabled in static mode.
+
   try {
     const res = await fetch(`${BASE}/auth/validate`, {
       method: 'POST',
@@ -240,58 +294,130 @@ export async function validateSecret(token: string): Promise<boolean> {
   }
 }
 
+// ── API object ──────────────────────────────────────
+// Each method first checks if we're in static mode, and if so
+// serves from pre-built JSON files. Otherwise calls the live backend.
+
 export const api = {
-  getTournament: () => request<TournamentData>('/tournament'),
-  getTeams: () => request<TeamData[]>('/teams'),
-  getTeam: (id: string) => request<TeamData & { participants: ParticipantData[] }>(`/teams/${id}`),
-  getMatches: () => request<MatchData[]>('/matches'),
-  getMatch: (id: string) => request<MatchDetail>(`/matches/${id}`),
-  startMatch: (id: string) => authedRequest<{ success: boolean }>(`/matches/${id}/start`, { method: 'POST' }),
-  getMap: (id: string) => request<MapDetail>(`/maps/${id}`),
+  getTournament: async (): Promise<TournamentData> => {
+    if (await staticModePromise) return fetchStatic<TournamentData>('tournament.json');
+    return request<TournamentData>('/tournament');
+  },
+
+  getTeams: async (): Promise<TeamData[]> => {
+    if (await staticModePromise) return fetchStatic<TeamData[]>('teams.json');
+    return request<TeamData[]>('/teams');
+  },
+
+  getTeam: async (id: string): Promise<TeamData & { participants: ParticipantData[] }> => {
+    if (await staticModePromise) return fetchStatic<TeamData & { participants: ParticipantData[] }>(`teams/${id}.json`);
+    return request<TeamData & { participants: ParticipantData[] }>(`/teams/${id}`);
+  },
+
+  getMatches: async (): Promise<MatchData[]> => {
+    if (await staticModePromise) return fetchStatic<MatchData[]>('matches.json');
+    return request<MatchData[]>('/matches');
+  },
+
+  getMatch: async (id: string): Promise<MatchDetail> => {
+    if (await staticModePromise) return fetchStatic<MatchDetail>(`matches/${id}.json`);
+    return request<MatchDetail>(`/matches/${id}`);
+  },
+
+  startMatch: (id: string) =>
+    authedRequest<{ success: boolean }>(`/matches/${id}/start`, { method: 'POST' }),
+
+  getMap: async (id: string): Promise<MapDetail> => {
+    if (await staticModePromise) return fetchStatic<MapDetail>(`maps/${id}.json`);
+    return request<MapDetail>(`/maps/${id}`);
+  },
+
   confirmResults: (mapId: string, results: { participantId: string; position: number | null; status: string }[]) =>
     authedRequest<{ success: boolean; ranked: RankingTeam[] }>(`/maps/${mapId}/results`, {
       method: 'POST',
       body: JSON.stringify({ results }),
     }),
+
   correctResults: (mapId: string, results: { participantId: string; position: number | null; status: string }[]) =>
     authedRequest<{ success: boolean; ranked: RankingTeam[] }>(`/maps/${mapId}/results`, {
       method: 'PUT',
       body: JSON.stringify({ results }),
     }),
-  getRankings: () => request<{ teams: RankingTeam[]; individuals: RankingIndividual[]; hasResults?: boolean }>('/rankings'),
-  getParticipants: (query?: Record<string, string>) => {
+
+  getRankings: async (): Promise<{ teams: RankingTeam[]; individuals: RankingIndividual[]; hasResults?: boolean }> => {
+    if (await staticModePromise) return fetchStatic<{ teams: RankingTeam[]; individuals: RankingIndividual[]; hasResults?: boolean }>('rankings.json');
+    return request<{ teams: RankingTeam[]; individuals: RankingIndividual[]; hasResults?: boolean }>('/rankings');
+  },
+
+  getParticipants: async (query?: Record<string, string>): Promise<ParticipantData[]> => {
+    if (await staticModePromise) {
+      // In static mode, load all participants and filter client-side
+      const all = await fetchStatic<ParticipantData[]>('participants.json');
+      if (!query) return all;
+      return all.filter(p => {
+        if (query.team && p.teamId !== query.team) return false;
+        if (query.type && p.type !== query.type) return false;
+        return true;
+      });
+    }
     const qs = query ? '?' + new URLSearchParams(query).toString() : '';
     return request<ParticipantData[]>(`/participants${qs}`);
   },
+
   updateParticipant: (id: string, name: string) =>
     authedRequest<{ success: boolean; participant: ParticipantData }>(`/participants/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ name }),
     }),
+
   confirmParticipant: (id: string, name: string) =>
     authedRequest<{ success: boolean; participant: ParticipantData }>(`/participants/${id}/confirm`, {
       method: 'POST',
       body: JSON.stringify({ name }),
     }),
+
   resetParticipant: (id: string) =>
     authedRequest<{ success: boolean; participant: ParticipantData }>(`/participants/${id}/reset`, {
       method: 'POST',
     }),
+
   resetMatch: (id: string) =>
     authedRequest<{ success: boolean; matchId: string; status: string; noop?: boolean; ranked?: RankingTeam[] }>(
       `/matches/${id}/reset`,
       { method: 'POST' }
     ),
+
   resetMap: (id: string) =>
     authedRequest<{ success: boolean; mapId: string; matchId: string; matchStatus: string; affectedMaps: string[]; noop?: boolean; ranked?: RankingTeam[] }>(
       `/maps/${id}/reset`,
       { method: 'POST' }
     ),
-  getStatisticsTeams: () => request<TeamStats[]>('/statistics/teams'),
-  getStatisticsTeam: (id: string) => request<TeamStats>(`/statistics/teams/${id}`),
-  getStatisticsParticipants: () => request<ParticipantStats[]>('/statistics/participants'),
-  getStatisticsParticipant: (id: string) => request<ParticipantStats>(`/statistics/participants/${id}`),
-  getStatisticsProgression: () => request<ProgressionResponse>('/statistics/progression'),
+
+  getStatisticsTeams: async (): Promise<TeamStats[]> => {
+    if (await staticModePromise) return fetchStatic<TeamStats[]>('statistics/teams.json');
+    return request<TeamStats[]>('/statistics/teams');
+  },
+
+  getStatisticsTeam: async (id: string): Promise<TeamStats> => {
+    if (await staticModePromise) return fetchStatic<TeamStats>(`statistics/teams/${id}.json`);
+    return request<TeamStats>(`/statistics/teams/${id}`);
+  },
+
+  getStatisticsParticipants: async (): Promise<ParticipantStats[]> => {
+    if (await staticModePromise) return fetchStatic<ParticipantStats[]>('statistics/participants.json');
+    return request<ParticipantStats[]>('/statistics/participants');
+  },
+
+  getStatisticsParticipant: async (id: string): Promise<ParticipantStats> => {
+    if (await staticModePromise) return fetchStatic<ParticipantStats>(`statistics/participants/${id}.json`);
+    return request<ParticipantStats>(`/statistics/participants/${id}`);
+  },
+
+  getStatisticsProgression: async (): Promise<ProgressionResponse> => {
+    if (await staticModePromise) return fetchStatic<ProgressionResponse>('statistics/progression.json');
+    return request<ProgressionResponse>('/statistics/progression');
+  },
+
   updateTeamRegistration: (id: string, data: { registrationUrl?: string | null; registrationType?: string | null; registrationPlatform?: string | null; registrationStatus?: string | null; communityNote?: string | null; qualifierDate?: string | null; qualifierStartTime?: string | null; qualifierEndTime?: string | null; qualifierFormat?: string | null; qualifierRequirements?: string | null; qualifierHowToParticipate?: string | null }) =>
     authedRequest<{ success: boolean; team: TeamData }>(`/teams/${id}`, {
       method: 'PATCH',

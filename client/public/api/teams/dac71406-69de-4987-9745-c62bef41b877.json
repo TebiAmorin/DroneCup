@@ -1,0 +1,48 @@
+{
+  "id": "dac71406-69de-4987-9745-c62bef41b877",
+  "tournamentId": "d865027c-d6f7-48b0-beb9-866bc5002fb2",
+  "name": "Vetel",
+  "slug": "vetel",
+  "color": "#38bdf8",
+  "logoUrl": null,
+  "registrationUrl": null,
+  "registrationType": null,
+  "registrationPlatform": null,
+  "registrationStatus": "completed",
+  "communityNote": null,
+  "qualifierDate": "2026-06-10",
+  "qualifierStartTime": "18:00",
+  "qualifierEndTime": "22:00",
+  "qualifierFormat": "Clasificatorio abierto – mejores tiempos",
+  "qualifierRequirements": "Cuenta de Ubisoft activa",
+  "qualifierHowToParticipate": "Sigue al creador para más información",
+  "participants": [
+    {
+      "id": "33b12dd4-ffa5-4189-9ad5-d45b07f4e980",
+      "teamId": "dac71406-69de-4987-9745-c62bef41b877",
+      "name": "Vetel",
+      "slug": "vetel",
+      "type": "CREATOR",
+      "confirmed": true,
+      "teamName": "Vetel"
+    },
+    {
+      "id": "301aa6b2-26d9-4f5b-aac1-7c65e03d2410",
+      "teamId": "dac71406-69de-4987-9745-c62bef41b877",
+      "name": "VetelAce",
+      "slug": "vetelace",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "teamName": "Vetel"
+    },
+    {
+      "id": "9c1c8efe-2bee-4454-9b45-03e5b49340f3",
+      "teamId": "dac71406-69de-4987-9745-c62bef41b877",
+      "name": "VetelNova",
+      "slug": "vetelnova",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "teamName": "Vetel"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "f5cdadf1-adc8-4bba-92b2-16ad8d92415f",
+  "tournamentId": "d865027c-d6f7-48b0-beb9-866bc5002fb2",
+  "name": "SoraMusic",
+  "slug": "sora",
+  "color": "#22c55e",
+  "logoUrl": null,
+  "registrationUrl": null,
+  "registrationType": null,
+  "registrationPlatform": null,
+  "registrationStatus": "completed",
+  "communityNote": null,
+  "qualifierDate": "2026-06-10",
+  "qualifierStartTime": "18:00",
+  "qualifierEndTime": "22:00",
+  "qualifierFormat": "Clasificatorio abierto – mejores tiempos",
+  "qualifierRequirements": "Cuenta de Ubisoft activa",
+  "qualifierHowToParticipate": "Sigue al creador para más información",
+  "participants": [
+    {
+      "id": "591b732a-2a4c-474b-923a-4145ff30353d",
+      "teamId": "f5cdadf1-adc8-4bba-92b2-16ad8d92415f",
+      "name": "SoraMusic",
+      "slug": "soramusic",
+      "type": "CREATOR",
+      "confirmed": true,
+      "teamName": "SoraMusic"
+    },
+    {
+      "id": "e9750a1b-460c-4603-ac9c-5379879c0c86",
+      "teamId": "f5cdadf1-adc8-4bba-92b2-16ad8d92415f",
+      "name": "SoraBlaze",
+      "slug": "sorablaze",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "teamName": "SoraMusic"
+    },
+    {
+      "id": "906a76a2-8d01-46d1-b69a-2ae08b4a74e9",
+      "teamId": "f5cdadf1-adc8-4bba-92b2-16ad8d92415f",
+      "name": "SoraWind",
+      "slug": "sorawind",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "teamName": "SoraMusic"
+    }
+  ]
+}

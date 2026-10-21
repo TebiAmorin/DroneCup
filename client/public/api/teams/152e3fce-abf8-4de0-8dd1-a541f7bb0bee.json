@@ -1,0 +1,48 @@
+{
+  "id": "152e3fce-abf8-4de0-8dd1-a541f7bb0bee",
+  "tournamentId": "ffc3af1b-a27d-413b-921c-d05ea72a9095",
+  "name": "Barra",
+  "slug": "barra",
+  "color": "#f5c842",
+  "logoUrl": null,
+  "registrationUrl": null,
+  "registrationType": null,
+  "registrationPlatform": null,
+  "registrationStatus": "completed",
+  "communityNote": null,
+  "qualifierDate": "2026-06-10",
+  "qualifierStartTime": "18:00",
+  "qualifierEndTime": "22:00",
+  "qualifierFormat": "Clasificatorio abierto – mejores tiempos",
+  "qualifierRequirements": "Cuenta de Ubisoft activa",
+  "qualifierHowToParticipate": "Sigue al creador para más información",
+  "participants": [
+    {
+      "id": "81ec2761-5109-483c-a4f0-e8362fbbd059",
+      "teamId": "152e3fce-abf8-4de0-8dd1-a541f7bb0bee",
+      "name": "Barra",
+      "slug": "barra",
+      "type": "CREATOR",
+      "confirmed": true,
+      "teamName": "Barra"
+    },
+    {
+      "id": "cb3b6498-d911-493f-bef4-4e4adef69f7f",
+      "teamId": "152e3fce-abf8-4de0-8dd1-a541f7bb0bee",
+      "name": "BarraGhost",
+      "slug": "barraghost",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "teamName": "Barra"
+    },
+    {
+      "id": "8717d30a-a0e2-481c-96d0-f8b778b9fa78",
+      "teamId": "152e3fce-abf8-4de0-8dd1-a541f7bb0bee",
+      "name": "BarraStorm",
+      "slug": "barrastorm",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "teamName": "Barra"
+    }
+  ]
+}

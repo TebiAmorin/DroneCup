@@ -1,0 +1,106 @@
+{
+  "participantId": "52548fd6-ba89-4a8b-adef-ec43c307c87b",
+  "participantName": "MiwellFox",
+  "participantType": "PLAYER_2",
+  "teamId": "e499c8de-79b8-400b-8b95-0b514dc192d5",
+  "teamName": "Miwell",
+  "totalPoints": 24,
+  "mapsPlayed": 6,
+  "averagePointsPerMap": 4,
+  "bestPosition": 8,
+  "positionCounts": [
+    {
+      "position": 8,
+      "count": 6
+    }
+  ],
+  "dnfCount": 0,
+  "pointsByMap": [
+    {
+      "mapId": "6fa769cf-ef83-4b42-9871-2a0a10210510",
+      "mapCode": "P3M1",
+      "matchNumber": 3,
+      "mapIndex": 1,
+      "points": 4
+    },
+    {
+      "mapId": "71516af6-9161-45b3-bbfe-0de43c10f2df",
+      "mapCode": "P3M2",
+      "matchNumber": 3,
+      "mapIndex": 2,
+      "points": 4
+    },
+    {
+      "mapId": "13247eda-6427-44cf-a94d-7642f5f9adaf",
+      "mapCode": "P3M3",
+      "matchNumber": 3,
+      "mapIndex": 3,
+      "points": 4
+    },
+    {
+      "mapId": "a8bfc6b7-5bbe-4c44-b58e-2607472830f1",
+      "mapCode": "P4M1",
+      "matchNumber": 4,
+      "mapIndex": 1,
+      "points": 4
+    },
+    {
+      "mapId": "a02738b4-7b62-4bc6-bda6-d3ea1483da07",
+      "mapCode": "P4M2",
+      "matchNumber": 4,
+      "mapIndex": 2,
+      "points": 4
+    },
+    {
+      "mapId": "d67c478a-a2c6-4aa3-95e0-812a4711a0f0",
+      "mapCode": "P4M3",
+      "matchNumber": 4,
+      "mapIndex": 3,
+      "points": 4
+    }
+  ],
+  "progression": [
+    {
+      "mapId": "6fa769cf-ef83-4b42-9871-2a0a10210510",
+      "mapCode": "P3M1",
+      "matchNumber": 3,
+      "mapIndex": 1,
+      "cumulativePoints": 4
+    },
+    {
+      "mapId": "71516af6-9161-45b3-bbfe-0de43c10f2df",
+      "mapCode": "P3M2",
+      "matchNumber": 3,
+      "mapIndex": 2,
+      "cumulativePoints": 8
+    },
+    {
+      "mapId": "13247eda-6427-44cf-a94d-7642f5f9adaf",
+      "mapCode": "P3M3",
+      "matchNumber": 3,
+      "mapIndex": 3,
+      "cumulativePoints": 12
+    },
+    {
+      "mapId": "a8bfc6b7-5bbe-4c44-b58e-2607472830f1",
+      "mapCode": "P4M1",
+      "matchNumber": 4,
+      "mapIndex": 1,
+      "cumulativePoints": 16
+    },
+    {
+      "mapId": "a02738b4-7b62-4bc6-bda6-d3ea1483da07",
+      "mapCode": "P4M2",
+      "matchNumber": 4,
+      "mapIndex": 2,
+      "cumulativePoints": 20
+    },
+    {
+      "mapId": "d67c478a-a2c6-4aa3-95e0-812a4711a0f0",
+      "mapCode": "P4M3",
+      "matchNumber": 4,
+      "mapIndex": 3,
+      "cumulativePoints": 24
+    }
+  ]
+}

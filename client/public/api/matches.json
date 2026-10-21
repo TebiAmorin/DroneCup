@@ -1,0 +1,38 @@
+[
+  {
+    "id": "7ba7c663-eafc-425f-9a16-5d0899a362f2",
+    "tournamentId": "d865027c-d6f7-48b0-beb9-866bc5002fb2",
+    "matchNumber": 1,
+    "phase": "MAIN",
+    "status": "COMPLETED",
+    "startedAt": "2026-06-15T16:00:00.000Z",
+    "completedAt": "2026-06-15T17:30:00.000Z"
+  },
+  {
+    "id": "c05c3618-b42f-4de8-9ced-6259bc50ff5d",
+    "tournamentId": "d865027c-d6f7-48b0-beb9-866bc5002fb2",
+    "matchNumber": 2,
+    "phase": "MAIN",
+    "status": "COMPLETED",
+    "startedAt": "2026-06-15T17:30:00.000Z",
+    "completedAt": "2026-06-15T19:00:00.000Z"
+  },
+  {
+    "id": "65bdc126-63aa-42ce-9662-8f66ceb77a1e",
+    "tournamentId": "d865027c-d6f7-48b0-beb9-866bc5002fb2",
+    "matchNumber": 3,
+    "phase": "MAIN",
+    "status": "COMPLETED",
+    "startedAt": "2026-06-15T19:00:00.000Z",
+    "completedAt": "2026-06-15T20:30:00.000Z"
+  },
+  {
+    "id": "d93f1f82-2769-4bfb-8ab5-bb3b9e546174",
+    "tournamentId": "d865027c-d6f7-48b0-beb9-866bc5002fb2",
+    "matchNumber": 4,
+    "phase": "MAIN",
+    "status": "COMPLETED",
+    "startedAt": "2026-06-15T20:30:00.000Z",
+    "completedAt": "2026-06-15T22:00:00.000Z"
+  }
+]

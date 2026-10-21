@@ -1,0 +1,204 @@
+{
+  "teamId": "a76ed924-1b3e-45cc-a9a3-10d7eb87fba1",
+  "teamName": "Barra",
+  "teamSlug": "barra",
+  "teamColor": "#f5c842",
+  "totalPoints": 315,
+  "globalPosition": 1,
+  "mapsPlayed": 12,
+  "mapsWon": 3,
+  "pointsByMatch": [
+    {
+      "matchId": "7ba7c663-eafc-425f-9a16-5d0899a362f2",
+      "matchNumber": 1,
+      "points": 84
+    },
+    {
+      "matchId": "c05c3618-b42f-4de8-9ced-6259bc50ff5d",
+      "matchNumber": 2,
+      "points": 82
+    },
+    {
+      "matchId": "65bdc126-63aa-42ce-9662-8f66ceb77a1e",
+      "matchNumber": 3,
+      "points": 67
+    },
+    {
+      "matchId": "d93f1f82-2769-4bfb-8ab5-bb3b9e546174",
+      "matchNumber": 4,
+      "points": 82
+    }
+  ],
+  "pointsByMap": [
+    {
+      "mapId": "eae5598b-b2cf-4076-a787-751c9c6b9a9b",
+      "mapCode": "P1M1",
+      "matchNumber": 1,
+      "mapIndex": 1,
+      "points": 28
+    },
+    {
+      "mapId": "d3c006f6-d688-436e-be75-39bf58feecaf",
+      "mapCode": "P1M2",
+      "matchNumber": 1,
+      "mapIndex": 2,
+      "points": 35
+    },
+    {
+      "mapId": "4eae0d2b-39b4-44b2-aa06-d49c10019f9e",
+      "mapCode": "P1M3",
+      "matchNumber": 1,
+      "mapIndex": 3,
+      "points": 21
+    },
+    {
+      "mapId": "57ba0566-5bf5-401b-94b0-e99a66cce867",
+      "mapCode": "P2M1",
+      "matchNumber": 2,
+      "mapIndex": 1,
+      "points": 23
+    },
+    {
+      "mapId": "4cdacaca-82d5-4c23-88e0-7b8ad8d27fe7",
+      "mapCode": "P2M2",
+      "matchNumber": 2,
+      "mapIndex": 2,
+      "points": 24
+    },
+    {
+      "mapId": "13c71ecb-bed0-4ffc-9fd8-c186ad7bfe1c",
+      "mapCode": "P2M3",
+      "matchNumber": 2,
+      "mapIndex": 3,
+      "points": 35
+    },
+    {
+      "mapId": "6fa769cf-ef83-4b42-9871-2a0a10210510",
+      "mapCode": "P3M1",
+      "matchNumber": 3,
+      "mapIndex": 1,
+      "points": 26
+    },
+    {
+      "mapId": "71516af6-9161-45b3-bbfe-0de43c10f2df",
+      "mapCode": "P3M2",
+      "matchNumber": 3,
+      "mapIndex": 2,
+      "points": 21
+    },
+    {
+      "mapId": "13247eda-6427-44cf-a94d-7642f5f9adaf",
+      "mapCode": "P3M3",
+      "matchNumber": 3,
+      "mapIndex": 3,
+      "points": 20
+    },
+    {
+      "mapId": "a8bfc6b7-5bbe-4c44-b58e-2607472830f1",
+      "mapCode": "P4M1",
+      "matchNumber": 4,
+      "mapIndex": 1,
+      "points": 35
+    },
+    {
+      "mapId": "a02738b4-7b62-4bc6-bda6-d3ea1483da07",
+      "mapCode": "P4M2",
+      "matchNumber": 4,
+      "mapIndex": 2,
+      "points": 26
+    },
+    {
+      "mapId": "d67c478a-a2c6-4aa3-95e0-812a4711a0f0",
+      "mapCode": "P4M3",
+      "matchNumber": 4,
+      "mapIndex": 3,
+      "points": 21
+    }
+  ],
+  "progression": [
+    {
+      "mapId": "eae5598b-b2cf-4076-a787-751c9c6b9a9b",
+      "mapCode": "P1M1",
+      "matchNumber": 1,
+      "mapIndex": 1,
+      "cumulativePoints": 28
+    },
+    {
+      "mapId": "d3c006f6-d688-436e-be75-39bf58feecaf",
+      "mapCode": "P1M2",
+      "matchNumber": 1,
+      "mapIndex": 2,
+      "cumulativePoints": 63
+    },
+    {
+      "mapId": "4eae0d2b-39b4-44b2-aa06-d49c10019f9e",
+      "mapCode": "P1M3",
+      "matchNumber": 1,
+      "mapIndex": 3,
+      "cumulativePoints": 84
+    },
+    {
+      "mapId": "57ba0566-5bf5-401b-94b0-e99a66cce867",
+      "mapCode": "P2M1",
+      "matchNumber": 2,
+      "mapIndex": 1,
+      "cumulativePoints": 107
+    },
+    {
+      "mapId": "4cdacaca-82d5-4c23-88e0-7b8ad8d27fe7",
+      "mapCode": "P2M2",
+      "matchNumber": 2,
+      "mapIndex": 2,
+      "cumulativePoints": 131
+    },
+    {
+      "mapId": "13c71ecb-bed0-4ffc-9fd8-c186ad7bfe1c",
+      "mapCode": "P2M3",
+      "matchNumber": 2,
+      "mapIndex": 3,
+      "cumulativePoints": 166
+    },
+    {
+      "mapId": "6fa769cf-ef83-4b42-9871-2a0a10210510",
+      "mapCode": "P3M1",
+      "matchNumber": 3,
+      "mapIndex": 1,
+      "cumulativePoints": 192
+    },
+    {
+      "mapId": "71516af6-9161-45b3-bbfe-0de43c10f2df",
+      "mapCode": "P3M2",
+      "matchNumber": 3,
+      "mapIndex": 2,
+      "cumulativePoints": 213
+    },
+    {
+      "mapId": "13247eda-6427-44cf-a94d-7642f5f9adaf",
+      "mapCode": "P3M3",
+      "matchNumber": 3,
+      "mapIndex": 3,
+      "cumulativePoints": 233
+    },
+    {
+      "mapId": "a8bfc6b7-5bbe-4c44-b58e-2607472830f1",
+      "mapCode": "P4M1",
+      "matchNumber": 4,
+      "mapIndex": 1,
+      "cumulativePoints": 268
+    },
+    {
+      "mapId": "a02738b4-7b62-4bc6-bda6-d3ea1483da07",
+      "mapCode": "P4M2",
+      "matchNumber": 4,
+      "mapIndex": 2,
+      "cumulativePoints": 294
+    },
+    {
+      "mapId": "d67c478a-a2c6-4aa3-95e0-812a4711a0f0",
+      "mapCode": "P4M3",
+      "matchNumber": 4,
+      "mapIndex": 3,
+      "cumulativePoints": 315
+    }
+  ]
+}

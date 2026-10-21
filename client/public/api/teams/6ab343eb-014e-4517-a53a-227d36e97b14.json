@@ -1,0 +1,48 @@
+{
+  "id": "6ab343eb-014e-4517-a53a-227d36e97b14",
+  "tournamentId": "d865027c-d6f7-48b0-beb9-866bc5002fb2",
+  "name": "Caramelo",
+  "slug": "caramelo",
+  "color": "#ef4444",
+  "logoUrl": null,
+  "registrationUrl": null,
+  "registrationType": null,
+  "registrationPlatform": null,
+  "registrationStatus": "completed",
+  "communityNote": null,
+  "qualifierDate": "2026-06-10",
+  "qualifierStartTime": "18:00",
+  "qualifierEndTime": "22:00",
+  "qualifierFormat": "Clasificatorio abierto – mejores tiempos",
+  "qualifierRequirements": "Cuenta de Ubisoft activa",
+  "qualifierHowToParticipate": "Sigue al creador para más información",
+  "participants": [
+    {
+      "id": "f444e6f0-5eef-4390-a77f-83d172fb5654",
+      "teamId": "6ab343eb-014e-4517-a53a-227d36e97b14",
+      "name": "Caramelo",
+      "slug": "caramelo",
+      "type": "CREATOR",
+      "confirmed": true,
+      "teamName": "Caramelo"
+    },
+    {
+      "id": "20451d4b-8411-4d3d-ad9e-a7950101730e",
+      "teamId": "6ab343eb-014e-4517-a53a-227d36e97b14",
+      "name": "CaraLion",
+      "slug": "caralion",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "teamName": "Caramelo"
+    },
+    {
+      "id": "df6b61dd-e355-41f6-bc5d-ee5bd56b04ab",
+      "teamId": "6ab343eb-014e-4517-a53a-227d36e97b14",
+      "name": "CaraShadow",
+      "slug": "carashadow",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "teamName": "Caramelo"
+    }
+  ]
+}
