@@ -7,3 +7,4 @@ httpServer.listen(PORT, () => {
 });
 
 export { app, httpServer, io };
+export default app;
