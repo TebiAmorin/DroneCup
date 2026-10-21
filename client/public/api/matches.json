@@ -1,38 +1,42 @@
 [
   {
-    "id": "7ba7c663-eafc-425f-9a16-5d0899a362f2",
-    "tournamentId": "d865027c-d6f7-48b0-beb9-866bc5002fb2",
+    "id": "3bf95fc1-1729-4c8a-8af7-73e7b587653b",
+    "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
     "matchNumber": 1,
     "phase": "MAIN",
     "status": "COMPLETED",
-    "startedAt": "2026-06-15T16:00:00.000Z",
-    "completedAt": "2026-06-15T17:30:00.000Z"
+    "startedAt": "2026-09-26T13:25:59.625Z",
+    "completedAt": "2026-09-26T13:26:27.917Z",
+    "createdAt": "2026-09-23T22:21:44.695Z"
   },
   {
-    "id": "c05c3618-b42f-4de8-9ced-6259bc50ff5d",
-    "tournamentId": "d865027c-d6f7-48b0-beb9-866bc5002fb2",
+    "id": "ef15ccd7-9e08-4ee3-85ac-867be8b71dca",
+    "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
     "matchNumber": 2,
     "phase": "MAIN",
     "status": "COMPLETED",
-    "startedAt": "2026-06-15T17:30:00.000Z",
-    "completedAt": "2026-06-15T19:00:00.000Z"
+    "startedAt": "2026-09-26T13:26:29.318Z",
+    "completedAt": "2026-10-01T19:53:55.181Z",
+    "createdAt": "2026-09-23T22:21:44.695Z"
   },
   {
-    "id": "65bdc126-63aa-42ce-9662-8f66ceb77a1e",
-    "tournamentId": "d865027c-d6f7-48b0-beb9-866bc5002fb2",
+    "id": "f0d13e29-6cfe-4232-8fbd-eb70ca56b7bd",
+    "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
     "matchNumber": 3,
     "phase": "MAIN",
     "status": "COMPLETED",
-    "startedAt": "2026-06-15T19:00:00.000Z",
-    "completedAt": "2026-06-15T20:30:00.000Z"
+    "startedAt": "2026-10-01T19:54:02.921Z",
+    "completedAt": "2026-10-01T19:54:12.787Z",
+    "createdAt": "2026-09-23T22:21:44.695Z"
   },
   {
-    "id": "d93f1f82-2769-4bfb-8ab5-bb3b9e546174",
-    "tournamentId": "d865027c-d6f7-48b0-beb9-866bc5002fb2",
+    "id": "f96c9da2-2ad8-4a69-9e83-8b78c40c4667",
+    "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
     "matchNumber": 4,
     "phase": "MAIN",
     "status": "COMPLETED",
-    "startedAt": "2026-06-15T20:30:00.000Z",
-    "completedAt": "2026-06-15T22:00:00.000Z"
+    "startedAt": "2026-10-01T19:57:36.015Z",
+    "completedAt": "2026-10-01T19:57:36.096Z",
+    "createdAt": "2026-09-23T22:21:44.695Z"
   }
 ]

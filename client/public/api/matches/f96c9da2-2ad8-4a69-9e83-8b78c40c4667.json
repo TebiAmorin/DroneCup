@@ -1,0 +1,117 @@
+{
+  "id": "f96c9da2-2ad8-4a69-9e83-8b78c40c4667",
+  "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+  "matchNumber": 4,
+  "phase": "MAIN",
+  "status": "COMPLETED",
+  "startedAt": "2026-10-01T19:57:36.015Z",
+  "completedAt": "2026-10-01T19:57:36.096Z",
+  "maps": [
+    {
+      "id": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
+      "mapIndex": 1,
+      "code": "P4M1",
+      "status": "COMPLETED",
+      "startedAt": "2026-10-01T19:57:36.015Z",
+      "completedAt": "2026-10-01T19:57:36.067Z"
+    },
+    {
+      "id": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
+      "mapIndex": 2,
+      "code": "P4M2",
+      "status": "COMPLETED",
+      "startedAt": "2026-10-01T19:57:36.067Z",
+      "completedAt": "2026-10-01T19:57:36.084Z"
+    },
+    {
+      "id": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
+      "mapIndex": 3,
+      "code": "P4M3",
+      "status": "COMPLETED",
+      "startedAt": "2026-10-01T19:57:36.084Z",
+      "completedAt": "2026-10-01T19:57:36.096Z"
+    }
+  ],
+  "participants": [
+    {
+      "id": "3209785a-2635-4529-98d9-917b61d002ca",
+      "name": "Barra",
+      "type": "CREATOR",
+      "teamName": "Barra",
+      "teamSlug": "barra",
+      "teamColor": "#ef4444"
+    },
+    {
+      "id": "b86fecc8-eb9c-47b3-8d00-839a5e085bf9",
+      "name": "as",
+      "type": "PLAYER_2",
+      "teamName": "Barra",
+      "teamSlug": "barra",
+      "teamColor": "#ef4444"
+    },
+    {
+      "id": "4b11e3d7-d15a-4520-8478-a05e2066fae7",
+      "name": "Caramelo",
+      "type": "CREATOR",
+      "teamName": "Caramelo",
+      "teamSlug": "caramelo",
+      "teamColor": "#f5c842"
+    },
+    {
+      "id": "639714a3-d4e8-48ca-8783-58cbf4f20b61",
+      "name": "Caramelo_P2a",
+      "type": "PLAYER_2",
+      "teamName": "Caramelo",
+      "teamSlug": "caramelo",
+      "teamColor": "#f5c842"
+    },
+    {
+      "id": "f6d25e2d-2df1-4fce-b3f2-5db0c11d0b11",
+      "name": "Miwell",
+      "type": "CREATOR",
+      "teamName": "Miwell",
+      "teamSlug": "miwell",
+      "teamColor": "#22c55e"
+    },
+    {
+      "id": "8c3c0375-477b-4448-b811-ee5fad4c226f",
+      "name": "Miwell_P2a",
+      "type": "PLAYER_2",
+      "teamName": "Miwell",
+      "teamSlug": "miwell",
+      "teamColor": "#22c55e"
+    },
+    {
+      "id": "d162b34a-5aa0-4a57-b3d1-db51e74b5e95",
+      "name": "SoraMusic",
+      "type": "CREATOR",
+      "teamName": "SoraMusic",
+      "teamSlug": "sora",
+      "teamColor": "#a855f7"
+    },
+    {
+      "id": "5282a557-40f4-4770-b4ec-7e270565c91d",
+      "name": "SoraMusic_P2a",
+      "type": "PLAYER_2",
+      "teamName": "SoraMusic",
+      "teamSlug": "sora",
+      "teamColor": "#a855f7"
+    },
+    {
+      "id": "3f23858b-e71b-48d9-b1cb-11ed24e6894b",
+      "name": "Vetel",
+      "type": "CREATOR",
+      "teamName": "Vetel",
+      "teamSlug": "vetel",
+      "teamColor": "#38bdf8"
+    },
+    {
+      "id": "c1abddb2-5cbc-4fbd-8b67-53957ac2e328",
+      "name": "Vetel_P2a",
+      "type": "PLAYER_2",
+      "teamName": "Vetel",
+      "teamSlug": "vetel",
+      "teamColor": "#38bdf8"
+    }
+  ]
+}

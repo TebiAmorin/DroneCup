@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "generate-data": "node generate-static-data.mjs",
+    "generate-data": "node export-live-data.mjs",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },

@@ -1,0 +1,47 @@
+{
+  "id": "5da730b7-3981-42cd-801f-4048df75504b",
+  "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+  "name": "SoraMusic",
+  "slug": "sora",
+  "color": "#a855f7",
+  "logoUrl": null,
+  "registrationUrl": "https://twitter.com/soramusicr6",
+  "registrationType": "external",
+  "registrationPlatform": "twitter",
+  "registrationStatus": "upcoming",
+  "communityNote": "Responde al tweet oficial fijado",
+  "qualifierDate": null,
+  "qualifierStartTime": null,
+  "qualifierEndTime": null,
+  "qualifierFormat": null,
+  "qualifierRequirements": null,
+  "qualifierHowToParticipate": null,
+  "createdAt": "2026-09-23T22:21:44.695Z",
+  "updatedAt": "2026-09-24T10:21:21.216Z",
+  "participants": [
+    {
+      "id": "d162b34a-5aa0-4a57-b3d1-db51e74b5e95",
+      "name": "SoraMusic",
+      "slug": "soramusic",
+      "type": "CREATOR",
+      "confirmed": true,
+      "createdAt": "2026-09-23T22:21:44.695Z"
+    },
+    {
+      "id": "157cb793-0308-4ad4-ac8b-2a5c2da34cb3",
+      "name": "SoraMusic_P1a",
+      "slug": "soramusic_p1a",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "createdAt": "2026-09-23T22:21:44.695Z"
+    },
+    {
+      "id": "5282a557-40f4-4770-b4ec-7e270565c91d",
+      "name": "SoraMusic_P2a",
+      "slug": "soramusic_p2a",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "createdAt": "2026-09-23T22:21:44.695Z"
+    }
+  ]
+}

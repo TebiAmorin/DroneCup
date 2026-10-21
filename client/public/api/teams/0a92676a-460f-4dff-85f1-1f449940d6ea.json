@@ -1,0 +1,47 @@
+{
+  "id": "0a92676a-460f-4dff-85f1-1f449940d6ea",
+  "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+  "name": "Vetel",
+  "slug": "vetel",
+  "color": "#38bdf8",
+  "logoUrl": null,
+  "registrationUrl": "https://discord.gg/vetel",
+  "registrationType": "external",
+  "registrationPlatform": "discord",
+  "registrationStatus": "upcoming",
+  "communityNote": "Inscripciones en el canal #drone-cup",
+  "qualifierDate": null,
+  "qualifierStartTime": null,
+  "qualifierEndTime": null,
+  "qualifierFormat": null,
+  "qualifierRequirements": null,
+  "qualifierHowToParticipate": null,
+  "createdAt": "2026-09-23T22:21:44.695Z",
+  "updatedAt": "2026-09-24T10:21:21.216Z",
+  "participants": [
+    {
+      "id": "3f23858b-e71b-48d9-b1cb-11ed24e6894b",
+      "name": "Vetel",
+      "slug": "vetel",
+      "type": "CREATOR",
+      "confirmed": true,
+      "createdAt": "2026-09-23T22:21:44.695Z"
+    },
+    {
+      "id": "c2a40dbb-97b2-461b-b6ad-4555f455a405",
+      "name": "Vetel_P1a",
+      "slug": "vetel_p1a",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "createdAt": "2026-09-23T22:21:44.695Z"
+    },
+    {
+      "id": "c1abddb2-5cbc-4fbd-8b67-53957ac2e328",
+      "name": "Vetel_P2a",
+      "slug": "vetel_p2a",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "createdAt": "2026-09-23T22:21:44.695Z"
+    }
+  ]
+}

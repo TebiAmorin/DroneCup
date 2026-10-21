@@ -1,0 +1,47 @@
+{
+  "id": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1",
+  "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+  "name": "Miwell",
+  "slug": "miwell",
+  "color": "#22c55e",
+  "logoUrl": null,
+  "registrationUrl": "https://www.twitch.tv/DonMiwell",
+  "registrationType": "external",
+  "registrationPlatform": "twitch",
+  "registrationStatus": "upcoming",
+  "communityNote": "Clasificatorio en directo durante su stream",
+  "qualifierDate": null,
+  "qualifierStartTime": null,
+  "qualifierEndTime": null,
+  "qualifierFormat": null,
+  "qualifierRequirements": null,
+  "qualifierHowToParticipate": null,
+  "createdAt": "2026-09-23T22:21:44.695Z",
+  "updatedAt": "2026-09-24T10:21:21.216Z",
+  "participants": [
+    {
+      "id": "f6d25e2d-2df1-4fce-b3f2-5db0c11d0b11",
+      "name": "Miwell",
+      "slug": "miwell",
+      "type": "CREATOR",
+      "confirmed": true,
+      "createdAt": "2026-09-23T22:21:44.695Z"
+    },
+    {
+      "id": "9de7f91a-5661-4af5-8525-9d0ee4640a9e",
+      "name": "Miwell_P1a",
+      "slug": "miwell_p1a",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "createdAt": "2026-09-23T22:21:44.695Z"
+    },
+    {
+      "id": "8c3c0375-477b-4448-b811-ee5fad4c226f",
+      "name": "Miwell_P2a",
+      "slug": "miwell_p2a",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "createdAt": "2026-09-23T22:21:44.695Z"
+    }
+  ]
+}

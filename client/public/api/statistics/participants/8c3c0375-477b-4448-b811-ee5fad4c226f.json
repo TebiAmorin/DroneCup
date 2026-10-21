@@ -1,0 +1,146 @@
+{
+  "participantId": "8c3c0375-477b-4448-b811-ee5fad4c226f",
+  "participantName": "Miwell_P2a",
+  "participantType": "PLAYER_2",
+  "teamId": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1",
+  "teamName": "Miwell",
+  "totalPoints": 48,
+  "mapsPlayed": 6,
+  "averagePointsPerMap": 8,
+  "bestPosition": 6,
+  "positionCounts": [
+    {
+      "position": 1,
+      "count": 0
+    },
+    {
+      "position": 2,
+      "count": 0
+    },
+    {
+      "position": 3,
+      "count": 0
+    },
+    {
+      "position": 4,
+      "count": 0
+    },
+    {
+      "position": 5,
+      "count": 0
+    },
+    {
+      "position": 6,
+      "count": 6
+    },
+    {
+      "position": 7,
+      "count": 0
+    },
+    {
+      "position": 8,
+      "count": 0
+    },
+    {
+      "position": 9,
+      "count": 0
+    },
+    {
+      "position": 10,
+      "count": 0
+    },
+    {
+      "position": "DNF",
+      "count": 0
+    }
+  ],
+  "dnfCount": 0,
+  "pointsByMap": [
+    {
+      "mapId": "be273398-4abd-4687-b3ec-6fa7422510cf",
+      "mapCode": "P3M1",
+      "matchNumber": 3,
+      "mapIndex": 1,
+      "points": 8
+    },
+    {
+      "mapId": "f1f9ff60-587a-4dd3-b151-df5022184c3a",
+      "mapCode": "P3M2",
+      "matchNumber": 3,
+      "mapIndex": 2,
+      "points": 8
+    },
+    {
+      "mapId": "59b11dbf-6b3c-4dad-aefe-1d0ee00d967e",
+      "mapCode": "P3M3",
+      "matchNumber": 3,
+      "mapIndex": 3,
+      "points": 8
+    },
+    {
+      "mapId": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
+      "mapCode": "P4M1",
+      "matchNumber": 4,
+      "mapIndex": 1,
+      "points": 8
+    },
+    {
+      "mapId": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
+      "mapCode": "P4M2",
+      "matchNumber": 4,
+      "mapIndex": 2,
+      "points": 8
+    },
+    {
+      "mapId": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
+      "mapCode": "P4M3",
+      "matchNumber": 4,
+      "mapIndex": 3,
+      "points": 8
+    }
+  ],
+  "progression": [
+    {
+      "mapId": "be273398-4abd-4687-b3ec-6fa7422510cf",
+      "mapCode": "P3M1",
+      "matchNumber": 3,
+      "mapIndex": 1,
+      "cumulativePoints": 8
+    },
+    {
+      "mapId": "f1f9ff60-587a-4dd3-b151-df5022184c3a",
+      "mapCode": "P3M2",
+      "matchNumber": 3,
+      "mapIndex": 2,
+      "cumulativePoints": 16
+    },
+    {
+      "mapId": "59b11dbf-6b3c-4dad-aefe-1d0ee00d967e",
+      "mapCode": "P3M3",
+      "matchNumber": 3,
+      "mapIndex": 3,
+      "cumulativePoints": 24
+    },
+    {
+      "mapId": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
+      "mapCode": "P4M1",
+      "matchNumber": 4,
+      "mapIndex": 1,
+      "cumulativePoints": 32
+    },
+    {
+      "mapId": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
+      "mapCode": "P4M2",
+      "matchNumber": 4,
+      "mapIndex": 2,
+      "cumulativePoints": 40
+    },
+    {
+      "mapId": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
+      "mapCode": "P4M3",
+      "matchNumber": 4,
+      "mapIndex": 3,
+      "cumulativePoints": 48
+    }
+  ]
+}

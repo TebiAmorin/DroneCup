@@ -1,0 +1,47 @@
+{
+  "id": "d7213635-7820-4352-b543-3ffc20b11878",
+  "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+  "name": "Caramelo",
+  "slug": "caramelo",
+  "color": "#f5c842",
+  "logoUrl": null,
+  "registrationUrl": "https://twitter.com/CarameloOficial",
+  "registrationType": "external",
+  "registrationPlatform": "twitter",
+  "registrationStatus": "upcoming",
+  "communityNote": "Draft y plazas abiertas en su post de X",
+  "qualifierDate": null,
+  "qualifierStartTime": null,
+  "qualifierEndTime": null,
+  "qualifierFormat": null,
+  "qualifierRequirements": null,
+  "qualifierHowToParticipate": null,
+  "createdAt": "2026-09-23T22:21:44.695Z",
+  "updatedAt": "2026-09-24T10:21:21.216Z",
+  "participants": [
+    {
+      "id": "4b11e3d7-d15a-4520-8478-a05e2066fae7",
+      "name": "Caramelo",
+      "slug": "caramelo",
+      "type": "CREATOR",
+      "confirmed": true,
+      "createdAt": "2026-09-23T22:21:44.695Z"
+    },
+    {
+      "id": "3be0e511-1c34-4293-b725-d5caf6845b83",
+      "name": "Caramelo_P1a",
+      "slug": "caramelo_p1a",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "createdAt": "2026-09-23T22:21:44.695Z"
+    },
+    {
+      "id": "639714a3-d4e8-48ca-8783-58cbf4f20b61",
+      "name": "Caramelo_P2a",
+      "slug": "caramelo_p2a",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "createdAt": "2026-09-23T22:21:44.695Z"
+    }
+  ]
+}
