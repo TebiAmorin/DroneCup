@@ -15,15 +15,23 @@ let _staticMode: boolean | null = null;
 async function detectStaticMode(): Promise<boolean> {
   if (_staticMode !== null) return _staticMode;
   try {
+    const res = await fetch(`${BASE}/health.json`, { method: 'GET', signal: AbortSignal.timeout(3000) });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.mode === 'static') {
+        _staticMode = true;
+        console.info('[DroneCup] Running in static mode — serving pre-built data.');
+        return true;
+      }
+    }
+  } catch {
+    // fall through to backend check
+  }
+  try {
     const res = await fetch(`${BASE}/health`, { method: 'GET', signal: AbortSignal.timeout(3000) });
     if (res.ok) {
       const data = await res.json();
-      // If the health endpoint returns mode: 'static', we're serving pre-built JSON
-      if (data.mode === 'static') {
-        _staticMode = true;
-      } else {
-        _staticMode = false;
-      }
+      _staticMode = data.mode === 'static';
     } else {
       _staticMode = true;
     }
