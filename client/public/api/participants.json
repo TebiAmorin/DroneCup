@@ -12,8 +12,8 @@
   {
     "id": "6b7dddd4-5636-4f3d-80a0-0c48dd2cb3cc",
     "teamId": "9ef76b14-e0f9-42b0-a574-18b397285228",
-    "name": "a",
-    "slug": "a",
+    "name": "s7tier",
+    "slug": "s7tier",
     "type": "PLAYER_1",
     "confirmed": true,
     "teamName": "Barra",
@@ -22,8 +22,8 @@
   {
     "id": "b86fecc8-eb9c-47b3-8d00-839a5e085bf9",
     "teamId": "9ef76b14-e0f9-42b0-a574-18b397285228",
-    "name": "as",
-    "slug": "as",
+    "name": "kikimaton",
+    "slug": "kikimaton",
     "type": "PLAYER_2",
     "confirmed": true,
     "teamName": "Barra",
@@ -32,6 +32,36 @@
   {
     "id": "4b11e3d7-d15a-4520-8478-a05e2066fae7",
     "teamId": "d7213635-7820-4352-b543-3ffc20b11878",
+    "name": "Vetel",
+    "slug": "vetel",
+    "type": "CREATOR",
+    "confirmed": true,
+    "teamName": "Vetel",
+    "createdAt": "2026-09-23T22:21:44.695Z"
+  },
+  {
+    "id": "3be0e511-1c34-4293-b725-d5caf6845b83",
+    "teamId": "d7213635-7820-4352-b543-3ffc20b11878",
+    "name": "littlemonty",
+    "slug": "littlemonty",
+    "type": "PLAYER_1",
+    "confirmed": true,
+    "teamName": "Vetel",
+    "createdAt": "2026-09-23T22:21:44.695Z"
+  },
+  {
+    "id": "639714a3-d4e8-48ca-8783-58cbf4f20b61",
+    "teamId": "d7213635-7820-4352-b543-3ffc20b11878",
+    "name": "nemessys",
+    "slug": "nemessys",
+    "type": "PLAYER_2",
+    "confirmed": true,
+    "teamName": "Vetel",
+    "createdAt": "2026-09-23T22:21:44.695Z"
+  },
+  {
+    "id": "f6d25e2d-2df1-4fce-b3f2-5db0c11d0b11",
+    "teamId": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1",
     "name": "Caramelo",
     "slug": "caramelo",
     "type": "CREATOR",
@@ -40,53 +70,23 @@
     "createdAt": "2026-09-23T22:21:44.695Z"
   },
   {
-    "id": "3be0e511-1c34-4293-b725-d5caf6845b83",
-    "teamId": "d7213635-7820-4352-b543-3ffc20b11878",
-    "name": "Caramelo_P1a",
-    "slug": "caramelo_p1a",
-    "type": "PLAYER_1",
-    "confirmed": true,
-    "teamName": "Caramelo",
-    "createdAt": "2026-09-23T22:21:44.695Z"
-  },
-  {
-    "id": "639714a3-d4e8-48ca-8783-58cbf4f20b61",
-    "teamId": "d7213635-7820-4352-b543-3ffc20b11878",
-    "name": "Caramelo_P2a",
-    "slug": "caramelo_p2a",
-    "type": "PLAYER_2",
-    "confirmed": true,
-    "teamName": "Caramelo",
-    "createdAt": "2026-09-23T22:21:44.695Z"
-  },
-  {
-    "id": "f6d25e2d-2df1-4fce-b3f2-5db0c11d0b11",
-    "teamId": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1",
-    "name": "Miwell",
-    "slug": "miwell",
-    "type": "CREATOR",
-    "confirmed": true,
-    "teamName": "Miwell",
-    "createdAt": "2026-09-23T22:21:44.695Z"
-  },
-  {
     "id": "9de7f91a-5661-4af5-8525-9d0ee4640a9e",
     "teamId": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1",
-    "name": "Miwell_P1a",
-    "slug": "miwell_p1a",
+    "name": "voltrexa",
+    "slug": "voltrexa",
     "type": "PLAYER_1",
     "confirmed": true,
-    "teamName": "Miwell",
+    "teamName": "Caramelo",
     "createdAt": "2026-09-23T22:21:44.695Z"
   },
   {
     "id": "8c3c0375-477b-4448-b811-ee5fad4c226f",
     "teamId": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1",
-    "name": "Miwell_P2a",
-    "slug": "miwell_p2a",
+    "name": "redlucky",
+    "slug": "redlucky",
     "type": "PLAYER_2",
     "confirmed": true,
-    "teamName": "Miwell",
+    "teamName": "Caramelo",
     "createdAt": "2026-09-23T22:21:44.695Z"
   },
   {
@@ -102,8 +102,8 @@
   {
     "id": "157cb793-0308-4ad4-ac8b-2a5c2da34cb3",
     "teamId": "5da730b7-3981-42cd-801f-4048df75504b",
-    "name": "SoraMusic_P1a",
-    "slug": "soramusic_p1a",
+    "name": "nix",
+    "slug": "nix",
     "type": "PLAYER_1",
     "confirmed": true,
     "teamName": "SoraMusic",
@@ -112,8 +112,8 @@
   {
     "id": "5282a557-40f4-4770-b4ec-7e270565c91d",
     "teamId": "5da730b7-3981-42cd-801f-4048df75504b",
-    "name": "SoraMusic_P2a",
-    "slug": "soramusic_p2a",
+    "name": "nei",
+    "slug": "nei",
     "type": "PLAYER_2",
     "confirmed": true,
     "teamName": "SoraMusic",
@@ -122,31 +122,31 @@
   {
     "id": "3f23858b-e71b-48d9-b1cb-11ed24e6894b",
     "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea",
-    "name": "Vetel",
-    "slug": "vetel",
+    "name": "Miwell",
+    "slug": "miwell",
     "type": "CREATOR",
     "confirmed": true,
-    "teamName": "Vetel",
+    "teamName": "Miwell",
     "createdAt": "2026-09-23T22:21:44.695Z"
   },
   {
     "id": "c2a40dbb-97b2-461b-b6ad-4555f455a405",
     "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea",
-    "name": "Vetel_P1a",
-    "slug": "vetel_p1a",
+    "name": "johnyhipster",
+    "slug": "johnyhipster",
     "type": "PLAYER_1",
     "confirmed": true,
-    "teamName": "Vetel",
+    "teamName": "Miwell",
     "createdAt": "2026-09-23T22:21:44.695Z"
   },
   {
     "id": "c1abddb2-5cbc-4fbd-8b67-53957ac2e328",
     "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea",
-    "name": "Vetel_P2a",
-    "slug": "vetel_p2a",
+    "name": "fost",
+    "slug": "fost",
     "type": "PLAYER_2",
     "confirmed": true,
-    "teamName": "Vetel",
+    "teamName": "Miwell",
     "createdAt": "2026-09-23T22:21:44.695Z"
   }
 ]

@@ -201,13 +201,14 @@
         "mapIndex": 3,
         "cumulativePoints": 442
       }
-    ]
+    ],
+    "rank": 1
   },
   {
     "teamId": "d7213635-7820-4352-b543-3ffc20b11878",
-    "teamName": "Caramelo",
-    "teamSlug": "caramelo",
-    "teamColor": "#f5c842",
+    "teamName": "Vetel",
+    "teamSlug": "vetel",
+    "teamColor": "#38bdf8",
     "totalPoints": 294,
     "globalPosition": 2,
     "mapsPlayed": 12,
@@ -405,13 +406,14 @@
         "mapIndex": 3,
         "cumulativePoints": 294
       }
-    ]
+    ],
+    "rank": 2
   },
   {
     "teamId": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1",
-    "teamName": "Miwell",
-    "teamSlug": "miwell",
-    "teamColor": "#22c55e",
+    "teamName": "Caramelo",
+    "teamSlug": "caramelo",
+    "teamColor": "#f5c842",
     "totalPoints": 202,
     "globalPosition": 3,
     "mapsPlayed": 12,
@@ -609,7 +611,8 @@
         "mapIndex": 3,
         "cumulativePoints": 202
       }
-    ]
+    ],
+    "rank": 3
   },
   {
     "teamId": "5da730b7-3981-42cd-801f-4048df75504b",
@@ -813,13 +816,14 @@
         "mapIndex": 3,
         "cumulativePoints": 174
       }
-    ]
+    ],
+    "rank": 4
   },
   {
     "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea",
-    "teamName": "Vetel",
-    "teamSlug": "vetel",
-    "teamColor": "#38bdf8",
+    "teamName": "Miwell",
+    "teamSlug": "miwell",
+    "teamColor": "#22c55e",
     "totalPoints": 100,
     "globalPosition": 5,
     "mapsPlayed": 12,
@@ -1017,6 +1021,7 @@
         "mapIndex": 3,
         "cumulativePoints": 100
       }
-    ]
+    ],
+    "rank": 5
   }
 ]

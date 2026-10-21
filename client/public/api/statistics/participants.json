@@ -227,14 +227,15 @@
         "mapIndex": 3,
         "cumulativePoints": 251
       }
-    ]
+    ],
+    "rank": 1
   },
   {
     "participantId": "4b11e3d7-d15a-4520-8478-a05e2066fae7",
-    "participantName": "Caramelo",
+    "participantName": "Vetel",
     "participantType": "CREATOR",
     "teamId": "d7213635-7820-4352-b543-3ffc20b11878",
-    "teamName": "Caramelo",
+    "teamName": "Vetel",
     "totalPoints": 166,
     "mapsPlayed": 12,
     "averagePointsPerMap": 13.83,
@@ -457,11 +458,12 @@
         "mapIndex": 3,
         "cumulativePoints": 166
       }
-    ]
+    ],
+    "rank": 2
   },
   {
     "participantId": "b86fecc8-eb9c-47b3-8d00-839a5e085bf9",
-    "participantName": "as",
+    "participantName": "kikimaton",
     "participantType": "PLAYER_2",
     "teamId": "9ef76b14-e0f9-42b0-a574-18b397285228",
     "teamName": "Barra",
@@ -603,14 +605,15 @@
         "mapIndex": 3,
         "cumulativePoints": 108
       }
-    ]
+    ],
+    "rank": 3
   },
   {
     "participantId": "f6d25e2d-2df1-4fce-b3f2-5db0c11d0b11",
-    "participantName": "Miwell",
+    "participantName": "Caramelo",
     "participantType": "CREATOR",
     "teamId": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1",
-    "teamName": "Miwell",
+    "teamName": "Caramelo",
     "totalPoints": 104,
     "mapsPlayed": 12,
     "averagePointsPerMap": 8.67,
@@ -833,7 +836,8 @@
         "mapIndex": 3,
         "cumulativePoints": 104
       }
-    ]
+    ],
+    "rank": 4
   },
   {
     "participantId": "d162b34a-5aa0-4a57-b3d1-db51e74b5e95",
@@ -1063,11 +1067,12 @@
         "mapIndex": 3,
         "cumulativePoints": 101
       }
-    ]
+    ],
+    "rank": 5
   },
   {
     "participantId": "6b7dddd4-5636-4f3d-80a0-0c48dd2cb3cc",
-    "participantName": "a",
+    "participantName": "s7tier",
     "participantType": "PLAYER_1",
     "teamId": "9ef76b14-e0f9-42b0-a574-18b397285228",
     "teamName": "Barra",
@@ -1209,14 +1214,15 @@
         "mapIndex": 3,
         "cumulativePoints": 83
       }
-    ]
+    ],
+    "rank": 6
   },
   {
     "participantId": "639714a3-d4e8-48ca-8783-58cbf4f20b61",
-    "participantName": "Caramelo_P2a",
+    "participantName": "nemessys",
     "participantType": "PLAYER_2",
     "teamId": "d7213635-7820-4352-b543-3ffc20b11878",
-    "teamName": "Caramelo",
+    "teamName": "Vetel",
     "totalPoints": 72,
     "mapsPlayed": 6,
     "averagePointsPerMap": 12,
@@ -1355,14 +1361,15 @@
         "mapIndex": 3,
         "cumulativePoints": 72
       }
-    ]
+    ],
+    "rank": 7
   },
   {
     "participantId": "3be0e511-1c34-4293-b725-d5caf6845b83",
-    "participantName": "Caramelo_P1a",
+    "participantName": "littlemonty",
     "participantType": "PLAYER_1",
     "teamId": "d7213635-7820-4352-b543-3ffc20b11878",
-    "teamName": "Caramelo",
+    "teamName": "Vetel",
     "totalPoints": 56,
     "mapsPlayed": 6,
     "averagePointsPerMap": 9.33,
@@ -1501,14 +1508,15 @@
         "mapIndex": 3,
         "cumulativePoints": 56
       }
-    ]
+    ],
+    "rank": 8
   },
   {
     "participantId": "3f23858b-e71b-48d9-b1cb-11ed24e6894b",
-    "participantName": "Vetel",
+    "participantName": "Miwell",
     "participantType": "CREATOR",
     "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea",
-    "teamName": "Vetel",
+    "teamName": "Miwell",
     "totalPoints": 53,
     "mapsPlayed": 12,
     "averagePointsPerMap": 4.42,
@@ -1731,14 +1739,15 @@
         "mapIndex": 3,
         "cumulativePoints": 53
       }
-    ]
+    ],
+    "rank": 9
   },
   {
     "participantId": "9de7f91a-5661-4af5-8525-9d0ee4640a9e",
-    "participantName": "Miwell_P1a",
+    "participantName": "voltrexa",
     "participantType": "PLAYER_1",
     "teamId": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1",
-    "teamName": "Miwell",
+    "teamName": "Caramelo",
     "totalPoints": 50,
     "mapsPlayed": 6,
     "averagePointsPerMap": 8.33,
@@ -1877,11 +1886,12 @@
         "mapIndex": 3,
         "cumulativePoints": 50
       }
-    ]
+    ],
+    "rank": 10
   },
   {
     "participantId": "157cb793-0308-4ad4-ac8b-2a5c2da34cb3",
-    "participantName": "SoraMusic_P1a",
+    "participantName": "nix",
     "participantType": "PLAYER_1",
     "teamId": "5da730b7-3981-42cd-801f-4048df75504b",
     "teamName": "SoraMusic",
@@ -2023,14 +2033,15 @@
         "mapIndex": 3,
         "cumulativePoints": 49
       }
-    ]
+    ],
+    "rank": 11
   },
   {
     "participantId": "8c3c0375-477b-4448-b811-ee5fad4c226f",
-    "participantName": "Miwell_P2a",
+    "participantName": "redlucky",
     "participantType": "PLAYER_2",
     "teamId": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1",
-    "teamName": "Miwell",
+    "teamName": "Caramelo",
     "totalPoints": 48,
     "mapsPlayed": 6,
     "averagePointsPerMap": 8,
@@ -2169,14 +2180,15 @@
         "mapIndex": 3,
         "cumulativePoints": 48
       }
-    ]
+    ],
+    "rank": 12
   },
   {
     "participantId": "c2a40dbb-97b2-461b-b6ad-4555f455a405",
-    "participantName": "Vetel_P1a",
+    "participantName": "johnyhipster",
     "participantType": "PLAYER_1",
     "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea",
-    "teamName": "Vetel",
+    "teamName": "Miwell",
     "totalPoints": 41,
     "mapsPlayed": 6,
     "averagePointsPerMap": 6.83,
@@ -2315,11 +2327,12 @@
         "mapIndex": 3,
         "cumulativePoints": 41
       }
-    ]
+    ],
+    "rank": 13
   },
   {
     "participantId": "5282a557-40f4-4770-b4ec-7e270565c91d",
-    "participantName": "SoraMusic_P2a",
+    "participantName": "nei",
     "participantType": "PLAYER_2",
     "teamId": "5da730b7-3981-42cd-801f-4048df75504b",
     "teamName": "SoraMusic",
@@ -2461,14 +2474,15 @@
         "mapIndex": 3,
         "cumulativePoints": 24
       }
-    ]
+    ],
+    "rank": 14
   },
   {
     "participantId": "c1abddb2-5cbc-4fbd-8b67-53957ac2e328",
-    "participantName": "Vetel_P2a",
+    "participantName": "fost",
     "participantType": "PLAYER_2",
     "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea",
-    "teamName": "Vetel",
+    "teamName": "Miwell",
     "totalPoints": 6,
     "mapsPlayed": 6,
     "averagePointsPerMap": 1,
@@ -2607,6 +2621,7 @@
         "mapIndex": 3,
         "cumulativePoints": 6
       }
-    ]
+    ],
+    "rank": 15
   }
 ]

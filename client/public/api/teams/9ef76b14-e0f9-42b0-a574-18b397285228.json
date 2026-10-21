@@ -21,27 +21,27 @@
   "participants": [
     {
       "id": "3209785a-2635-4529-98d9-917b61d002ca",
+      "teamId": "9ef76b14-e0f9-42b0-a574-18b397285228",
       "name": "Barra",
       "slug": "barra",
       "type": "CREATOR",
-      "confirmed": true,
-      "createdAt": "2026-09-23T22:21:44.695Z"
+      "teamName": "Barra"
     },
     {
       "id": "6b7dddd4-5636-4f3d-80a0-0c48dd2cb3cc",
-      "name": "a",
-      "slug": "a",
+      "teamId": "9ef76b14-e0f9-42b0-a574-18b397285228",
+      "name": "s7tier",
+      "slug": "s7tier",
       "type": "PLAYER_1",
-      "confirmed": true,
-      "createdAt": "2026-09-23T22:21:44.695Z"
+      "teamName": "Barra"
     },
     {
       "id": "b86fecc8-eb9c-47b3-8d00-839a5e085bf9",
-      "name": "as",
-      "slug": "as",
+      "teamId": "9ef76b14-e0f9-42b0-a574-18b397285228",
+      "name": "kikimaton",
+      "slug": "kikimaton",
       "type": "PLAYER_2",
-      "confirmed": true,
-      "createdAt": "2026-09-23T22:21:44.695Z"
+      "teamName": "Barra"
     }
   ]
 }

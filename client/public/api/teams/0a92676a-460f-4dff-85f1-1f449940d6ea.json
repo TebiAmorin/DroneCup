@@ -1,15 +1,15 @@
 {
   "id": "0a92676a-460f-4dff-85f1-1f449940d6ea",
   "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
-  "name": "Vetel",
-  "slug": "vetel",
-  "color": "#38bdf8",
+  "name": "Miwell",
+  "slug": "miwell",
+  "color": "#22c55e",
   "logoUrl": null,
-  "registrationUrl": "https://discord.gg/vetel",
+  "registrationUrl": "https://www.twitch.tv/DonMiwell",
   "registrationType": "external",
-  "registrationPlatform": "discord",
+  "registrationPlatform": "twitch",
   "registrationStatus": "upcoming",
-  "communityNote": "Inscripciones en el canal #drone-cup",
+  "communityNote": "Clasificatorio en directo durante su stream",
   "qualifierDate": null,
   "qualifierStartTime": null,
   "qualifierEndTime": null,
@@ -21,27 +21,27 @@
   "participants": [
     {
       "id": "3f23858b-e71b-48d9-b1cb-11ed24e6894b",
-      "name": "Vetel",
-      "slug": "vetel",
+      "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea",
+      "name": "Miwell",
+      "slug": "miwell",
       "type": "CREATOR",
-      "confirmed": true,
-      "createdAt": "2026-09-23T22:21:44.695Z"
+      "teamName": "Miwell"
     },
     {
       "id": "c2a40dbb-97b2-461b-b6ad-4555f455a405",
-      "name": "Vetel_P1a",
-      "slug": "vetel_p1a",
+      "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea",
+      "name": "johnyhipster",
+      "slug": "johnyhipster",
       "type": "PLAYER_1",
-      "confirmed": true,
-      "createdAt": "2026-09-23T22:21:44.695Z"
+      "teamName": "Miwell"
     },
     {
       "id": "c1abddb2-5cbc-4fbd-8b67-53957ac2e328",
-      "name": "Vetel_P2a",
-      "slug": "vetel_p2a",
+      "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea",
+      "name": "fost",
+      "slug": "fost",
       "type": "PLAYER_2",
-      "confirmed": true,
-      "createdAt": "2026-09-23T22:21:44.695Z"
+      "teamName": "Miwell"
     }
   ]
 }

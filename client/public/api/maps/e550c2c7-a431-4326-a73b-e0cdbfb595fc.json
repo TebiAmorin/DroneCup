@@ -18,40 +18,44 @@
       "teamColor": "#a855f7",
       "position": 1,
       "status": "FINISHED",
-      "points": 25
+      "points": 25,
+      "teamId": "5da730b7-3981-42cd-801f-4048df75504b"
     },
     {
       "participantId": "157cb793-0308-4ad4-ac8b-2a5c2da34cb3",
-      "participantName": "SoraMusic_P1a",
+      "participantName": "nix",
       "participantType": "PLAYER_1",
       "teamName": "SoraMusic",
       "teamSlug": "sora",
       "teamColor": "#a855f7",
       "position": 2,
       "status": "FINISHED",
-      "points": 18
+      "points": 18,
+      "teamId": "5da730b7-3981-42cd-801f-4048df75504b"
     },
     {
       "participantId": "3f23858b-e71b-48d9-b1cb-11ed24e6894b",
-      "participantName": "Vetel",
+      "participantName": "Miwell",
       "participantType": "CREATOR",
-      "teamName": "Vetel",
+      "teamName": "Miwell",
       "teamSlug": "vetel",
       "teamColor": "#38bdf8",
       "position": 3,
       "status": "FINISHED",
-      "points": 15
+      "points": 15,
+      "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea"
     },
     {
       "participantId": "c2a40dbb-97b2-461b-b6ad-4555f455a405",
-      "participantName": "Vetel_P1a",
+      "participantName": "johnyhipster",
       "participantType": "PLAYER_1",
-      "teamName": "Vetel",
+      "teamName": "Miwell",
       "teamSlug": "vetel",
       "teamColor": "#38bdf8",
       "position": 4,
       "status": "FINISHED",
-      "points": 12
+      "points": 12,
+      "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea"
     },
     {
       "participantId": "3209785a-2635-4529-98d9-917b61d002ca",
@@ -62,62 +66,68 @@
       "teamColor": "#ef4444",
       "position": 5,
       "status": "FINISHED",
-      "points": 10
+      "points": 10,
+      "teamId": "9ef76b14-e0f9-42b0-a574-18b397285228"
     },
     {
       "participantId": "6b7dddd4-5636-4f3d-80a0-0c48dd2cb3cc",
-      "participantName": "a",
+      "participantName": "s7tier",
       "participantType": "PLAYER_1",
       "teamName": "Barra",
       "teamSlug": "barra",
       "teamColor": "#ef4444",
       "position": 6,
       "status": "FINISHED",
-      "points": 8
+      "points": 8,
+      "teamId": "9ef76b14-e0f9-42b0-a574-18b397285228"
     },
     {
       "participantId": "4b11e3d7-d15a-4520-8478-a05e2066fae7",
-      "participantName": "Caramelo",
+      "participantName": "Vetel",
       "participantType": "CREATOR",
-      "teamName": "Caramelo",
+      "teamName": "Vetel",
       "teamSlug": "caramelo",
       "teamColor": "#f5c842",
       "position": 7,
       "status": "FINISHED",
-      "points": 6
+      "points": 6,
+      "teamId": "d7213635-7820-4352-b543-3ffc20b11878"
     },
     {
       "participantId": "3be0e511-1c34-4293-b725-d5caf6845b83",
-      "participantName": "Caramelo_P1a",
+      "participantName": "littlemonty",
       "participantType": "PLAYER_1",
-      "teamName": "Caramelo",
+      "teamName": "Vetel",
       "teamSlug": "caramelo",
       "teamColor": "#f5c842",
       "position": 8,
       "status": "FINISHED",
-      "points": 4
+      "points": 4,
+      "teamId": "d7213635-7820-4352-b543-3ffc20b11878"
     },
     {
       "participantId": "f6d25e2d-2df1-4fce-b3f2-5db0c11d0b11",
-      "participantName": "Miwell",
+      "participantName": "Caramelo",
       "participantType": "CREATOR",
-      "teamName": "Miwell",
+      "teamName": "Caramelo",
       "teamSlug": "miwell",
       "teamColor": "#22c55e",
       "position": 9,
       "status": "FINISHED",
-      "points": 2
+      "points": 2,
+      "teamId": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1"
     },
     {
       "participantId": "9de7f91a-5661-4af5-8525-9d0ee4640a9e",
-      "participantName": "Miwell_P1a",
+      "participantName": "voltrexa",
       "participantType": "PLAYER_1",
-      "teamName": "Miwell",
+      "teamName": "Caramelo",
       "teamSlug": "miwell",
       "teamColor": "#22c55e",
       "position": 10,
       "status": "FINISHED",
-      "points": 1
+      "points": 1,
+      "teamId": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1"
     }
   ]
 }
