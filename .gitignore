@@ -4,3 +4,5 @@ dist/
 *.local
 *.tsbuildinfo
 .DS_Store
+skills-lock.json
+*.log
