@@ -1,0 +1,77 @@
+{
+  "participantId": "8ec031c1-4e3e-46d0-ae93-9a4a674a88a5",
+  "participantName": "Miwell",
+  "participantType": "CREATOR",
+  "teamId": "07ef3fa0-ed87-42bf-ac18-349a21f94848",
+  "teamName": "Miwell",
+  "teamSlug": "miwell",
+  "teamColor": "#a855f7",
+  "totalPoints": 108,
+  "wins": 0,
+  "podiums": 0,
+  "mapsPlayed": 12,
+  "averagePointsPerMap": 9,
+  "progression": [
+    {
+      "mapIndex": 1,
+      "code": "P1M1",
+      "points": 6
+    },
+    {
+      "mapIndex": 2,
+      "code": "P1M2",
+      "points": 12
+    },
+    {
+      "mapIndex": 3,
+      "code": "P1M3",
+      "points": 20
+    },
+    {
+      "mapIndex": 4,
+      "code": "P2M1",
+      "points": 32
+    },
+    {
+      "mapIndex": 5,
+      "code": "P2M2",
+      "points": 42
+    },
+    {
+      "mapIndex": 6,
+      "code": "P2M3",
+      "points": 50
+    },
+    {
+      "mapIndex": 7,
+      "code": "P3M1",
+      "points": 60
+    },
+    {
+      "mapIndex": 8,
+      "code": "P3M2",
+      "points": 70
+    },
+    {
+      "mapIndex": 9,
+      "code": "P3M3",
+      "points": 80
+    },
+    {
+      "mapIndex": 10,
+      "code": "P4M1",
+      "points": 88
+    },
+    {
+      "mapIndex": 11,
+      "code": "P4M2",
+      "points": 98
+    },
+    {
+      "mapIndex": 12,
+      "code": "P4M3",
+      "points": 108
+    }
+  ],
+  "rank": 5
+}

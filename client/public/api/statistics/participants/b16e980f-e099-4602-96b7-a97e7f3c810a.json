@@ -1,0 +1,47 @@
+{
+  "participantId": "b16e980f-e099-4602-96b7-a97e7f3c810a",
+  "participantName": "fost",
+  "participantType": "PLAYER_2",
+  "teamId": "07ef3fa0-ed87-42bf-ac18-349a21f94848",
+  "teamName": "Miwell",
+  "teamSlug": "miwell",
+  "teamColor": "#a855f7",
+  "totalPoints": 9,
+  "wins": 0,
+  "podiums": 0,
+  "mapsPlayed": 6,
+  "averagePointsPerMap": 1.5,
+  "progression": [
+    {
+      "mapIndex": 7,
+      "code": "P3M1",
+      "points": 1
+    },
+    {
+      "mapIndex": 8,
+      "code": "P3M2",
+      "points": 3
+    },
+    {
+      "mapIndex": 9,
+      "code": "P3M3",
+      "points": 4
+    },
+    {
+      "mapIndex": 10,
+      "code": "P4M1",
+      "points": 6
+    },
+    {
+      "mapIndex": 11,
+      "code": "P4M2",
+      "points": 7
+    },
+    {
+      "mapIndex": 12,
+      "code": "P4M3",
+      "points": 9
+    }
+  ],
+  "rank": 14
+}

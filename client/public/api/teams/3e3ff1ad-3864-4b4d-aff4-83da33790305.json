@@ -1,0 +1,44 @@
+{
+  "id": "3e3ff1ad-3864-4b4d-aff4-83da33790305",
+  "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+  "name": "Barra",
+  "slug": "barra",
+  "color": "#f5c842",
+  "logoUrl": null,
+  "registrationUrl": "https://discord.gg/barra",
+  "registrationType": "external",
+  "registrationPlatform": "discord",
+  "registrationStatus": "completed",
+  "communityNote": "Formulario disponible en su servidor",
+  "createdAt": "2026-06-15T06:00:00.000Z",
+  "updatedAt": "2026-06-16T00:00:00.000Z",
+  "participants": [
+    {
+      "id": "8c38ab7e-e57a-46cd-887e-170d9402c8ab",
+      "teamId": "3e3ff1ad-3864-4b4d-aff4-83da33790305",
+      "name": "Barra",
+      "slug": "barra",
+      "type": "CREATOR",
+      "confirmed": true,
+      "teamName": "Barra"
+    },
+    {
+      "id": "f3d229d0-2e25-4fa1-b5fc-665361cecad8",
+      "teamId": "3e3ff1ad-3864-4b4d-aff4-83da33790305",
+      "name": "s7tier",
+      "slug": "s7tier",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "teamName": "Barra"
+    },
+    {
+      "id": "aec931d4-9438-4c6f-b3ad-58c83f888de2",
+      "teamId": "3e3ff1ad-3864-4b4d-aff4-83da33790305",
+      "name": "kikimaton",
+      "slug": "kikimaton",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "teamName": "Barra"
+    }
+  ]
+}

@@ -1,12 +1,12 @@
 {
   "id": "771764d6-5ae3-4976-83b6-bfae637de9a9",
   "name": "Wasteland Drone Cup",
-  "status": "LIVE",
+  "status": "COMPLETED",
   "currentMatchId": null,
   "currentMapId": null,
-  "createdAt": "2026-09-23T22:21:44.695Z",
-  "updatedAt": "2026-10-01T19:57:36.096Z",
   "tournamentReady": true,
   "confirmedParticipants": 15,
-  "totalParticipants": 15
+  "totalParticipants": 15,
+  "createdAt": "2026-06-15T14:00:00.000Z",
+  "updatedAt": "2026-06-16T00:00:00.000Z"
 }

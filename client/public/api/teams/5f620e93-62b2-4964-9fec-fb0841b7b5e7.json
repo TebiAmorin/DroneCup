@@ -1,0 +1,44 @@
+{
+  "id": "5f620e93-62b2-4964-9fec-fb0841b7b5e7",
+  "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+  "name": "SoraMusic",
+  "slug": "sora",
+  "color": "#22c55e",
+  "logoUrl": null,
+  "registrationUrl": "https://twitter.com/soramusicr6",
+  "registrationType": "external",
+  "registrationPlatform": "twitter",
+  "registrationStatus": "completed",
+  "communityNote": "Responde al tweet oficial fijado",
+  "createdAt": "2026-06-15T06:00:00.000Z",
+  "updatedAt": "2026-06-16T00:00:00.000Z",
+  "participants": [
+    {
+      "id": "447984d4-1a7b-4e3b-8147-65466248aa52",
+      "teamId": "5f620e93-62b2-4964-9fec-fb0841b7b5e7",
+      "name": "SoraMusic",
+      "slug": "soramusic",
+      "type": "CREATOR",
+      "confirmed": true,
+      "teamName": "SoraMusic"
+    },
+    {
+      "id": "ec2089ec-ef34-4b64-ad13-7835d1d16975",
+      "teamId": "5f620e93-62b2-4964-9fec-fb0841b7b5e7",
+      "name": "nix",
+      "slug": "nix",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "teamName": "SoraMusic"
+    },
+    {
+      "id": "e60d8caa-a07c-472c-9746-a939d06d4880",
+      "teamId": "5f620e93-62b2-4964-9fec-fb0841b7b5e7",
+      "name": "nei",
+      "slug": "nei",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "teamName": "SoraMusic"
+    }
+  ]
+}

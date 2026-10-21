@@ -1,0 +1,44 @@
+{
+  "id": "5d4843e2-b989-4db7-8202-eb728d5acefd",
+  "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+  "name": "Caramelo",
+  "slug": "caramelo",
+  "color": "#ef4444",
+  "logoUrl": null,
+  "registrationUrl": "https://twitter.com/CarameloOficial",
+  "registrationType": "external",
+  "registrationPlatform": "twitter",
+  "registrationStatus": "completed",
+  "communityNote": "Draft y plazas abiertas en su post de X",
+  "createdAt": "2026-06-15T06:00:00.000Z",
+  "updatedAt": "2026-06-16T00:00:00.000Z",
+  "participants": [
+    {
+      "id": "0b9a1953-a0a3-4a1b-aa91-f2967af15254",
+      "teamId": "5d4843e2-b989-4db7-8202-eb728d5acefd",
+      "name": "Caramelo",
+      "slug": "caramelo",
+      "type": "CREATOR",
+      "confirmed": true,
+      "teamName": "Caramelo"
+    },
+    {
+      "id": "000a6572-f5a0-4ea9-a5ce-0ce9e4006afd",
+      "teamId": "5d4843e2-b989-4db7-8202-eb728d5acefd",
+      "name": "voltrexa",
+      "slug": "voltrexa",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "teamName": "Caramelo"
+    },
+    {
+      "id": "191693c4-3429-4840-abf9-53d474b863c3",
+      "teamId": "5d4843e2-b989-4db7-8202-eb728d5acefd",
+      "name": "redlucky",
+      "slug": "redlucky",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "teamName": "Caramelo"
+    }
+  ]
+}

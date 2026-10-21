@@ -1,0 +1,47 @@
+{
+  "participantId": "ec2089ec-ef34-4b64-ad13-7835d1d16975",
+  "participantName": "nix",
+  "participantType": "PLAYER_1",
+  "teamId": "5f620e93-62b2-4964-9fec-fb0841b7b5e7",
+  "teamName": "SoraMusic",
+  "teamSlug": "sora",
+  "teamColor": "#22c55e",
+  "totalPoints": 8,
+  "wins": 0,
+  "podiums": 0,
+  "mapsPlayed": 6,
+  "averagePointsPerMap": 1.3,
+  "progression": [
+    {
+      "mapIndex": 1,
+      "code": "P1M1",
+      "points": 2
+    },
+    {
+      "mapIndex": 2,
+      "code": "P1M2",
+      "points": 3
+    },
+    {
+      "mapIndex": 3,
+      "code": "P1M3",
+      "points": 4
+    },
+    {
+      "mapIndex": 4,
+      "code": "P2M1",
+      "points": 5
+    },
+    {
+      "mapIndex": 5,
+      "code": "P2M2",
+      "points": 7
+    },
+    {
+      "mapIndex": 6,
+      "code": "P2M3",
+      "points": 8
+    }
+  ],
+  "rank": 15
+}

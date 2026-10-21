@@ -1,0 +1,47 @@
+{
+  "participantId": "5bdfa148-b8d3-45dd-a0d9-9a7befab4e49",
+  "participantName": "littlemonty",
+  "participantType": "PLAYER_1",
+  "teamId": "b09dbcb4-5cb8-4994-84ae-0089c547462f",
+  "teamName": "Vetel",
+  "teamSlug": "vetel",
+  "teamColor": "#38bdf8",
+  "totalPoints": 50,
+  "wins": 0,
+  "podiums": 0,
+  "mapsPlayed": 6,
+  "averagePointsPerMap": 8.3,
+  "progression": [
+    {
+      "mapIndex": 1,
+      "code": "P1M1",
+      "points": 12
+    },
+    {
+      "mapIndex": 2,
+      "code": "P1M2",
+      "points": 20
+    },
+    {
+      "mapIndex": 3,
+      "code": "P1M3",
+      "points": 30
+    },
+    {
+      "mapIndex": 4,
+      "code": "P2M1",
+      "points": 36
+    },
+    {
+      "mapIndex": 5,
+      "code": "P2M2",
+      "points": 44
+    },
+    {
+      "mapIndex": 6,
+      "code": "P2M3",
+      "points": 50
+    }
+  ],
+  "rank": 7
+}

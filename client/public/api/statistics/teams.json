@@ -1,1025 +1,515 @@
 [
   {
-    "teamId": "9ef76b14-e0f9-42b0-a574-18b397285228",
+    "teamId": "3e3ff1ad-3864-4b4d-aff4-83da33790305",
     "teamName": "Barra",
     "teamSlug": "barra",
-    "teamColor": "#ef4444",
-    "totalPoints": 442,
-    "globalPosition": 1,
+    "teamColor": "#f5c842",
+    "totalPoints": 315,
+    "wins": 3,
+    "podiums": 11,
     "mapsPlayed": 12,
-    "mapsWon": 10,
-    "pointsByMatch": [
+    "averagePointsPerMap": 26.3,
+    "participantBreakdown": [
       {
-        "matchId": "3bf95fc1-1729-4c8a-8af7-73e7b587653b",
-        "matchNumber": 1,
-        "points": 80
+        "participantId": "8c38ab7e-e57a-46cd-887e-170d9402c8ab",
+        "participantName": "Barra",
+        "participantType": "CREATOR",
+        "points": 219,
+        "wins": 3,
+        "podiums": 11,
+        "mapsPlayed": 12
       },
       {
-        "matchId": "ef15ccd7-9e08-4ee3-85ac-867be8b71dca",
-        "matchNumber": 2,
-        "points": 104
+        "participantId": "f3d229d0-2e25-4fa1-b5fc-665361cecad8",
+        "participantName": "s7tier",
+        "participantType": "PLAYER_1",
+        "points": 50,
+        "wins": 0,
+        "podiums": 0,
+        "mapsPlayed": 6
       },
       {
-        "matchId": "f0d13e29-6cfe-4232-8fbd-eb70ca56b7bd",
-        "matchNumber": 3,
-        "points": 129
-      },
-      {
-        "matchId": "f96c9da2-2ad8-4a69-9e83-8b78c40c4667",
-        "matchNumber": 4,
-        "points": 129
-      }
-    ],
-    "pointsByMap": [
-      {
-        "mapId": "8ccd6084-7baa-4d5b-a57f-a041b6931e14",
-        "mapCode": "P1M1",
-        "matchNumber": 1,
-        "mapIndex": 1,
-        "points": 37
-      },
-      {
-        "mapId": "dca79aef-ef2a-4454-9741-11dfc9791b93",
-        "mapCode": "P1M2",
-        "matchNumber": 1,
-        "mapIndex": 2,
-        "points": 40
-      },
-      {
-        "mapId": "83bedbba-43b9-4fd0-9332-970e2c98b235",
-        "mapCode": "P1M3",
-        "matchNumber": 1,
-        "mapIndex": 3,
-        "points": 3
-      },
-      {
-        "mapId": "51e3bdfa-a37b-4f3a-8d9c-4495f809187a",
-        "mapCode": "P2M1",
-        "matchNumber": 2,
-        "mapIndex": 1,
-        "points": 43
-      },
-      {
-        "mapId": "487b7934-783a-4a1b-b9cb-31a43f1b17b3",
-        "mapCode": "P2M2",
-        "matchNumber": 2,
-        "mapIndex": 2,
-        "points": 43
-      },
-      {
-        "mapId": "e550c2c7-a431-4326-a73b-e0cdbfb595fc",
-        "mapCode": "P2M3",
-        "matchNumber": 2,
-        "mapIndex": 3,
-        "points": 18
-      },
-      {
-        "mapId": "be273398-4abd-4687-b3ec-6fa7422510cf",
-        "mapCode": "P3M1",
-        "matchNumber": 3,
-        "mapIndex": 1,
-        "points": 43
-      },
-      {
-        "mapId": "f1f9ff60-587a-4dd3-b151-df5022184c3a",
-        "mapCode": "P3M2",
-        "matchNumber": 3,
-        "mapIndex": 2,
-        "points": 43
-      },
-      {
-        "mapId": "59b11dbf-6b3c-4dad-aefe-1d0ee00d967e",
-        "mapCode": "P3M3",
-        "matchNumber": 3,
-        "mapIndex": 3,
-        "points": 43
-      },
-      {
-        "mapId": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
-        "mapCode": "P4M1",
-        "matchNumber": 4,
-        "mapIndex": 1,
-        "points": 43
-      },
-      {
-        "mapId": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
-        "mapCode": "P4M2",
-        "matchNumber": 4,
-        "mapIndex": 2,
-        "points": 43
-      },
-      {
-        "mapId": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
-        "mapCode": "P4M3",
-        "matchNumber": 4,
-        "mapIndex": 3,
-        "points": 43
+        "participantId": "aec931d4-9438-4c6f-b3ad-58c83f888de2",
+        "participantName": "kikimaton",
+        "participantType": "PLAYER_2",
+        "points": 46,
+        "wins": 0,
+        "podiums": 0,
+        "mapsPlayed": 6
       }
     ],
     "progression": [
       {
-        "mapId": "8ccd6084-7baa-4d5b-a57f-a041b6931e14",
-        "mapCode": "P1M1",
-        "matchNumber": 1,
         "mapIndex": 1,
-        "cumulativePoints": 37
+        "code": "P1M1",
+        "points": 28
       },
       {
-        "mapId": "dca79aef-ef2a-4454-9741-11dfc9791b93",
-        "mapCode": "P1M2",
-        "matchNumber": 1,
         "mapIndex": 2,
-        "cumulativePoints": 77
+        "code": "P1M2",
+        "points": 63
       },
       {
-        "mapId": "83bedbba-43b9-4fd0-9332-970e2c98b235",
-        "mapCode": "P1M3",
-        "matchNumber": 1,
         "mapIndex": 3,
-        "cumulativePoints": 80
+        "code": "P1M3",
+        "points": 84
       },
       {
-        "mapId": "51e3bdfa-a37b-4f3a-8d9c-4495f809187a",
-        "mapCode": "P2M1",
-        "matchNumber": 2,
-        "mapIndex": 1,
-        "cumulativePoints": 123
+        "mapIndex": 4,
+        "code": "P2M1",
+        "points": 107
       },
       {
-        "mapId": "487b7934-783a-4a1b-b9cb-31a43f1b17b3",
-        "mapCode": "P2M2",
-        "matchNumber": 2,
-        "mapIndex": 2,
-        "cumulativePoints": 166
+        "mapIndex": 5,
+        "code": "P2M2",
+        "points": 131
       },
       {
-        "mapId": "e550c2c7-a431-4326-a73b-e0cdbfb595fc",
-        "mapCode": "P2M3",
-        "matchNumber": 2,
-        "mapIndex": 3,
-        "cumulativePoints": 184
+        "mapIndex": 6,
+        "code": "P2M3",
+        "points": 166
       },
       {
-        "mapId": "be273398-4abd-4687-b3ec-6fa7422510cf",
-        "mapCode": "P3M1",
-        "matchNumber": 3,
-        "mapIndex": 1,
-        "cumulativePoints": 227
+        "mapIndex": 7,
+        "code": "P3M1",
+        "points": 192
       },
       {
-        "mapId": "f1f9ff60-587a-4dd3-b151-df5022184c3a",
-        "mapCode": "P3M2",
-        "matchNumber": 3,
-        "mapIndex": 2,
-        "cumulativePoints": 270
+        "mapIndex": 8,
+        "code": "P3M2",
+        "points": 213
       },
       {
-        "mapId": "59b11dbf-6b3c-4dad-aefe-1d0ee00d967e",
-        "mapCode": "P3M3",
-        "matchNumber": 3,
-        "mapIndex": 3,
-        "cumulativePoints": 313
+        "mapIndex": 9,
+        "code": "P3M3",
+        "points": 233
       },
       {
-        "mapId": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
-        "mapCode": "P4M1",
-        "matchNumber": 4,
-        "mapIndex": 1,
-        "cumulativePoints": 356
+        "mapIndex": 10,
+        "code": "P4M1",
+        "points": 268
       },
       {
-        "mapId": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
-        "mapCode": "P4M2",
-        "matchNumber": 4,
-        "mapIndex": 2,
-        "cumulativePoints": 399
+        "mapIndex": 11,
+        "code": "P4M2",
+        "points": 294
       },
       {
-        "mapId": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
-        "mapCode": "P4M3",
-        "matchNumber": 4,
-        "mapIndex": 3,
-        "cumulativePoints": 442
+        "mapIndex": 12,
+        "code": "P4M3",
+        "points": 315
       }
     ],
     "rank": 1
   },
   {
-    "teamId": "d7213635-7820-4352-b543-3ffc20b11878",
+    "teamId": "b09dbcb4-5cb8-4994-84ae-0089c547462f",
     "teamName": "Vetel",
     "teamSlug": "vetel",
     "teamColor": "#38bdf8",
-    "totalPoints": 294,
-    "globalPosition": 2,
+    "totalPoints": 310,
+    "wins": 4,
+    "podiums": 9,
     "mapsPlayed": 12,
-    "mapsWon": 0,
-    "pointsByMatch": [
+    "averagePointsPerMap": 25.8,
+    "participantBreakdown": [
       {
-        "matchId": "3bf95fc1-1729-4c8a-8af7-73e7b587653b",
-        "matchNumber": 1,
-        "points": 68
+        "participantId": "0335df6e-6e55-4d64-8763-d1c389bdced1",
+        "participantName": "Vetel",
+        "participantType": "CREATOR",
+        "points": 220,
+        "wins": 4,
+        "podiums": 9,
+        "mapsPlayed": 12
       },
       {
-        "matchId": "ef15ccd7-9e08-4ee3-85ac-867be8b71dca",
-        "matchNumber": 2,
-        "points": 64
+        "participantId": "5bdfa148-b8d3-45dd-a0d9-9a7befab4e49",
+        "participantName": "littlemonty",
+        "participantType": "PLAYER_1",
+        "points": 50,
+        "wins": 0,
+        "podiums": 0,
+        "mapsPlayed": 6
       },
       {
-        "matchId": "f0d13e29-6cfe-4232-8fbd-eb70ca56b7bd",
-        "matchNumber": 3,
-        "points": 81
-      },
-      {
-        "matchId": "f96c9da2-2ad8-4a69-9e83-8b78c40c4667",
-        "matchNumber": 4,
-        "points": 81
-      }
-    ],
-    "pointsByMap": [
-      {
-        "mapId": "8ccd6084-7baa-4d5b-a57f-a041b6931e14",
-        "mapCode": "P1M1",
-        "matchNumber": 1,
-        "mapIndex": 1,
-        "points": 28
-      },
-      {
-        "mapId": "dca79aef-ef2a-4454-9741-11dfc9791b93",
-        "mapCode": "P1M2",
-        "matchNumber": 1,
-        "mapIndex": 2,
-        "points": 30
-      },
-      {
-        "mapId": "83bedbba-43b9-4fd0-9332-970e2c98b235",
-        "mapCode": "P1M3",
-        "matchNumber": 1,
-        "mapIndex": 3,
-        "points": 10
-      },
-      {
-        "mapId": "51e3bdfa-a37b-4f3a-8d9c-4495f809187a",
-        "mapCode": "P2M1",
-        "matchNumber": 2,
-        "mapIndex": 1,
-        "points": 27
-      },
-      {
-        "mapId": "487b7934-783a-4a1b-b9cb-31a43f1b17b3",
-        "mapCode": "P2M2",
-        "matchNumber": 2,
-        "mapIndex": 2,
-        "points": 27
-      },
-      {
-        "mapId": "e550c2c7-a431-4326-a73b-e0cdbfb595fc",
-        "mapCode": "P2M3",
-        "matchNumber": 2,
-        "mapIndex": 3,
-        "points": 10
-      },
-      {
-        "mapId": "be273398-4abd-4687-b3ec-6fa7422510cf",
-        "mapCode": "P3M1",
-        "matchNumber": 3,
-        "mapIndex": 1,
-        "points": 27
-      },
-      {
-        "mapId": "f1f9ff60-587a-4dd3-b151-df5022184c3a",
-        "mapCode": "P3M2",
-        "matchNumber": 3,
-        "mapIndex": 2,
-        "points": 27
-      },
-      {
-        "mapId": "59b11dbf-6b3c-4dad-aefe-1d0ee00d967e",
-        "mapCode": "P3M3",
-        "matchNumber": 3,
-        "mapIndex": 3,
-        "points": 27
-      },
-      {
-        "mapId": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
-        "mapCode": "P4M1",
-        "matchNumber": 4,
-        "mapIndex": 1,
-        "points": 27
-      },
-      {
-        "mapId": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
-        "mapCode": "P4M2",
-        "matchNumber": 4,
-        "mapIndex": 2,
-        "points": 27
-      },
-      {
-        "mapId": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
-        "mapCode": "P4M3",
-        "matchNumber": 4,
-        "mapIndex": 3,
-        "points": 27
+        "participantId": "2b4c12a4-2d60-40bd-8c60-9329952ab01a",
+        "participantName": "nemessys",
+        "participantType": "PLAYER_2",
+        "points": 40,
+        "wins": 0,
+        "podiums": 0,
+        "mapsPlayed": 6
       }
     ],
     "progression": [
       {
-        "mapId": "8ccd6084-7baa-4d5b-a57f-a041b6931e14",
-        "mapCode": "P1M1",
-        "matchNumber": 1,
         "mapIndex": 1,
-        "cumulativePoints": 28
+        "code": "P1M1",
+        "points": 37
       },
       {
-        "mapId": "dca79aef-ef2a-4454-9741-11dfc9791b93",
-        "mapCode": "P1M2",
-        "matchNumber": 1,
         "mapIndex": 2,
-        "cumulativePoints": 58
+        "code": "P1M2",
+        "points": 60
       },
       {
-        "mapId": "83bedbba-43b9-4fd0-9332-970e2c98b235",
-        "mapCode": "P1M3",
-        "matchNumber": 1,
         "mapIndex": 3,
-        "cumulativePoints": 68
+        "code": "P1M3",
+        "points": 88
       },
       {
-        "mapId": "51e3bdfa-a37b-4f3a-8d9c-4495f809187a",
-        "mapCode": "P2M1",
-        "matchNumber": 2,
-        "mapIndex": 1,
-        "cumulativePoints": 95
+        "mapIndex": 4,
+        "code": "P2M1",
+        "points": 119
       },
       {
-        "mapId": "487b7934-783a-4a1b-b9cb-31a43f1b17b3",
-        "mapCode": "P2M2",
-        "matchNumber": 2,
-        "mapIndex": 2,
-        "cumulativePoints": 122
+        "mapIndex": 5,
+        "code": "P2M2",
+        "points": 139
       },
       {
-        "mapId": "e550c2c7-a431-4326-a73b-e0cdbfb595fc",
-        "mapCode": "P2M3",
-        "matchNumber": 2,
-        "mapIndex": 3,
-        "cumulativePoints": 132
+        "mapIndex": 6,
+        "code": "P2M3",
+        "points": 163
       },
       {
-        "mapId": "be273398-4abd-4687-b3ec-6fa7422510cf",
-        "mapCode": "P3M1",
-        "matchNumber": 3,
-        "mapIndex": 1,
-        "cumulativePoints": 159
+        "mapIndex": 7,
+        "code": "P3M1",
+        "points": 181
       },
       {
-        "mapId": "f1f9ff60-587a-4dd3-b151-df5022184c3a",
-        "mapCode": "P3M2",
-        "matchNumber": 3,
-        "mapIndex": 2,
-        "cumulativePoints": 186
+        "mapIndex": 8,
+        "code": "P3M2",
+        "points": 214
       },
       {
-        "mapId": "59b11dbf-6b3c-4dad-aefe-1d0ee00d967e",
-        "mapCode": "P3M3",
-        "matchNumber": 3,
-        "mapIndex": 3,
-        "cumulativePoints": 213
+        "mapIndex": 9,
+        "code": "P3M3",
+        "points": 235
       },
       {
-        "mapId": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
-        "mapCode": "P4M1",
-        "matchNumber": 4,
-        "mapIndex": 1,
-        "cumulativePoints": 240
+        "mapIndex": 10,
+        "code": "P4M1",
+        "points": 259
       },
       {
-        "mapId": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
-        "mapCode": "P4M2",
-        "matchNumber": 4,
-        "mapIndex": 2,
-        "cumulativePoints": 267
+        "mapIndex": 11,
+        "code": "P4M2",
+        "points": 290
       },
       {
-        "mapId": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
-        "mapCode": "P4M3",
-        "matchNumber": 4,
-        "mapIndex": 3,
-        "cumulativePoints": 294
+        "mapIndex": 12,
+        "code": "P4M3",
+        "points": 310
       }
     ],
     "rank": 2
   },
   {
-    "teamId": "3efcb850-00aa-4a58-b3b9-091fcb5e32c1",
+    "teamId": "5d4843e2-b989-4db7-8202-eb728d5acefd",
     "teamName": "Caramelo",
     "teamSlug": "caramelo",
-    "teamColor": "#f5c842",
-    "totalPoints": 202,
-    "globalPosition": 3,
+    "teamColor": "#ef4444",
+    "totalPoints": 258,
+    "wins": 3,
+    "podiums": 9,
     "mapsPlayed": 12,
-    "mapsWon": 0,
-    "pointsByMatch": [
+    "averagePointsPerMap": 21.5,
+    "participantBreakdown": [
       {
-        "matchId": "3bf95fc1-1729-4c8a-8af7-73e7b587653b",
-        "matchNumber": 1,
-        "points": 55
+        "participantId": "0b9a1953-a0a3-4a1b-aa91-f2967af15254",
+        "participantName": "Caramelo",
+        "participantType": "CREATOR",
+        "points": 210,
+        "wins": 3,
+        "podiums": 9,
+        "mapsPlayed": 12
       },
       {
-        "matchId": "ef15ccd7-9e08-4ee3-85ac-867be8b71dca",
-        "matchNumber": 2,
-        "points": 39
+        "participantId": "000a6572-f5a0-4ea9-a5ce-0ce9e4006afd",
+        "participantName": "voltrexa",
+        "participantType": "PLAYER_1",
+        "points": 24,
+        "wins": 0,
+        "podiums": 0,
+        "mapsPlayed": 6
       },
       {
-        "matchId": "f0d13e29-6cfe-4232-8fbd-eb70ca56b7bd",
-        "matchNumber": 3,
-        "points": 54
-      },
-      {
-        "matchId": "f96c9da2-2ad8-4a69-9e83-8b78c40c4667",
-        "matchNumber": 4,
-        "points": 54
-      }
-    ],
-    "pointsByMap": [
-      {
-        "mapId": "8ccd6084-7baa-4d5b-a57f-a041b6931e14",
-        "mapCode": "P1M1",
-        "matchNumber": 1,
-        "mapIndex": 1,
-        "points": 23
-      },
-      {
-        "mapId": "dca79aef-ef2a-4454-9741-11dfc9791b93",
-        "mapCode": "P1M2",
-        "matchNumber": 1,
-        "mapIndex": 2,
-        "points": 14
-      },
-      {
-        "mapId": "83bedbba-43b9-4fd0-9332-970e2c98b235",
-        "mapCode": "P1M3",
-        "matchNumber": 1,
-        "mapIndex": 3,
-        "points": 18
-      },
-      {
-        "mapId": "51e3bdfa-a37b-4f3a-8d9c-4495f809187a",
-        "mapCode": "P2M1",
-        "matchNumber": 2,
-        "mapIndex": 1,
-        "points": 18
-      },
-      {
-        "mapId": "487b7934-783a-4a1b-b9cb-31a43f1b17b3",
-        "mapCode": "P2M2",
-        "matchNumber": 2,
-        "mapIndex": 2,
-        "points": 18
-      },
-      {
-        "mapId": "e550c2c7-a431-4326-a73b-e0cdbfb595fc",
-        "mapCode": "P2M3",
-        "matchNumber": 2,
-        "mapIndex": 3,
-        "points": 3
-      },
-      {
-        "mapId": "be273398-4abd-4687-b3ec-6fa7422510cf",
-        "mapCode": "P3M1",
-        "matchNumber": 3,
-        "mapIndex": 1,
-        "points": 18
-      },
-      {
-        "mapId": "f1f9ff60-587a-4dd3-b151-df5022184c3a",
-        "mapCode": "P3M2",
-        "matchNumber": 3,
-        "mapIndex": 2,
-        "points": 18
-      },
-      {
-        "mapId": "59b11dbf-6b3c-4dad-aefe-1d0ee00d967e",
-        "mapCode": "P3M3",
-        "matchNumber": 3,
-        "mapIndex": 3,
-        "points": 18
-      },
-      {
-        "mapId": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
-        "mapCode": "P4M1",
-        "matchNumber": 4,
-        "mapIndex": 1,
-        "points": 18
-      },
-      {
-        "mapId": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
-        "mapCode": "P4M2",
-        "matchNumber": 4,
-        "mapIndex": 2,
-        "points": 18
-      },
-      {
-        "mapId": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
-        "mapCode": "P4M3",
-        "matchNumber": 4,
-        "mapIndex": 3,
-        "points": 18
+        "participantId": "191693c4-3429-4840-abf9-53d474b863c3",
+        "participantName": "redlucky",
+        "participantType": "PLAYER_2",
+        "points": 24,
+        "wins": 0,
+        "podiums": 0,
+        "mapsPlayed": 6
       }
     ],
     "progression": [
       {
-        "mapId": "8ccd6084-7baa-4d5b-a57f-a041b6931e14",
-        "mapCode": "P1M1",
-        "matchNumber": 1,
         "mapIndex": 1,
-        "cumulativePoints": 23
+        "code": "P1M1",
+        "points": 19
       },
       {
-        "mapId": "dca79aef-ef2a-4454-9741-11dfc9791b93",
-        "mapCode": "P1M2",
-        "matchNumber": 1,
         "mapIndex": 2,
-        "cumulativePoints": 37
+        "code": "P1M2",
+        "points": 41
       },
       {
-        "mapId": "83bedbba-43b9-4fd0-9332-970e2c98b235",
-        "mapCode": "P1M3",
-        "matchNumber": 1,
         "mapIndex": 3,
-        "cumulativePoints": 55
+        "code": "P1M3",
+        "points": 70
       },
       {
-        "mapId": "51e3bdfa-a37b-4f3a-8d9c-4495f809187a",
-        "mapCode": "P2M1",
-        "matchNumber": 2,
-        "mapIndex": 1,
-        "cumulativePoints": 73
+        "mapIndex": 4,
+        "code": "P2M1",
+        "points": 92
       },
       {
-        "mapId": "487b7934-783a-4a1b-b9cb-31a43f1b17b3",
-        "mapCode": "P2M2",
-        "matchNumber": 2,
-        "mapIndex": 2,
-        "cumulativePoints": 91
+        "mapIndex": 5,
+        "code": "P2M2",
+        "points": 111
       },
       {
-        "mapId": "e550c2c7-a431-4326-a73b-e0cdbfb595fc",
-        "mapCode": "P2M3",
-        "matchNumber": 2,
-        "mapIndex": 3,
-        "cumulativePoints": 94
+        "mapIndex": 6,
+        "code": "P2M3",
+        "points": 127
       },
       {
-        "mapId": "be273398-4abd-4687-b3ec-6fa7422510cf",
-        "mapCode": "P3M1",
-        "matchNumber": 3,
-        "mapIndex": 1,
-        "cumulativePoints": 112
+        "mapIndex": 7,
+        "code": "P3M1",
+        "points": 156
       },
       {
-        "mapId": "f1f9ff60-587a-4dd3-b151-df5022184c3a",
-        "mapCode": "P3M2",
-        "matchNumber": 3,
-        "mapIndex": 2,
-        "cumulativePoints": 130
+        "mapIndex": 8,
+        "code": "P3M2",
+        "points": 172
       },
       {
-        "mapId": "59b11dbf-6b3c-4dad-aefe-1d0ee00d967e",
-        "mapCode": "P3M3",
-        "matchNumber": 3,
-        "mapIndex": 3,
-        "cumulativePoints": 148
+        "mapIndex": 9,
+        "code": "P3M3",
+        "points": 194
       },
       {
-        "mapId": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
-        "mapCode": "P4M1",
-        "matchNumber": 4,
-        "mapIndex": 1,
-        "cumulativePoints": 166
+        "mapIndex": 10,
+        "code": "P4M1",
+        "points": 213
       },
       {
-        "mapId": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
-        "mapCode": "P4M2",
-        "matchNumber": 4,
-        "mapIndex": 2,
-        "cumulativePoints": 184
+        "mapIndex": 11,
+        "code": "P4M2",
+        "points": 229
       },
       {
-        "mapId": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
-        "mapCode": "P4M3",
-        "matchNumber": 4,
-        "mapIndex": 3,
-        "cumulativePoints": 202
+        "mapIndex": 12,
+        "code": "P4M3",
+        "points": 258
       }
     ],
     "rank": 3
   },
   {
-    "teamId": "5da730b7-3981-42cd-801f-4048df75504b",
+    "teamId": "5f620e93-62b2-4964-9fec-fb0841b7b5e7",
     "teamName": "SoraMusic",
     "teamSlug": "sora",
-    "teamColor": "#a855f7",
-    "totalPoints": 174,
-    "globalPosition": 4,
+    "teamColor": "#22c55e",
+    "totalPoints": 202,
+    "wins": 2,
+    "podiums": 7,
     "mapsPlayed": 12,
-    "mapsWon": 1,
-    "pointsByMatch": [
+    "averagePointsPerMap": 16.8,
+    "participantBreakdown": [
       {
-        "matchId": "3bf95fc1-1729-4c8a-8af7-73e7b587653b",
-        "matchNumber": 1,
-        "points": 51
+        "participantId": "447984d4-1a7b-4e3b-8147-65466248aa52",
+        "participantName": "SoraMusic",
+        "participantType": "CREATOR",
+        "points": 185,
+        "wins": 2,
+        "podiums": 7,
+        "mapsPlayed": 12
       },
       {
-        "matchId": "ef15ccd7-9e08-4ee3-85ac-867be8b71dca",
-        "matchNumber": 2,
-        "points": 63
+        "participantId": "ec2089ec-ef34-4b64-ad13-7835d1d16975",
+        "participantName": "nix",
+        "participantType": "PLAYER_1",
+        "points": 8,
+        "wins": 0,
+        "podiums": 0,
+        "mapsPlayed": 6
       },
       {
-        "matchId": "f0d13e29-6cfe-4232-8fbd-eb70ca56b7bd",
-        "matchNumber": 3,
-        "points": 30
-      },
-      {
-        "matchId": "f96c9da2-2ad8-4a69-9e83-8b78c40c4667",
-        "matchNumber": 4,
-        "points": 30
-      }
-    ],
-    "pointsByMap": [
-      {
-        "mapId": "8ccd6084-7baa-4d5b-a57f-a041b6931e14",
-        "mapCode": "P1M1",
-        "matchNumber": 1,
-        "mapIndex": 1,
-        "points": 10
-      },
-      {
-        "mapId": "dca79aef-ef2a-4454-9741-11dfc9791b93",
-        "mapCode": "P1M2",
-        "matchNumber": 1,
-        "mapIndex": 2,
-        "points": 14
-      },
-      {
-        "mapId": "83bedbba-43b9-4fd0-9332-970e2c98b235",
-        "mapCode": "P1M3",
-        "matchNumber": 1,
-        "mapIndex": 3,
-        "points": 27
-      },
-      {
-        "mapId": "51e3bdfa-a37b-4f3a-8d9c-4495f809187a",
-        "mapCode": "P2M1",
-        "matchNumber": 2,
-        "mapIndex": 1,
-        "points": 10
-      },
-      {
-        "mapId": "487b7934-783a-4a1b-b9cb-31a43f1b17b3",
-        "mapCode": "P2M2",
-        "matchNumber": 2,
-        "mapIndex": 2,
-        "points": 10
-      },
-      {
-        "mapId": "e550c2c7-a431-4326-a73b-e0cdbfb595fc",
-        "mapCode": "P2M3",
-        "matchNumber": 2,
-        "mapIndex": 3,
-        "points": 43
-      },
-      {
-        "mapId": "be273398-4abd-4687-b3ec-6fa7422510cf",
-        "mapCode": "P3M1",
-        "matchNumber": 3,
-        "mapIndex": 1,
-        "points": 10
-      },
-      {
-        "mapId": "f1f9ff60-587a-4dd3-b151-df5022184c3a",
-        "mapCode": "P3M2",
-        "matchNumber": 3,
-        "mapIndex": 2,
-        "points": 10
-      },
-      {
-        "mapId": "59b11dbf-6b3c-4dad-aefe-1d0ee00d967e",
-        "mapCode": "P3M3",
-        "matchNumber": 3,
-        "mapIndex": 3,
-        "points": 10
-      },
-      {
-        "mapId": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
-        "mapCode": "P4M1",
-        "matchNumber": 4,
-        "mapIndex": 1,
-        "points": 10
-      },
-      {
-        "mapId": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
-        "mapCode": "P4M2",
-        "matchNumber": 4,
-        "mapIndex": 2,
-        "points": 10
-      },
-      {
-        "mapId": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
-        "mapCode": "P4M3",
-        "matchNumber": 4,
-        "mapIndex": 3,
-        "points": 10
+        "participantId": "e60d8caa-a07c-472c-9746-a939d06d4880",
+        "participantName": "nei",
+        "participantType": "PLAYER_2",
+        "points": 9,
+        "wins": 0,
+        "podiums": 0,
+        "mapsPlayed": 6
       }
     ],
     "progression": [
       {
-        "mapId": "8ccd6084-7baa-4d5b-a57f-a041b6931e14",
-        "mapCode": "P1M1",
-        "matchNumber": 1,
         "mapIndex": 1,
-        "cumulativePoints": 10
+        "code": "P1M1",
+        "points": 10
       },
       {
-        "mapId": "dca79aef-ef2a-4454-9741-11dfc9791b93",
-        "mapCode": "P1M2",
-        "matchNumber": 1,
         "mapIndex": 2,
-        "cumulativePoints": 24
+        "code": "P1M2",
+        "points": 23
       },
       {
-        "mapId": "83bedbba-43b9-4fd0-9332-970e2c98b235",
-        "mapCode": "P1M3",
-        "matchNumber": 1,
         "mapIndex": 3,
-        "cumulativePoints": 51
+        "code": "P1M3",
+        "points": 36
       },
       {
-        "mapId": "51e3bdfa-a37b-4f3a-8d9c-4495f809187a",
-        "mapCode": "P2M1",
-        "matchNumber": 2,
-        "mapIndex": 1,
-        "cumulativePoints": 61
+        "mapIndex": 4,
+        "code": "P2M1",
+        "points": 47
       },
       {
-        "mapId": "487b7934-783a-4a1b-b9cb-31a43f1b17b3",
-        "mapCode": "P2M2",
-        "matchNumber": 2,
-        "mapIndex": 2,
-        "cumulativePoints": 71
+        "mapIndex": 5,
+        "code": "P2M2",
+        "points": 74
       },
       {
-        "mapId": "e550c2c7-a431-4326-a73b-e0cdbfb595fc",
-        "mapCode": "P2M3",
-        "matchNumber": 2,
-        "mapIndex": 3,
-        "cumulativePoints": 114
+        "mapIndex": 6,
+        "code": "P2M3",
+        "points": 90
       },
       {
-        "mapId": "be273398-4abd-4687-b3ec-6fa7422510cf",
-        "mapCode": "P3M1",
-        "matchNumber": 3,
-        "mapIndex": 1,
-        "cumulativePoints": 124
+        "mapIndex": 7,
+        "code": "P3M1",
+        "points": 107
       },
       {
-        "mapId": "f1f9ff60-587a-4dd3-b151-df5022184c3a",
-        "mapCode": "P3M2",
-        "matchNumber": 3,
-        "mapIndex": 2,
-        "cumulativePoints": 134
+        "mapIndex": 8,
+        "code": "P3M2",
+        "points": 126
       },
       {
-        "mapId": "59b11dbf-6b3c-4dad-aefe-1d0ee00d967e",
-        "mapCode": "P3M3",
-        "matchNumber": 3,
-        "mapIndex": 3,
-        "cumulativePoints": 144
+        "mapIndex": 9,
+        "code": "P3M3",
+        "points": 153
       },
       {
-        "mapId": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
-        "mapCode": "P4M1",
-        "matchNumber": 4,
-        "mapIndex": 1,
-        "cumulativePoints": 154
+        "mapIndex": 10,
+        "code": "P4M1",
+        "points": 166
       },
       {
-        "mapId": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
-        "mapCode": "P4M2",
-        "matchNumber": 4,
-        "mapIndex": 2,
-        "cumulativePoints": 164
+        "mapIndex": 11,
+        "code": "P4M2",
+        "points": 183
       },
       {
-        "mapId": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
-        "mapCode": "P4M3",
-        "matchNumber": 4,
-        "mapIndex": 3,
-        "cumulativePoints": 174
+        "mapIndex": 12,
+        "code": "P4M3",
+        "points": 202
       }
     ],
     "rank": 4
   },
   {
-    "teamId": "0a92676a-460f-4dff-85f1-1f449940d6ea",
+    "teamId": "07ef3fa0-ed87-42bf-ac18-349a21f94848",
     "teamName": "Miwell",
     "teamSlug": "miwell",
-    "teamColor": "#22c55e",
-    "totalPoints": 100,
-    "globalPosition": 5,
+    "teamColor": "#a855f7",
+    "totalPoints": 127,
+    "wins": 0,
+    "podiums": 0,
     "mapsPlayed": 12,
-    "mapsWon": 1,
-    "pointsByMatch": [
+    "averagePointsPerMap": 10.6,
+    "participantBreakdown": [
       {
-        "matchId": "3bf95fc1-1729-4c8a-8af7-73e7b587653b",
-        "matchNumber": 1,
-        "points": 49
+        "participantId": "8ec031c1-4e3e-46d0-ae93-9a4a674a88a5",
+        "participantName": "Miwell",
+        "participantType": "CREATOR",
+        "points": 108,
+        "wins": 0,
+        "podiums": 0,
+        "mapsPlayed": 12
       },
       {
-        "matchId": "ef15ccd7-9e08-4ee3-85ac-867be8b71dca",
-        "matchNumber": 2,
-        "points": 33
+        "participantId": "02dbbb1d-aa2a-4bef-b930-46ccc4cd669c",
+        "participantName": "johnyhipster",
+        "participantType": "PLAYER_1",
+        "points": 10,
+        "wins": 0,
+        "podiums": 0,
+        "mapsPlayed": 6
       },
       {
-        "matchId": "f0d13e29-6cfe-4232-8fbd-eb70ca56b7bd",
-        "matchNumber": 3,
-        "points": 9
-      },
-      {
-        "matchId": "f96c9da2-2ad8-4a69-9e83-8b78c40c4667",
-        "matchNumber": 4,
-        "points": 9
-      }
-    ],
-    "pointsByMap": [
-      {
-        "mapId": "8ccd6084-7baa-4d5b-a57f-a041b6931e14",
-        "mapCode": "P1M1",
-        "matchNumber": 1,
-        "mapIndex": 1,
-        "points": 3
-      },
-      {
-        "mapId": "dca79aef-ef2a-4454-9741-11dfc9791b93",
-        "mapCode": "P1M2",
-        "matchNumber": 1,
-        "mapIndex": 2,
-        "points": 3
-      },
-      {
-        "mapId": "83bedbba-43b9-4fd0-9332-970e2c98b235",
-        "mapCode": "P1M3",
-        "matchNumber": 1,
-        "mapIndex": 3,
-        "points": 43
-      },
-      {
-        "mapId": "51e3bdfa-a37b-4f3a-8d9c-4495f809187a",
-        "mapCode": "P2M1",
-        "matchNumber": 2,
-        "mapIndex": 1,
-        "points": 3
-      },
-      {
-        "mapId": "487b7934-783a-4a1b-b9cb-31a43f1b17b3",
-        "mapCode": "P2M2",
-        "matchNumber": 2,
-        "mapIndex": 2,
-        "points": 3
-      },
-      {
-        "mapId": "e550c2c7-a431-4326-a73b-e0cdbfb595fc",
-        "mapCode": "P2M3",
-        "matchNumber": 2,
-        "mapIndex": 3,
-        "points": 27
-      },
-      {
-        "mapId": "be273398-4abd-4687-b3ec-6fa7422510cf",
-        "mapCode": "P3M1",
-        "matchNumber": 3,
-        "mapIndex": 1,
-        "points": 3
-      },
-      {
-        "mapId": "f1f9ff60-587a-4dd3-b151-df5022184c3a",
-        "mapCode": "P3M2",
-        "matchNumber": 3,
-        "mapIndex": 2,
-        "points": 3
-      },
-      {
-        "mapId": "59b11dbf-6b3c-4dad-aefe-1d0ee00d967e",
-        "mapCode": "P3M3",
-        "matchNumber": 3,
-        "mapIndex": 3,
-        "points": 3
-      },
-      {
-        "mapId": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
-        "mapCode": "P4M1",
-        "matchNumber": 4,
-        "mapIndex": 1,
-        "points": 3
-      },
-      {
-        "mapId": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
-        "mapCode": "P4M2",
-        "matchNumber": 4,
-        "mapIndex": 2,
-        "points": 3
-      },
-      {
-        "mapId": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
-        "mapCode": "P4M3",
-        "matchNumber": 4,
-        "mapIndex": 3,
-        "points": 3
+        "participantId": "b16e980f-e099-4602-96b7-a97e7f3c810a",
+        "participantName": "fost",
+        "participantType": "PLAYER_2",
+        "points": 9,
+        "wins": 0,
+        "podiums": 0,
+        "mapsPlayed": 6
       }
     ],
     "progression": [
       {
-        "mapId": "8ccd6084-7baa-4d5b-a57f-a041b6931e14",
-        "mapCode": "P1M1",
-        "matchNumber": 1,
         "mapIndex": 1,
-        "cumulativePoints": 3
+        "code": "P1M1",
+        "points": 7
       },
       {
-        "mapId": "dca79aef-ef2a-4454-9741-11dfc9791b93",
-        "mapCode": "P1M2",
-        "matchNumber": 1,
         "mapIndex": 2,
-        "cumulativePoints": 6
+        "code": "P1M2",
+        "points": 15
       },
       {
-        "mapId": "83bedbba-43b9-4fd0-9332-970e2c98b235",
-        "mapCode": "P1M3",
-        "matchNumber": 1,
         "mapIndex": 3,
-        "cumulativePoints": 49
+        "code": "P1M3",
+        "points": 25
       },
       {
-        "mapId": "51e3bdfa-a37b-4f3a-8d9c-4495f809187a",
-        "mapCode": "P2M1",
-        "matchNumber": 2,
-        "mapIndex": 1,
-        "cumulativePoints": 52
+        "mapIndex": 4,
+        "code": "P2M1",
+        "points": 39
       },
       {
-        "mapId": "487b7934-783a-4a1b-b9cb-31a43f1b17b3",
-        "mapCode": "P2M2",
-        "matchNumber": 2,
-        "mapIndex": 2,
-        "cumulativePoints": 55
+        "mapIndex": 5,
+        "code": "P2M2",
+        "points": 50
       },
       {
-        "mapId": "e550c2c7-a431-4326-a73b-e0cdbfb595fc",
-        "mapCode": "P2M3",
-        "matchNumber": 2,
-        "mapIndex": 3,
-        "cumulativePoints": 82
+        "mapIndex": 6,
+        "code": "P2M3",
+        "points": 60
       },
       {
-        "mapId": "be273398-4abd-4687-b3ec-6fa7422510cf",
-        "mapCode": "P3M1",
-        "matchNumber": 3,
-        "mapIndex": 1,
-        "cumulativePoints": 85
+        "mapIndex": 7,
+        "code": "P3M1",
+        "points": 71
       },
       {
-        "mapId": "f1f9ff60-587a-4dd3-b151-df5022184c3a",
-        "mapCode": "P3M2",
-        "matchNumber": 3,
-        "mapIndex": 2,
-        "cumulativePoints": 88
+        "mapIndex": 8,
+        "code": "P3M2",
+        "points": 83
       },
       {
-        "mapId": "59b11dbf-6b3c-4dad-aefe-1d0ee00d967e",
-        "mapCode": "P3M3",
-        "matchNumber": 3,
-        "mapIndex": 3,
-        "cumulativePoints": 91
+        "mapIndex": 9,
+        "code": "P3M3",
+        "points": 94
       },
       {
-        "mapId": "7ccc0e67-9fca-4f5a-bd94-16431dbf55c5",
-        "mapCode": "P4M1",
-        "matchNumber": 4,
-        "mapIndex": 1,
-        "cumulativePoints": 94
+        "mapIndex": 10,
+        "code": "P4M1",
+        "points": 104
       },
       {
-        "mapId": "9ca9f334-ec31-4e00-abcf-628ea13b26c4",
-        "mapCode": "P4M2",
-        "matchNumber": 4,
-        "mapIndex": 2,
-        "cumulativePoints": 97
+        "mapIndex": 11,
+        "code": "P4M2",
+        "points": 115
       },
       {
-        "mapId": "1637f1e6-9c94-48e3-a84b-092c30b289bb",
-        "mapCode": "P4M3",
-        "matchNumber": 4,
-        "mapIndex": 3,
-        "cumulativePoints": 100
+        "mapIndex": 12,
+        "code": "P4M3",
+        "points": 127
       }
     ],
     "rank": 5

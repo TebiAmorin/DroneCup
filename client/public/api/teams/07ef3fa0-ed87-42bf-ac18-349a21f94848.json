@@ -1,0 +1,44 @@
+{
+  "id": "07ef3fa0-ed87-42bf-ac18-349a21f94848",
+  "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+  "name": "Miwell",
+  "slug": "miwell",
+  "color": "#a855f7",
+  "logoUrl": null,
+  "registrationUrl": "https://www.twitch.tv/DonMiwell",
+  "registrationType": "external",
+  "registrationPlatform": "twitch",
+  "registrationStatus": "completed",
+  "communityNote": "Clasificatorio en directo durante su stream",
+  "createdAt": "2026-06-15T06:00:00.000Z",
+  "updatedAt": "2026-06-16T00:00:00.000Z",
+  "participants": [
+    {
+      "id": "8ec031c1-4e3e-46d0-ae93-9a4a674a88a5",
+      "teamId": "07ef3fa0-ed87-42bf-ac18-349a21f94848",
+      "name": "Miwell",
+      "slug": "miwell",
+      "type": "CREATOR",
+      "confirmed": true,
+      "teamName": "Miwell"
+    },
+    {
+      "id": "02dbbb1d-aa2a-4bef-b930-46ccc4cd669c",
+      "teamId": "07ef3fa0-ed87-42bf-ac18-349a21f94848",
+      "name": "johnyhipster",
+      "slug": "johnyhipster",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "teamName": "Miwell"
+    },
+    {
+      "id": "b16e980f-e099-4602-96b7-a97e7f3c810a",
+      "teamId": "07ef3fa0-ed87-42bf-ac18-349a21f94848",
+      "name": "fost",
+      "slug": "fost",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "teamName": "Miwell"
+    }
+  ]
+}

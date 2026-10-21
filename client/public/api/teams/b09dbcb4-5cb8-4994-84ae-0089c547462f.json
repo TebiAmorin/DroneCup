@@ -1,0 +1,44 @@
+{
+  "id": "b09dbcb4-5cb8-4994-84ae-0089c547462f",
+  "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+  "name": "Vetel",
+  "slug": "vetel",
+  "color": "#38bdf8",
+  "logoUrl": null,
+  "registrationUrl": "https://discord.gg/vetel",
+  "registrationType": "external",
+  "registrationPlatform": "discord",
+  "registrationStatus": "completed",
+  "communityNote": "Inscripciones en el canal #drone-cup",
+  "createdAt": "2026-06-15T06:00:00.000Z",
+  "updatedAt": "2026-06-16T00:00:00.000Z",
+  "participants": [
+    {
+      "id": "0335df6e-6e55-4d64-8763-d1c389bdced1",
+      "teamId": "b09dbcb4-5cb8-4994-84ae-0089c547462f",
+      "name": "Vetel",
+      "slug": "vetel",
+      "type": "CREATOR",
+      "confirmed": true,
+      "teamName": "Vetel"
+    },
+    {
+      "id": "5bdfa148-b8d3-45dd-a0d9-9a7befab4e49",
+      "teamId": "b09dbcb4-5cb8-4994-84ae-0089c547462f",
+      "name": "littlemonty",
+      "slug": "littlemonty",
+      "type": "PLAYER_1",
+      "confirmed": true,
+      "teamName": "Vetel"
+    },
+    {
+      "id": "2b4c12a4-2d60-40bd-8c60-9329952ab01a",
+      "teamId": "b09dbcb4-5cb8-4994-84ae-0089c547462f",
+      "name": "nemessys",
+      "slug": "nemessys",
+      "type": "PLAYER_2",
+      "confirmed": true,
+      "teamName": "Vetel"
+    }
+  ]
+}

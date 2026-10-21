@@ -1,0 +1,47 @@
+{
+  "participantId": "000a6572-f5a0-4ea9-a5ce-0ce9e4006afd",
+  "participantName": "voltrexa",
+  "participantType": "PLAYER_1",
+  "teamId": "5d4843e2-b989-4db7-8202-eb728d5acefd",
+  "teamName": "Caramelo",
+  "teamSlug": "caramelo",
+  "teamColor": "#ef4444",
+  "totalPoints": 24,
+  "wins": 0,
+  "podiums": 0,
+  "mapsPlayed": 6,
+  "averagePointsPerMap": 4,
+  "progression": [
+    {
+      "mapIndex": 1,
+      "code": "P1M1",
+      "points": 4
+    },
+    {
+      "mapIndex": 2,
+      "code": "P1M2",
+      "points": 8
+    },
+    {
+      "mapIndex": 3,
+      "code": "P1M3",
+      "points": 12
+    },
+    {
+      "mapIndex": 4,
+      "code": "P2M1",
+      "points": 16
+    },
+    {
+      "mapIndex": 5,
+      "code": "P2M2",
+      "points": 20
+    },
+    {
+      "mapIndex": 6,
+      "code": "P2M3",
+      "points": 24
+    }
+  ],
+  "rank": 10
+}

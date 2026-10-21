@@ -1,42 +1,38 @@
 [
   {
-    "id": "3bf95fc1-1729-4c8a-8af7-73e7b587653b",
-    "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+    "id": "daf91b32-9157-4ba4-a6c0-8b9864ff30e6",
     "matchNumber": 1,
     "phase": "MAIN",
     "status": "COMPLETED",
-    "startedAt": "2026-09-26T13:25:59.625Z",
-    "completedAt": "2026-09-26T13:26:27.917Z",
-    "createdAt": "2026-09-23T22:21:44.695Z"
+    "startedAt": "2026-06-15T16:00:00.000Z",
+    "completedAt": "2026-06-15T17:12:00.000Z",
+    "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9"
   },
   {
-    "id": "ef15ccd7-9e08-4ee3-85ac-867be8b71dca",
-    "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+    "id": "fa78124d-109c-4528-8524-9a80fea8ff28",
     "matchNumber": 2,
     "phase": "MAIN",
     "status": "COMPLETED",
-    "startedAt": "2026-09-26T13:26:29.318Z",
-    "completedAt": "2026-10-01T19:53:55.181Z",
-    "createdAt": "2026-09-23T22:21:44.695Z"
+    "startedAt": "2026-06-15T17:30:00.000Z",
+    "completedAt": "2026-06-15T18:48:00.000Z",
+    "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9"
   },
   {
-    "id": "f0d13e29-6cfe-4232-8fbd-eb70ca56b7bd",
-    "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+    "id": "506b40cf-17f4-4a32-bbd1-5de0773009a4",
     "matchNumber": 3,
     "phase": "MAIN",
     "status": "COMPLETED",
-    "startedAt": "2026-10-01T19:54:02.921Z",
-    "completedAt": "2026-10-01T19:54:12.787Z",
-    "createdAt": "2026-09-23T22:21:44.695Z"
+    "startedAt": "2026-06-15T19:12:00.000Z",
+    "completedAt": "2026-06-15T20:30:00.000Z",
+    "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9"
   },
   {
-    "id": "f96c9da2-2ad8-4a69-9e83-8b78c40c4667",
-    "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9",
+    "id": "831d6249-2579-4491-ae5a-c77c9b5e92c2",
     "matchNumber": 4,
     "phase": "MAIN",
     "status": "COMPLETED",
-    "startedAt": "2026-10-01T19:57:36.015Z",
-    "completedAt": "2026-10-01T19:57:36.096Z",
-    "createdAt": "2026-09-23T22:21:44.695Z"
+    "startedAt": "2026-06-15T21:00:00.000Z",
+    "completedAt": "2026-06-15T22:18:00.000Z",
+    "tournamentId": "771764d6-5ae3-4976-83b6-bfae637de9a9"
   }
 ]

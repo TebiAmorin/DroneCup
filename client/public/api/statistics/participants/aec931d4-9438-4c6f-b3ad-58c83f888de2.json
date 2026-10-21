@@ -1,0 +1,47 @@
+{
+  "participantId": "aec931d4-9438-4c6f-b3ad-58c83f888de2",
+  "participantName": "kikimaton",
+  "participantType": "PLAYER_2",
+  "teamId": "3e3ff1ad-3864-4b4d-aff4-83da33790305",
+  "teamName": "Barra",
+  "teamSlug": "barra",
+  "teamColor": "#f5c842",
+  "totalPoints": 46,
+  "wins": 0,
+  "podiums": 0,
+  "mapsPlayed": 6,
+  "averagePointsPerMap": 7.7,
+  "progression": [
+    {
+      "mapIndex": 7,
+      "code": "P3M1",
+      "points": 8
+    },
+    {
+      "mapIndex": 8,
+      "code": "P3M2",
+      "points": 14
+    },
+    {
+      "mapIndex": 9,
+      "code": "P3M3",
+      "points": 22
+    },
+    {
+      "mapIndex": 10,
+      "code": "P4M1",
+      "points": 32
+    },
+    {
+      "mapIndex": 11,
+      "code": "P4M2",
+      "points": 40
+    },
+    {
+      "mapIndex": 12,
+      "code": "P4M3",
+      "points": 46
+    }
+  ],
+  "rank": 8
+}

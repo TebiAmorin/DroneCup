@@ -1,0 +1,77 @@
+{
+  "participantId": "0b9a1953-a0a3-4a1b-aa91-f2967af15254",
+  "participantName": "Caramelo",
+  "participantType": "CREATOR",
+  "teamId": "5d4843e2-b989-4db7-8202-eb728d5acefd",
+  "teamName": "Caramelo",
+  "teamSlug": "caramelo",
+  "teamColor": "#ef4444",
+  "totalPoints": 210,
+  "wins": 3,
+  "podiums": 9,
+  "mapsPlayed": 12,
+  "averagePointsPerMap": 17.5,
+  "progression": [
+    {
+      "mapIndex": 1,
+      "code": "P1M1",
+      "points": 15
+    },
+    {
+      "mapIndex": 2,
+      "code": "P1M2",
+      "points": 33
+    },
+    {
+      "mapIndex": 3,
+      "code": "P1M3",
+      "points": 58
+    },
+    {
+      "mapIndex": 4,
+      "code": "P2M1",
+      "points": 76
+    },
+    {
+      "mapIndex": 5,
+      "code": "P2M2",
+      "points": 91
+    },
+    {
+      "mapIndex": 6,
+      "code": "P2M3",
+      "points": 103
+    },
+    {
+      "mapIndex": 7,
+      "code": "P3M1",
+      "points": 128
+    },
+    {
+      "mapIndex": 8,
+      "code": "P3M2",
+      "points": 140
+    },
+    {
+      "mapIndex": 9,
+      "code": "P3M3",
+      "points": 158
+    },
+    {
+      "mapIndex": 10,
+      "code": "P4M1",
+      "points": 173
+    },
+    {
+      "mapIndex": 11,
+      "code": "P4M2",
+      "points": 185
+    },
+    {
+      "mapIndex": 12,
+      "code": "P4M3",
+      "points": 210
+    }
+  ],
+  "rank": 3
+}

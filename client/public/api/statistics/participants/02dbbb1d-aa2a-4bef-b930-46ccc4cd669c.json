@@ -1,0 +1,47 @@
+{
+  "participantId": "02dbbb1d-aa2a-4bef-b930-46ccc4cd669c",
+  "participantName": "johnyhipster",
+  "participantType": "PLAYER_1",
+  "teamId": "07ef3fa0-ed87-42bf-ac18-349a21f94848",
+  "teamName": "Miwell",
+  "teamSlug": "miwell",
+  "teamColor": "#a855f7",
+  "totalPoints": 10,
+  "wins": 0,
+  "podiums": 0,
+  "mapsPlayed": 6,
+  "averagePointsPerMap": 1.7,
+  "progression": [
+    {
+      "mapIndex": 1,
+      "code": "P1M1",
+      "points": 1
+    },
+    {
+      "mapIndex": 2,
+      "code": "P1M2",
+      "points": 3
+    },
+    {
+      "mapIndex": 3,
+      "code": "P1M3",
+      "points": 5
+    },
+    {
+      "mapIndex": 4,
+      "code": "P2M1",
+      "points": 7
+    },
+    {
+      "mapIndex": 5,
+      "code": "P2M2",
+      "points": 8
+    },
+    {
+      "mapIndex": 6,
+      "code": "P2M3",
+      "points": 10
+    }
+  ],
+  "rank": 12
+}

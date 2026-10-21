@@ -1,0 +1,103 @@
+{
+  "teamId": "3e3ff1ad-3864-4b4d-aff4-83da33790305",
+  "teamName": "Barra",
+  "teamSlug": "barra",
+  "teamColor": "#f5c842",
+  "totalPoints": 315,
+  "wins": 3,
+  "podiums": 11,
+  "mapsPlayed": 12,
+  "averagePointsPerMap": 26.3,
+  "participantBreakdown": [
+    {
+      "participantId": "8c38ab7e-e57a-46cd-887e-170d9402c8ab",
+      "participantName": "Barra",
+      "participantType": "CREATOR",
+      "points": 219,
+      "wins": 3,
+      "podiums": 11,
+      "mapsPlayed": 12
+    },
+    {
+      "participantId": "f3d229d0-2e25-4fa1-b5fc-665361cecad8",
+      "participantName": "s7tier",
+      "participantType": "PLAYER_1",
+      "points": 50,
+      "wins": 0,
+      "podiums": 0,
+      "mapsPlayed": 6
+    },
+    {
+      "participantId": "aec931d4-9438-4c6f-b3ad-58c83f888de2",
+      "participantName": "kikimaton",
+      "participantType": "PLAYER_2",
+      "points": 46,
+      "wins": 0,
+      "podiums": 0,
+      "mapsPlayed": 6
+    }
+  ],
+  "progression": [
+    {
+      "mapIndex": 1,
+      "code": "P1M1",
+      "points": 28
+    },
+    {
+      "mapIndex": 2,
+      "code": "P1M2",
+      "points": 63
+    },
+    {
+      "mapIndex": 3,
+      "code": "P1M3",
+      "points": 84
+    },
+    {
+      "mapIndex": 4,
+      "code": "P2M1",
+      "points": 107
+    },
+    {
+      "mapIndex": 5,
+      "code": "P2M2",
+      "points": 131
+    },
+    {
+      "mapIndex": 6,
+      "code": "P2M3",
+      "points": 166
+    },
+    {
+      "mapIndex": 7,
+      "code": "P3M1",
+      "points": 192
+    },
+    {
+      "mapIndex": 8,
+      "code": "P3M2",
+      "points": 213
+    },
+    {
+      "mapIndex": 9,
+      "code": "P3M3",
+      "points": 233
+    },
+    {
+      "mapIndex": 10,
+      "code": "P4M1",
+      "points": 268
+    },
+    {
+      "mapIndex": 11,
+      "code": "P4M2",
+      "points": 294
+    },
+    {
+      "mapIndex": 12,
+      "code": "P4M3",
+      "points": 315
+    }
+  ],
+  "rank": 1
+}

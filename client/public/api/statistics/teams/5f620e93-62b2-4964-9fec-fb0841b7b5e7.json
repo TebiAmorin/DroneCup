@@ -1,0 +1,103 @@
+{
+  "teamId": "5f620e93-62b2-4964-9fec-fb0841b7b5e7",
+  "teamName": "SoraMusic",
+  "teamSlug": "sora",
+  "teamColor": "#22c55e",
+  "totalPoints": 202,
+  "wins": 2,
+  "podiums": 7,
+  "mapsPlayed": 12,
+  "averagePointsPerMap": 16.8,
+  "participantBreakdown": [
+    {
+      "participantId": "447984d4-1a7b-4e3b-8147-65466248aa52",
+      "participantName": "SoraMusic",
+      "participantType": "CREATOR",
+      "points": 185,
+      "wins": 2,
+      "podiums": 7,
+      "mapsPlayed": 12
+    },
+    {
+      "participantId": "ec2089ec-ef34-4b64-ad13-7835d1d16975",
+      "participantName": "nix",
+      "participantType": "PLAYER_1",
+      "points": 8,
+      "wins": 0,
+      "podiums": 0,
+      "mapsPlayed": 6
+    },
+    {
+      "participantId": "e60d8caa-a07c-472c-9746-a939d06d4880",
+      "participantName": "nei",
+      "participantType": "PLAYER_2",
+      "points": 9,
+      "wins": 0,
+      "podiums": 0,
+      "mapsPlayed": 6
+    }
+  ],
+  "progression": [
+    {
+      "mapIndex": 1,
+      "code": "P1M1",
+      "points": 10
+    },
+    {
+      "mapIndex": 2,
+      "code": "P1M2",
+      "points": 23
+    },
+    {
+      "mapIndex": 3,
+      "code": "P1M3",
+      "points": 36
+    },
+    {
+      "mapIndex": 4,
+      "code": "P2M1",
+      "points": 47
+    },
+    {
+      "mapIndex": 5,
+      "code": "P2M2",
+      "points": 74
+    },
+    {
+      "mapIndex": 6,
+      "code": "P2M3",
+      "points": 90
+    },
+    {
+      "mapIndex": 7,
+      "code": "P3M1",
+      "points": 107
+    },
+    {
+      "mapIndex": 8,
+      "code": "P3M2",
+      "points": 126
+    },
+    {
+      "mapIndex": 9,
+      "code": "P3M3",
+      "points": 153
+    },
+    {
+      "mapIndex": 10,
+      "code": "P4M1",
+      "points": 166
+    },
+    {
+      "mapIndex": 11,
+      "code": "P4M2",
+      "points": 183
+    },
+    {
+      "mapIndex": 12,
+      "code": "P4M3",
+      "points": 202
+    }
+  ],
+  "rank": 4
+}

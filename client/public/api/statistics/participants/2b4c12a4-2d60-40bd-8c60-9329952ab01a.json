@@ -1,0 +1,47 @@
+{
+  "participantId": "2b4c12a4-2d60-40bd-8c60-9329952ab01a",
+  "participantName": "nemessys",
+  "participantType": "PLAYER_2",
+  "teamId": "b09dbcb4-5cb8-4994-84ae-0089c547462f",
+  "teamName": "Vetel",
+  "teamSlug": "vetel",
+  "teamColor": "#38bdf8",
+  "totalPoints": 40,
+  "wins": 0,
+  "podiums": 0,
+  "mapsPlayed": 6,
+  "averagePointsPerMap": 6.7,
+  "progression": [
+    {
+      "mapIndex": 7,
+      "code": "P3M1",
+      "points": 6
+    },
+    {
+      "mapIndex": 8,
+      "code": "P3M2",
+      "points": 14
+    },
+    {
+      "mapIndex": 9,
+      "code": "P3M3",
+      "points": 20
+    },
+    {
+      "mapIndex": 10,
+      "code": "P4M1",
+      "points": 26
+    },
+    {
+      "mapIndex": 11,
+      "code": "P4M2",
+      "points": 32
+    },
+    {
+      "mapIndex": 12,
+      "code": "P4M3",
+      "points": 40
+    }
+  ],
+  "rank": 9
+}
